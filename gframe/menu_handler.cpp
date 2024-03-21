@@ -54,11 +54,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_LAN_MODE: {
-				mainGame->btnCreateHost->setEnabled(true);
-				mainGame->btnJoinHost->setEnabled(true);
-				mainGame->btnJoinCancel->setEnabled(true);
-				mainGame->HideElement(mainGame->wMainMenu);
-				mainGame->ShowElement(mainGame->wLanWindow);
 				break;
 			}
 			case BUTTON_JOIN_HOST: {
