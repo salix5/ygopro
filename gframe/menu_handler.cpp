@@ -103,15 +103,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_HP_KICK: {
-				int id = 0;
-				while(id < 4) {
-					if(mainGame->btnHostPrepKick[id] == caller)
-						break;
-					id++;
-				}
-				CTOS_Kick csk;
-				csk.pos = id;
-				DuelClient::SendPacketToServer(CTOS_HS_KICK, csk);
 				break;
 			}
 			case BUTTON_HP_READY: {
@@ -385,16 +376,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 		case irr::gui::EGET_LISTBOX_CHANGED: {
 			switch(id) {
 			case LISTBOX_LAN_HOST: {
-				int sel = mainGame->lstHostList->getSelected();
-				if(sel == -1)
-					break;
-				int addr = DuelClient::hosts[sel].ipaddr;
-				int port = DuelClient::hosts[sel].port;
-				wchar_t buf[20];
-				myswprintf(buf, L"%d.%d.%d.%d", addr & 0xff, (addr >> 8) & 0xff, (addr >> 16) & 0xff, (addr >> 24) & 0xff);
-				mainGame->ebJoinHost->setText(buf);
-				myswprintf(buf, L"%d", port);
-				mainGame->ebJoinPort->setText(buf);
 				break;
 			}
 			case LISTBOX_REPLAY_LIST: {

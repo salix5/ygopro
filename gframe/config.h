@@ -8,9 +8,7 @@
 #ifdef _WIN32
 
 #define NOMINMAX
-#include <WinSock2.h>
 #include <windows.h>
-#include <ws2tcpip.h>
 
 #ifdef _MSC_VER
 #define mywcsncasecmp _wcsnicmp

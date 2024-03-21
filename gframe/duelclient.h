@@ -20,8 +20,6 @@ private:
 	static unsigned int watching;
 	static unsigned char selftype;
 	static bool is_host;
-	static unsigned char duel_client_read[SIZE_NETWORK_BUFFER];
-	static unsigned char duel_client_write[SIZE_NETWORK_BUFFER];
 	static bool is_closing;
 	static bool is_swapping;
 	static int select_hint;
@@ -54,7 +52,6 @@ protected:
 	static int match_kill;
 	static std::set<std::pair<unsigned int, unsigned short>> remotes;
 public:
-	static std::vector<HostPacket> hosts;
 	static void BeginRefreshHost();
 };
 

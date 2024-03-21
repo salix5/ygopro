@@ -1770,7 +1770,6 @@ void Game::CloseDuelWindow() {
 	lstLog->clear();
 	logParam.clear();
 	lstHostList->clear();
-	DuelClient::hosts.clear();
 	ClearTextures();
 	closeDoneSignal.Set();
 }

@@ -17,8 +17,6 @@ unsigned int DuelClient::response_len = 0;
 unsigned int DuelClient::watching = 0;
 unsigned char DuelClient::selftype = 0;
 bool DuelClient::is_host = false;
-unsigned char DuelClient::duel_client_read[SIZE_NETWORK_BUFFER];
-unsigned char DuelClient::duel_client_write[SIZE_NETWORK_BUFFER];
 bool DuelClient::is_closing = false;
 bool DuelClient::is_swapping = false;
 int DuelClient::select_hint = 0;
@@ -31,7 +29,6 @@ mt19937 DuelClient::rnd;
 
 bool DuelClient::is_refreshing = false;
 int DuelClient::match_kill = 0;
-std::vector<HostPacket> DuelClient::hosts;
 std::set<std::pair<unsigned int, unsigned short>> DuelClient::remotes;
 
 bool DuelClient::StartClient(unsigned int ip, unsigned short port, bool create_game) {
