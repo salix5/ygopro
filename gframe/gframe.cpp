@@ -85,26 +85,6 @@ int main(int argc, char* argv[]) {
 				ygo::dataManager.LoadDB(wargv[i]);
 			}
 			continue;
-		} else if(!wcscmp(wargv[i], L"-n")) { // nickName
-			++i;
-			if(i < wargc)
-				ygo::mainGame->ebNickName->setText(wargv[i]);
-			continue;
-		} else if(!wcscmp(wargv[i], L"-h")) { // Host address
-			++i;
-			if(i < wargc)
-				ygo::mainGame->ebJoinHost->setText(wargv[i]);
-			continue;
-		} else if(!wcscmp(wargv[i], L"-p")) { // host Port
-			++i;
-			if(i < wargc)
-				ygo::mainGame->ebJoinPort->setText(wargv[i]);
-			continue;
-		} else if(!wcscmp(wargv[i], L"-w")) { // host passWord
-			++i;
-			if(i < wargc)
-				ygo::mainGame->ebJoinPass->setText(wargv[i]);
-			continue;
 		} else if(!wcscmp(wargv[i], L"-k")) { // Keep on return
 			exit_on_return = false;
 			keep_on_return = true;
@@ -138,38 +118,6 @@ int main(int argc, char* argv[]) {
 				ClickButton(ygo::mainGame->btnDeckEdit);
 				break;
 			}
-		} else if(!wcscmp(wargv[i], L"-c")) { // Create host
-			exit_on_return = !keep_on_return;
-			ygo::mainGame->HideElement(ygo::mainGame->wMainMenu);
-			ClickButton(ygo::mainGame->btnHostConfirm);
-			break;
-		} else if(!wcscmp(wargv[i], L"-j")) { // Join host
-			exit_on_return = !keep_on_return;
-			ygo::mainGame->HideElement(ygo::mainGame->wMainMenu);
-			ClickButton(ygo::mainGame->btnJoinHost);
-			break;
-		} else if(!wcscmp(wargv[i], L"-r")) { // Replay
-			exit_on_return = !keep_on_return;
-			++i;
-			if(i < wargc) {
-				open_file = true;
-				wcscpy(open_file_name, wargv[i]);
-			}
-			ClickButton(ygo::mainGame->btnReplayMode);
-			if(open_file)
-				ClickButton(ygo::mainGame->btnLoadReplay);
-			break;
-		} else if(!wcscmp(wargv[i], L"-s")) { // Single
-			exit_on_return = !keep_on_return;
-			++i;
-			if(i < wargc) {
-				open_file = true;
-				wcscpy(open_file_name, wargv[i]);
-			}
-			ClickButton(ygo::mainGame->btnSingleMode);
-			if(open_file)
-				ClickButton(ygo::mainGame->btnLoadSinglePlay);
-			break;
 		} else if(wargc == 2 && wcslen(wargv[1]) >= 4) {
 			wchar_t* pstrext = wargv[1] + wcslen(wargv[1]) - 4;
 			if(!mywcsncasecmp(pstrext, L".ydk", 4)) {
@@ -177,14 +125,6 @@ int main(int argc, char* argv[]) {
 				wcscpy(open_file_name, wargv[i]);
 				exit_on_return = !keep_on_return;
 				ClickButton(ygo::mainGame->btnDeckEdit);
-				break;
-			}
-			if(!mywcsncasecmp(pstrext, L".yrp", 4)) {
-				open_file = true;
-				wcscpy(open_file_name, wargv[i]);
-				exit_on_return = !keep_on_return;
-				ClickButton(ygo::mainGame->btnReplayMode);
-				ClickButton(ygo::mainGame->btnLoadReplay);
 				break;
 			}
 		}

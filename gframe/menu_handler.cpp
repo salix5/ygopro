@@ -51,9 +51,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				mainGame->device->closeDevice();
 				break;
 			}
-			case BUTTON_LAN_MODE: {
-				break;
-			}
 			case BUTTON_JOIN_HOST: {
 				break;
 			}
@@ -140,58 +137,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 					mainGame->device->closeDevice();
 				break;
 			}
-			case BUTTON_REPLAY_MODE: {
-				break;
-			}
-			case BUTTON_SINGLE_MODE: {
-				break;
-			}
-			case BUTTON_LOAD_REPLAY: {
-				break;
-			}
-			case BUTTON_DELETE_REPLAY: {
-				int sel = mainGame->lstReplayList->getSelected();
-				if(sel == -1)
-					break;
-				mainGame->gMutex.lock();
-				wchar_t textBuffer[256];
-				myswprintf(textBuffer, L"%ls\n%ls", mainGame->lstReplayList->getListItem(sel), dataManager.GetSysString(1363));
-				mainGame->SetStaticText(mainGame->stQMessage, 310, mainGame->guiFont, textBuffer);
-				mainGame->PopupElement(mainGame->wQuery);
-				mainGame->gMutex.unlock();
-				prev_operation = id;
-				prev_sel = sel;
-				break;
-			}
-			case BUTTON_RENAME_REPLAY: {
-				int sel = mainGame->lstReplayList->getSelected();
-				if(sel == -1)
-					break;
-				mainGame->gMutex.lock();
-				mainGame->wReplaySave->setText(dataManager.GetSysString(1364));
-				mainGame->ebRSName->setText(mainGame->lstReplayList->getListItem(sel));
-				mainGame->PopupElement(mainGame->wReplaySave);
-				mainGame->gMutex.unlock();
-				prev_operation = id;
-				prev_sel = sel;
-				break;
-			}
-			case BUTTON_CANCEL_REPLAY: {
-				mainGame->HideElement(mainGame->wReplay);
-				mainGame->ShowElement(mainGame->wMainMenu);
-				break;
-			}
-			case BUTTON_EXPORT_DECK: {
-				break;
-			}
-			case BUTTON_LOAD_SINGLEPLAY: {
-				break;
-			}
-			case BUTTON_CANCEL_SINGLEPLAY: {
-				mainGame->HideElement(mainGame->wSinglePlay);
-				mainGame->ShowElement(mainGame->wMainMenu);
-				break;
-			}
 			case BUTTON_DECK_EDIT: {
 				mainGame->RefreshCategoryDeck(mainGame->cbDBCategory, mainGame->cbDBDecks);
 				if(open_file && deckManager.LoadDeck(open_file_name)) {
@@ -251,27 +196,12 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				prev_sel = -1;
 				break;
 			}
-			case BUTTON_REPLAY_SAVE: {
-				break;
-			}
-			case BUTTON_REPLAY_CANCEL: {
-				mainGame->HideElement(mainGame->wReplaySave);
-				prev_operation = 0;
-				prev_sel = -1;
-				break;
-			}
 			}
 			break;
 		}
 		case irr::gui::EGET_LISTBOX_CHANGED: {
 			switch(id) {
 			case LISTBOX_LAN_HOST: {
-				break;
-			}
-			case LISTBOX_REPLAY_LIST: {
-				break;
-			}
-			case LISTBOX_SINGLEPLAY_LIST: {
 				break;
 			}
 			}
