@@ -159,7 +159,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				mainGame->HideElement(mainGame->wMainMenu);
 				mainGame->ShowElement(mainGame->wSinglePlay);
 				mainGame->RefreshSingleplay();
-				mainGame->RefreshBot();
 				break;
 			}
 			case BUTTON_LOAD_REPLAY: {
@@ -264,9 +263,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				}
 				mainGame->stACMessage->setText(dataManager.GetSysString(1335));
 				mainGame->PopupElement(mainGame->wACMessage, 20);
-				break;
-			}
-			case BUTTON_BOT_START: {
 				break;
 			}
 			case BUTTON_LOAD_SINGLEPLAY: {
@@ -460,15 +456,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				mainGame->SetStaticText(mainGame->stSinglePlayInfo, 200, mainGame->guiFont, message.c_str());
 				break;
 			}
-			case LISTBOX_BOT_LIST: {
-				int sel = mainGame->lstBotList->getSelected();
-				if(sel == -1)
-					break;
-				mainGame->SetStaticText(mainGame->stBotInfo, 200, mainGame->guiFont, mainGame->botInfo[sel].desc);
-				mainGame->cbBotDeckCategory->setVisible(mainGame->botInfo[sel].select_deckfile);
-				mainGame->cbBotDeck->setVisible(mainGame->botInfo[sel].select_deckfile);
-				break;
-			}
 			}
 			break;
 		}
@@ -504,10 +491,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 		}
 		case irr::gui::EGET_COMBO_BOX_CHANGED: {
 			switch(id) {
-			case COMBOBOX_BOT_RULE: {
-				mainGame->RefreshBot();
-				break;
-			}
 			case COMBOBOX_HP_CATEGORY: {
 				int catesel = mainGame->cbCategorySelect->getSelected();
 				if(catesel == 3) {
@@ -517,18 +500,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				if(catesel >= 0) {
 					mainGame->RefreshDeck(mainGame->cbCategorySelect, mainGame->cbDeckSelect);
 					mainGame->cbDeckSelect->setSelected(0);
-				}
-				break;
-			}
-			case COMBOBOX_BOT_DECKCATEGORY: {
-				int catesel = mainGame->cbBotDeckCategory->getSelected();
-				if(catesel == 3) {
-					catesel = 2;
-					mainGame->cbBotDeckCategory->setSelected(2);
-				}
-				if(catesel >= 0) {
-					mainGame->RefreshDeck(mainGame->cbBotDeckCategory, mainGame->cbBotDeck);
-					mainGame->cbBotDeck->setSelected(0);
 				}
 				break;
 			}
