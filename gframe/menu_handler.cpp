@@ -51,92 +51,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				mainGame->device->closeDevice();
 				break;
 			}
-			case BUTTON_JOIN_HOST: {
-				break;
-			}
-			case BUTTON_JOIN_CANCEL: {
-				mainGame->HideElement(mainGame->wLanWindow);
-				mainGame->ShowElement(mainGame->wMainMenu);
-				if(exit_on_return)
-					mainGame->device->closeDevice();
-				break;
-			}
-			case BUTTON_LAN_REFRESH: {
-				break;
-			}
-			case BUTTON_CREATE_HOST: {
-				mainGame->btnHostConfirm->setEnabled(true);
-				mainGame->btnHostCancel->setEnabled(true);
-				mainGame->HideElement(mainGame->wLanWindow);
-				mainGame->ShowElement(mainGame->wCreateHost);
-				break;
-			}
-			case BUTTON_HOST_CONFIRM: {
-				break;
-			}
-			case BUTTON_HOST_CANCEL: {
-				mainGame->btnCreateHost->setEnabled(true);
-				mainGame->btnJoinHost->setEnabled(true);
-				mainGame->btnJoinCancel->setEnabled(true);
-				mainGame->HideElement(mainGame->wCreateHost);
-				mainGame->ShowElement(mainGame->wLanWindow);
-				break;
-			}
-			case BUTTON_HP_DUELIST: {
-				mainGame->cbCategorySelect->setEnabled(true);
-				mainGame->cbDeckSelect->setEnabled(true);
-				DuelClient::SendPacketToServer(CTOS_HS_TODUELIST);
-				break;
-			}
-			case BUTTON_HP_OBSERVER: {
-				DuelClient::SendPacketToServer(CTOS_HS_TOOBSERVER);
-				break;
-			}
-			case BUTTON_HP_KICK: {
-				break;
-			}
-			case BUTTON_HP_READY: {
-				if(mainGame->cbCategorySelect->getSelected() == -1 || mainGame->cbDeckSelect->getSelected() == -1 ||
-					!deckManager.LoadDeck(mainGame->cbCategorySelect, mainGame->cbDeckSelect)) {
-					mainGame->gMutex.lock();
-					soundManager.PlaySoundEffect(SOUND_INFO);
-					mainGame->env->addMessageBox(L"", dataManager.GetSysString(1406));
-					mainGame->gMutex.unlock();
-					break;
-				}
-				UpdateDeck();
-				DuelClient::SendPacketToServer(CTOS_HS_READY);
-				mainGame->cbCategorySelect->setEnabled(false);
-				mainGame->cbDeckSelect->setEnabled(false);
-				break;
-			}
-			case BUTTON_HP_NOTREADY: {
-				DuelClient::SendPacketToServer(CTOS_HS_NOTREADY);
-				mainGame->cbCategorySelect->setEnabled(true);
-				mainGame->cbDeckSelect->setEnabled(true);
-				break;
-			}
-			case BUTTON_HP_START: {
-				DuelClient::SendPacketToServer(CTOS_HS_START);
-				break;
-			}
-			case BUTTON_HP_CANCEL: {
-				DuelClient::StopClient();
-				mainGame->btnCreateHost->setEnabled(true);
-				mainGame->btnJoinHost->setEnabled(true);
-				mainGame->btnJoinCancel->setEnabled(true);
-				mainGame->btnStartBot->setEnabled(true);
-				mainGame->btnBotCancel->setEnabled(true);
-				mainGame->HideElement(mainGame->wHostPrepare);
-				if(bot_mode)
-					mainGame->ShowElement(mainGame->wSinglePlay);
-				else
-					mainGame->ShowElement(mainGame->wLanWindow);
-				mainGame->wChat->setVisible(false);
-				if(exit_on_return)
-					mainGame->device->closeDevice();
-				break;
-			}
 			case BUTTON_DECK_EDIT: {
 				mainGame->RefreshCategoryDeck(mainGame->cbDBCategory, mainGame->cbDBDecks);
 				if(open_file && deckManager.LoadDeck(open_file_name)) {
@@ -201,64 +115,26 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 		}
 		case irr::gui::EGET_LISTBOX_CHANGED: {
 			switch(id) {
-			case LISTBOX_LAN_HOST: {
-				break;
-			}
 			}
 			break;
 		}
 		case irr::gui::EGET_CHECKBOX_CHANGED: {
 			switch(id) {
-			case CHECKBOX_HP_READY: {
-				if(!caller->isEnabled())
-					break;
-				mainGame->env->setFocus(mainGame->wHostPrepare);
-				if(static_cast<irr::gui::IGUICheckBox*>(caller)->isChecked()) {
-					if(mainGame->cbCategorySelect->getSelected() == -1 || mainGame->cbDeckSelect->getSelected() == -1 ||
-						!deckManager.LoadDeck(mainGame->cbCategorySelect, mainGame->cbDeckSelect)) {
-						mainGame->gMutex.lock();
-						static_cast<irr::gui::IGUICheckBox*>(caller)->setChecked(false);
-						soundManager.PlaySoundEffect(SOUND_INFO);
-						mainGame->env->addMessageBox(L"", dataManager.GetSysString(1406));
-						mainGame->gMutex.unlock();
-						break;
-					}
-					UpdateDeck();
-					DuelClient::SendPacketToServer(CTOS_HS_READY);
-					mainGame->cbCategorySelect->setEnabled(false);
-					mainGame->cbDeckSelect->setEnabled(false);
-				} else {
-					DuelClient::SendPacketToServer(CTOS_HS_NOTREADY);
-					mainGame->cbCategorySelect->setEnabled(true);
-					mainGame->cbDeckSelect->setEnabled(true);
-				}
-				break;
-			}
 			}
 			break;
 		}
 		case irr::gui::EGET_COMBO_BOX_CHANGED: {
 			switch(id) {
-			case COMBOBOX_HP_CATEGORY: {
-				int catesel = mainGame->cbCategorySelect->getSelected();
-				if(catesel == 3) {
-					catesel = 2;
-					mainGame->cbCategorySelect->setSelected(2);
-				}
-				if(catesel >= 0) {
-					mainGame->RefreshDeck(mainGame->cbCategorySelect, mainGame->cbDeckSelect);
-					mainGame->cbDeckSelect->setSelected(0);
-				}
-				break;
-			}
 			}
 			break;
 		}
-		default: break;
+		default:
+			break;
 		}
 		break;
 	}
-	default: break;
+	default:
+		break;
 	}
 	return false;
 }
