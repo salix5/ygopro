@@ -7,7 +7,6 @@
 #include "replay.h"
 #include "materials.h"
 #include "duelclient.h"
-#include "netserver.h"
 #include "single_mode.h"
 
 const unsigned short PRO_VERSION = 0x1360;

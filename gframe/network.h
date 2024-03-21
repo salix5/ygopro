@@ -3,11 +3,6 @@
 
 #include "config.h"
 #include "deck_manager.h"
-#include <event2/event.h>
-#include <event2/listener.h>
-#include <event2/bufferevent.h>
-#include <event2/buffer.h>
-#include <event2/thread.h>
 
 namespace ygo {
 	constexpr int SIZE_NETWORK_BUFFER = 0x2000;
@@ -100,46 +95,7 @@ struct STOC_HS_WatchChange {
 
 class DuelMode;
 
-struct DuelPlayer {
-	unsigned short name[20]{};
-	DuelMode* game{ nullptr };
-	unsigned char type{ 0 };
-	unsigned char state{ 0 };
-	bufferevent* bev{ 0 };
-};
-
 class DuelMode {
-public:
-	DuelMode(): host_player(nullptr), pduel(0), duel_stage(0) {}
-	virtual ~DuelMode() {}
-	virtual void Chat(DuelPlayer* dp, void* pdata, int len) {}
-	virtual void JoinGame(DuelPlayer* dp, void* pdata, bool is_creater) {}
-	virtual void LeaveGame(DuelPlayer* dp) {}
-	virtual void ToDuelist(DuelPlayer* dp) {}
-	virtual void ToObserver(DuelPlayer* dp) {}
-	virtual void PlayerReady(DuelPlayer* dp, bool is_ready) {}
-	virtual void PlayerKick(DuelPlayer* dp, unsigned char pos) {}
-	virtual void UpdateDeck(DuelPlayer* dp, void* pdata, unsigned int len) {}
-	virtual void StartDuel(DuelPlayer* dp) {}
-	virtual void HandResult(DuelPlayer* dp, unsigned char res) {}
-	virtual void TPResult(DuelPlayer* dp, unsigned char tp) {}
-	virtual void Process() {}
-	virtual int Analyze(char* msgbuffer, unsigned int len) {
-		return 0;
-	}
-	virtual void Surrender(DuelPlayer* dp) {}
-	virtual void GetResponse(DuelPlayer* dp, void* pdata, unsigned int len) {}
-	virtual void TimeConfirm(DuelPlayer* dp) {}
-	virtual void EndDuel() {};
-
-public:
-	event* etimer;
-	DuelPlayer* host_player;
-	HostInfo host_info;
-	int duel_stage;
-	intptr_t pduel;
-	wchar_t name[20];
-	wchar_t pass[20];
 };
 
 }

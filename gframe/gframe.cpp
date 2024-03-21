@@ -1,7 +1,6 @@
 #include "config.h"
 #include "game.h"
 #include "data_manager.h"
-#include <event2/thread.h>
 #include <memory>
 #ifdef __APPLE__
 #import <CoreFoundation/CoreFoundation.h>
@@ -52,7 +51,6 @@ int main(int argc, char* argv[]) {
 	WSADATA wsaData;
 	wVersionRequested = MAKEWORD(2, 2);
 	WSAStartup(wVersionRequested, &wsaData);
-	evthread_use_windows_threads();
 #else
 	evthread_use_pthreads();
 #endif //_WIN32
