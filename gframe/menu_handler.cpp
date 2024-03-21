@@ -2,8 +2,6 @@
 #include "menu_handler.h"
 #include "duelclient.h"
 #include "deck_manager.h"
-#include "replay_mode.h"
-#include "single_mode.h"
 #include "image_manager.h"
 #include "sound_manager.h"
 #include "game.h"
@@ -143,46 +141,12 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_REPLAY_MODE: {
-				mainGame->HideElement(mainGame->wMainMenu);
-				mainGame->ShowElement(mainGame->wReplay);
-				mainGame->ebRepStartTurn->setText(L"1");
-				mainGame->stReplayInfo->setText(L"");
-				mainGame->RefreshReplay();
 				break;
 			}
 			case BUTTON_SINGLE_MODE: {
-				mainGame->HideElement(mainGame->wMainMenu);
-				mainGame->ShowElement(mainGame->wSinglePlay);
-				mainGame->RefreshSingleplay();
 				break;
 			}
 			case BUTTON_LOAD_REPLAY: {
-				if(open_file) {
-					ReplayMode::cur_replay.OpenReplay(open_file_name);
-					open_file = false;
-				} else {
-					if(mainGame->lstReplayList->getSelected() == -1)
-						break;
-					if(!ReplayMode::cur_replay.OpenReplay(mainGame->lstReplayList->getListItem(mainGame->lstReplayList->getSelected())))
-						break;
-				}
-				mainGame->ClearCardInfo();
-				mainGame->wCardImg->setVisible(true);
-				mainGame->wInfos->setVisible(true);
-				mainGame->wReplay->setVisible(true);
-				mainGame->wReplayControl->setVisible(true);
-				mainGame->btnReplayStart->setVisible(false);
-				mainGame->btnReplayPause->setVisible(true);
-				mainGame->btnReplayStep->setVisible(false);
-				mainGame->btnReplayUndo->setVisible(false);
-				mainGame->wPhase->setVisible(true);
-				mainGame->dField.Clear();
-				mainGame->HideElement(mainGame->wReplay);
-				mainGame->device->setEventReceiver(&mainGame->dField);
-				unsigned int start_turn = _wtoi(mainGame->ebRepStartTurn->getText());
-				if(start_turn == 1)
-					start_turn = 0;
-				ReplayMode::StartReplay(start_turn);
 				break;
 			}
 			case BUTTON_DELETE_REPLAY: {
@@ -218,53 +182,9 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_EXPORT_DECK: {
-				if(mainGame->lstReplayList->getSelected() == -1)
-					break;
-				Replay replay;
-				wchar_t ex_filename[256];
-				wchar_t namebuf[4][20];
-				wchar_t filename[256];
-				myswprintf(ex_filename, L"%ls", mainGame->lstReplayList->getListItem(mainGame->lstReplayList->getSelected()));
-				if(!replay.OpenReplay(ex_filename))
-					break;
-				const ReplayHeader& rh = replay.pheader;
-				if(rh.flag & REPLAY_SINGLE_MODE)
-					break;
-				int max = (rh.flag & REPLAY_TAG) ? 4 : 2;
-				//player name
-				for(int i = 0; i < max; ++i)
-					replay.ReadName(namebuf[i]);
-				//skip pre infos
-				for(int i = 0; i < 4; ++i)
-					replay.ReadInt32();
-				//deck
-				for(int i = 0; i < max; ++i) {
-					int main = replay.ReadInt32();
-					Deck tmp_deck;
-					for (int j = 0; j < main; ++j) {
-						auto card = dataManager.GetCodePointer(replay.ReadInt32());
-						if (card != dataManager.datas_end)
-							tmp_deck.main.push_back(card);
-					}
-					int extra = replay.ReadInt32();
-					for (int j = 0; j < extra; ++j) {
-						auto card = dataManager.GetCodePointer(replay.ReadInt32());
-						if (card != dataManager.datas_end)
-							tmp_deck.extra.push_back(card);
-					}
-					FileSystem::SafeFileName(namebuf[i]);
-					myswprintf(filename, L"deck/%ls-%d %ls.ydk", ex_filename, i + 1, namebuf[i]);
-					deckManager.SaveDeck(tmp_deck, filename);
-				}
-				mainGame->stACMessage->setText(dataManager.GetSysString(1335));
-				mainGame->PopupElement(mainGame->wACMessage, 20);
 				break;
 			}
 			case BUTTON_LOAD_SINGLEPLAY: {
-				if(!open_file && mainGame->lstSinglePlayList->getSelected() == -1)
-					break;
-				mainGame->singleSignal.SetNoWait(false);
-				SingleMode::StartPlay();
 				break;
 			}
 			case BUTTON_CANCEL_SINGLEPLAY: {
@@ -321,12 +241,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			}
 			case BUTTON_YES: {
 				mainGame->HideElement(mainGame->wQuery);
-				if(prev_operation == BUTTON_DELETE_REPLAY) {
-					if(Replay::DeleteReplay(mainGame->lstReplayList->getListItem(prev_sel))) {
-						mainGame->stReplayInfo->setText(L"");
-						mainGame->lstReplayList->removeItem(prev_sel);
-					}
-				}
 				prev_operation = 0;
 				prev_sel = -1;
 				break;
@@ -338,21 +252,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_REPLAY_SAVE: {
-				mainGame->HideElement(mainGame->wReplaySave);
-				if(prev_operation == BUTTON_RENAME_REPLAY) {
-					wchar_t newname[256];
-					BufferIO::CopyWStr(mainGame->ebRSName->getText(), newname, 256);
-					if(mywcsncasecmp(newname + wcslen(newname) - 4, L".yrp", 4)) {
-						myswprintf(newname, L"%ls.yrp", mainGame->ebRSName->getText());
-					}
-					if(Replay::RenameReplay(mainGame->lstReplayList->getListItem(prev_sel), newname)) {
-						mainGame->lstReplayList->setItem(prev_sel, newname, -1);
-					} else {
-						mainGame->env->addMessageBox(L"", dataManager.GetSysString(1365));
-					}
-				}
-				prev_operation = 0;
-				prev_sel = -1;
 				break;
 			}
 			case BUTTON_REPLAY_CANCEL: {
@@ -370,85 +269,9 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case LISTBOX_REPLAY_LIST: {
-				int sel = mainGame->lstReplayList->getSelected();
-				if(sel == -1)
-					break;
-				if(!ReplayMode::cur_replay.OpenReplay(mainGame->lstReplayList->getListItem(sel)))
-					break;
-				wchar_t infobuf[256];
-				std::wstring repinfo;
-				time_t curtime;
-				if(ReplayMode::cur_replay.pheader.flag & REPLAY_UNIFORM)
-					curtime = ReplayMode::cur_replay.pheader.start_time;
-				else
-					curtime = ReplayMode::cur_replay.pheader.seed;
-				tm* st = localtime(&curtime);
-				wcsftime(infobuf, 256, L"%Y/%m/%d %H:%M:%S\n", st);
-				repinfo.append(infobuf);
-				wchar_t namebuf[4][20];
-				ReplayMode::cur_replay.ReadName(namebuf[0]);
-				ReplayMode::cur_replay.ReadName(namebuf[1]);
-				if(ReplayMode::cur_replay.pheader.flag & REPLAY_TAG) {
-					ReplayMode::cur_replay.ReadName(namebuf[2]);
-					ReplayMode::cur_replay.ReadName(namebuf[3]);
-				}
-				if(ReplayMode::cur_replay.pheader.flag & REPLAY_TAG)
-					myswprintf(infobuf, L"%ls\n%ls\n===VS===\n%ls\n%ls\n", namebuf[0], namebuf[1], namebuf[2], namebuf[3]);
-				else
-					myswprintf(infobuf, L"%ls\n===VS===\n%ls\n", namebuf[0], namebuf[1]);
-				repinfo.append(infobuf);
-				mainGame->ebRepStartTurn->setText(L"1");
-				mainGame->SetStaticText(mainGame->stReplayInfo, 180, mainGame->guiFont, repinfo.c_str());
 				break;
 			}
 			case LISTBOX_SINGLEPLAY_LIST: {
-				int sel = mainGame->lstSinglePlayList->getSelected();
-				if(sel == -1)
-					break;
-				const wchar_t* name = mainGame->lstSinglePlayList->getListItem(sel);
-				wchar_t fname[256];
-				myswprintf(fname, L"./single/%ls", name);
-				FILE *fp;
-#ifdef _WIN32
-				fp = _wfopen(fname, L"rb");
-#else
-				char filename[256];
-				BufferIO::EncodeUTF8(fname, filename);
-				fp = fopen(filename, "rb");
-#endif
-				if(!fp) {
-					mainGame->stSinglePlayInfo->setText(L"");
-					break;
-				}
-				char linebuf[1024];
-				wchar_t wlinebuf[1024];
-				std::wstring message = L"";
-				bool in_message = false;
-				while(fgets(linebuf, 1024, fp)) {
-					if(!strncmp(linebuf, "--[[message", 11)) {
-						size_t len = strlen(linebuf);
-						char* msgend = strrchr(linebuf, ']');
-						if(len <= 13) {
-							in_message = true;
-							continue;
-						} else if(len > 15 && msgend) {
-							*(msgend - 1) = '\0';
-							BufferIO::DecodeUTF8(linebuf + 12, wlinebuf);
-							message.append(wlinebuf);
-							break;
-						}
-					}
-					if(!strncmp(linebuf, "]]", 2)) {
-						in_message = false;
-						break;
-					}
-					if(in_message) {
-						BufferIO::DecodeUTF8(linebuf, wlinebuf);
-						message.append(wlinebuf);
-					}
-				}
-				fclose(fp);
-				mainGame->SetStaticText(mainGame->stSinglePlayInfo, 200, mainGame->guiFont, message.c_str());
 				break;
 			}
 			}

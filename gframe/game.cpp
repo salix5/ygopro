@@ -4,10 +4,8 @@
 #include "data_manager.h"
 #include "deck_manager.h"
 #include "sound_manager.h"
-#include "replay.h"
 #include "materials.h"
 #include "duelclient.h"
-#include "single_mode.h"
 
 const unsigned short PRO_VERSION = 0x1360;
 
@@ -1041,8 +1039,6 @@ void Game::MainLoop() {
 		}
 	}
 	DuelClient::StopClient(true);
-	if(dInfo.isSingleMode)
-		SingleMode::StopPlay(true);
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	SaveConfig();
 //	device->drop();
@@ -1215,21 +1211,6 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 			deckname[len - 4] = 0;
 			additem(deckname);
 		}
-	});
-}
-void Game::RefreshReplay() {
-	lstReplayList->clear();
-	FileSystem::TraversalDir(L"./replay", [this](const wchar_t* name, bool isdir) {
-		if(!isdir && wcsrchr(name, '.') && !mywcsncasecmp(wcsrchr(name, '.'), L".yrp", 4) && Replay::CheckReplay(name))
-			lstReplayList->addItem(name);
-	});
-}
-void Game::RefreshSingleplay() {
-	lstSinglePlayList->clear();
-	stSinglePlayInfo->setText(L"");
-	FileSystem::TraversalDir(L"./single", [this](const wchar_t* name, bool isdir) {
-		if(!isdir && wcsrchr(name, '.') && !mywcsncasecmp(wcsrchr(name, '.'), L".lua", 4))
-			lstSinglePlayList->addItem(name);
 	});
 }
 void Game::LoadConfig() {

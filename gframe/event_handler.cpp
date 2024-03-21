@@ -7,8 +7,6 @@
 #include "data_manager.h"
 #include "image_manager.h"
 #include "sound_manager.h"
-#include "replay_mode.h"
-#include "single_mode.h"
 #include "materials.h"
 #include "../ocgcore/common.h"
 
@@ -32,113 +30,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			}
 			case BUTTON_FIRST:
 			case BUTTON_SECOND: {
-				break;
-			}
-			case BUTTON_REPLAY_START: {
-				if(!mainGame->dInfo.isReplay)
-					break;
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				mainGame->btnReplayStart->setVisible(false);
-				mainGame->btnReplayPause->setVisible(true);
-				mainGame->btnReplayStep->setVisible(false);
-				mainGame->btnReplayUndo->setVisible(false);
-				ReplayMode::Pause(false, false);
-				break;
-			}
-			case BUTTON_REPLAY_PAUSE: {
-				if(!mainGame->dInfo.isReplay)
-					break;
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				mainGame->btnReplayStart->setVisible(true);
-				mainGame->btnReplayPause->setVisible(false);
-				mainGame->btnReplayStep->setVisible(true);
-				mainGame->btnReplayUndo->setVisible(true);
-				ReplayMode::Pause(true, false);
-				break;
-			}
-			case BUTTON_REPLAY_STEP: {
-				if(!mainGame->dInfo.isReplay)
-					break;
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				ReplayMode::Pause(false, true);
-				break;
-			}
-			case BUTTON_REPLAY_EXIT: {
-				if(!mainGame->dInfo.isReplay)
-					break;
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				ReplayMode::StopReplay();
-				break;
-			}
-			case BUTTON_REPLAY_SWAP: {
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				if(mainGame->dInfo.isReplay)
-					ReplayMode::SwapField();
-				else if(mainGame->dInfo.player_type == 7)
-					DuelClient::SwapField();
-				break;
-			}
-			case BUTTON_REPLAY_UNDO: {
-				if(!mainGame->dInfo.isReplay)
-					break;
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				ReplayMode::Undo();
-				break;
-			}
-			case BUTTON_REPLAY_SAVE: {
-				if(mainGame->ebRSName->getText()[0] == 0)
-					break;
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				mainGame->actionParam = 1;
-				mainGame->HideElement(mainGame->wReplaySave);
-				mainGame->replaySignal.Set();
-				break;
-			}
-			case BUTTON_REPLAY_CANCEL: {
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				mainGame->actionParam = 0;
-				mainGame->HideElement(mainGame->wReplaySave);
-				mainGame->replaySignal.Set();
-				break;
-			}
-			case BUTTON_LEAVE_GAME: {
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				if(mainGame->dInfo.isSingleMode) {
-					mainGame->singleSignal.SetNoWait(true);
-					SingleMode::StopPlay(false);
-					break;
-				}
-				if(mainGame->dInfo.player_type == 7) {
-					DuelClient::StopClient();
-					mainGame->dInfo.isStarted = false;
-					mainGame->dInfo.isFinished = false;
-					mainGame->device->setEventReceiver(&mainGame->menuHandler);
-					mainGame->CloseDuelWindow();
-					mainGame->btnCreateHost->setEnabled(true);
-					mainGame->btnJoinHost->setEnabled(true);
-					mainGame->btnJoinCancel->setEnabled(true);
-					mainGame->btnStartBot->setEnabled(true);
-					mainGame->btnBotCancel->setEnabled(true);
-					if(bot_mode)
-						mainGame->ShowElement(mainGame->wSinglePlay);
-					else
-						mainGame->ShowElement(mainGame->wLanWindow);
-					if(exit_on_return)
-						mainGame->device->closeDevice();
-				} else {
-					mainGame->PopupElement(mainGame->wSurrender);
-				}
-				break;
-			}
-			case BUTTON_SURRENDER_YES: {
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				DuelClient::SendPacketToServer(CTOS_SURRENDER);
-				mainGame->HideElement(mainGame->wSurrender);
-				break;
-			}
-			case BUTTON_SURRENDER_NO: {
-				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				mainGame->HideElement(mainGame->wSurrender);
 				break;
 			}
 			case BUTTON_CHAIN_IGNORE: {

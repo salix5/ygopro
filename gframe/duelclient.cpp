@@ -3,11 +3,8 @@
 #include "materials.h"
 #include "image_manager.h"
 #include "sound_manager.h"
-#include "single_mode.h"
 #include "../ocgcore/common.h"
 #include "game.h"
-#include "replay.h"
-#include "replay_mode.h"
 
 namespace ygo {
 
@@ -3106,40 +3103,6 @@ void DuelClient::SetResponseB(void* respB, unsigned int len) {
 	response_len = len;
 }
 void DuelClient::SendResponse() {
-	switch(mainGame->dInfo.curMsg) {
-	case MSG_SELECT_BATTLECMD: {
-		mainGame->dField.ClearCommandFlag();
-		mainGame->btnM2->setVisible(false);
-		mainGame->btnEP->setVisible(false);
-		break;
-	}
-	case MSG_SELECT_IDLECMD: {
-		mainGame->dField.ClearCommandFlag();
-		mainGame->btnBP->setVisible(false);
-		mainGame->btnEP->setVisible(false);
-		mainGame->btnShuffle->setVisible(false);
-		break;
-	}
-	case MSG_SELECT_CARD:
-	case MSG_SELECT_UNSELECT_CARD:
-	case MSG_SELECT_TRIBUTE:
-	case MSG_SELECT_SUM:
-	case MSG_SELECT_COUNTER: {
-		mainGame->dField.ClearSelect();
-		break;
-	}
-	case MSG_SELECT_CHAIN: {
-		mainGame->dField.ClearChainSelect();
-		break;
-	}
-	}
-	if(mainGame->dInfo.isSingleMode) {
-		SingleMode::SetResponse(response_buf, response_len);
-		mainGame->singleSignal.Set();
-	} else {
-		mainGame->dInfo.time_player = 2;
-		SendBufferToServer(CTOS_RESPONSE, response_buf, response_len);
-	}
 }
 void DuelClient::BeginRefreshHost() {
 }
