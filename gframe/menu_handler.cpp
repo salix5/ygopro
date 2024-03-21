@@ -36,10 +36,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			mainGame->wQuery->getParent()->bringToFront(mainGame->wQuery);
 			break;
 		}
-		if(mainGame->wReplaySave->isVisible() && id != BUTTON_REPLAY_SAVE && id != BUTTON_REPLAY_CANCEL) {
-			mainGame->wReplaySave->getParent()->bringToFront(mainGame->wReplaySave);
-			break;
-		}
 		switch(event.GUIEvent.EventType) {
 		case irr::gui::EGET_BUTTON_CLICKED: {
 			if(id < 110)
@@ -114,18 +110,12 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::gui::EGET_LISTBOX_CHANGED: {
-			switch(id) {
-			}
 			break;
 		}
 		case irr::gui::EGET_CHECKBOX_CHANGED: {
-			switch(id) {
-			}
 			break;
 		}
 		case irr::gui::EGET_COMBO_BOX_CHANGED: {
-			switch(id) {
-			}
 			break;
 		}
 		default:
