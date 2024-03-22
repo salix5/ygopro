@@ -1293,6 +1293,8 @@ void Game::LoadConfig() {
 			gameConf.chkIgnoreDeckChanges = atoi(valbuf);
 		} else if(!strcmp(strbuf, "default_ot")) {
 			gameConf.defaultOT = atoi(valbuf);
+		} else if (!strcmp(strbuf, "enable_bot_mode")) {
+			gameConf.enable_bot_mode = atoi(valbuf);
 		} else if(!strcmp(strbuf, "quick_animation")) {
 			gameConf.quick_animation = atoi(valbuf);
 		} else if(!strcmp(strbuf, "auto_save_replay")) {
@@ -1338,6 +1340,9 @@ void Game::LoadConfig() {
 			} else if (!strcmp(strbuf, "lastdeck")) {
 				BufferIO::DecodeUTF8(valbuf, wstr);
 				BufferIO::CopyWStr(wstr, gameConf.lastdeck, 64);
+			} else if (!strcmp(strbuf, "bot_deck_path")) {
+				BufferIO::DecodeUTF8(valbuf, wstr);
+				BufferIO::CopyWStr(wstr, gameConf.bot_deck_path, 64);
 			}
 		}
 	}
@@ -1393,6 +1398,9 @@ void Game::SaveConfig() {
 	fprintf(fp, "search_multiple_keywords = %d\n", gameConf.search_multiple_keywords);
 	fprintf(fp, "ignore_deck_changes = %d\n", (chkIgnoreDeckChanges->isChecked() ? 1 : 0));
 	fprintf(fp, "default_ot = %d\n", gameConf.defaultOT);
+	fprintf(fp, "enable_bot_mode = %d\n", gameConf.enable_bot_mode);
+	BufferIO::EncodeUTF8(gameConf.bot_deck_path, linebuf);
+	fprintf(fp, "bot_deck_path = %s\n", linebuf);
 	fprintf(fp, "quick_animation = %d\n", gameConf.quick_animation);
 	fprintf(fp, "auto_save_replay = %d\n", (chkAutoSaveReplay->isChecked() ? 1 : 0));
 	fprintf(fp, "draw_single_chain = %d\n", gameConf.draw_single_chain);
