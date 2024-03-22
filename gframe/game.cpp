@@ -9,6 +9,8 @@
 
 const unsigned short PRO_VERSION = 0x1360;
 
+constexpr char config_filename[] = "setting.conf";
+
 namespace ygo {
 
 Game* mainGame;
@@ -827,13 +829,11 @@ bool Game::Initialize() {
 	wSinglePlay->getCloseButton()->setVisible(false);
 	wSinglePlay->setVisible(false);
 	irr::gui::IGUITabControl* wSingle = env->addTabControl(rect<s32>(0, 20, 579, 419), wSinglePlay, true);
-	if(gameConf.enable_bot_mode) {
-	} else { // avoid null pointer
-		btnStartBot = env->addButton(rect<s32>(0, 0, 0, 0), wSinglePlay);
-		btnBotCancel = env->addButton(rect<s32>(0, 0, 0, 0), wSinglePlay);
-		btnStartBot->setVisible(false);
-		btnBotCancel->setVisible(false);
-	}
+	// avoid null pointer
+	btnStartBot = env->addButton(rect<s32>(0, 0, 0, 0), wSinglePlay);
+	btnBotCancel = env->addButton(rect<s32>(0, 0, 0, 0), wSinglePlay);
+	btnStartBot->setVisible(false);
+	btnBotCancel->setVisible(false);
 	irr::gui::IGUITab* tabSingle = wSingle->addTab(dataManager.GetSysString(1381));
 	lstSinglePlayList = env->addListBox(rect<s32>(10, 10, 350, 350), tabSingle, LISTBOX_SINGLEPLAY_LIST, true);
 	lstSinglePlayList->setItemHeight(18);
@@ -1214,7 +1214,7 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 	});
 }
 void Game::LoadConfig() {
-	FILE* fp = fopen("system.conf", "r");
+	FILE* fp = fopen(config_filename, "r");
 	if(!fp)
 		return;
 	char linebuf[256];
@@ -1349,7 +1349,7 @@ void Game::LoadConfig() {
 	fclose(fp);
 }
 void Game::SaveConfig() {
-	FILE* fp = fopen("system.conf", "w");
+	FILE* fp = fopen(config_filename, "w");
 	fprintf(fp, "#config file\n#nickname & gamename should be less than 20 characters\n");
 	char linebuf[256];
 	fprintf(fp, "use_d3d = %d\n", gameConf.use_d3d ? 1 : 0);
