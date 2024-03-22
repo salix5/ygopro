@@ -1,7 +1,6 @@
 #include <stack>
 #include "client_field.h"
 #include "client_card.h"
-#include "duelclient.h"
 #include "data_manager.h"
 #include "image_manager.h"
 #include "game.h"
@@ -1125,59 +1124,6 @@ void ClientField::FadeCard(ClientCard * pcard, int alpha, int frame) {
 	pcard->dAlpha = (alpha - pcard->curAlpha) / frame;
 	pcard->is_fading = true;
 	pcard->aniFrame = frame;
-}
-bool ClientField::ShowSelectSum(bool panelmode) {
-	if(panelmode) {
-		if(CheckSelectSum()) {
-			if(selectsum_cards.size() == 0 || selectable_cards.size() == 0) {
-				SetResponseSelectedCards();
-				ShowCancelOrFinishButton(0);
-				if(mainGame->wCardSelect->isVisible())
-					mainGame->HideElement(mainGame->wCardSelect, true);
-				else {
-					DuelClient::SendResponse();
-					return true;
-				}
-			} else {
-				select_ready = true;
-				mainGame->wCardSelect->setVisible(false);
-				wchar_t wbuf[256], *pwbuf = wbuf;
-				BufferIO::CopyWStrRef(dataManager.GetSysString(209), pwbuf, 256);
-				*pwbuf++ = L'\n';
-				BufferIO::CopyWStrRef(dataManager.GetSysString(210), pwbuf, 256);
-				mainGame->stQMessage->setText(wbuf);
-				mainGame->PopupElement(mainGame->wQuery);
-			}
-		} else {
-			select_ready = false;
-			mainGame->wCardSelect->setVisible(false);
-			mainGame->dField.ShowSelectCard();
-		}
-	} else {
-		if(CheckSelectSum()) {
-			if(selectsum_cards.size() == 0 || selectable_cards.size() == 0) {
-				SetResponseSelectedCards();
-				ShowCancelOrFinishButton(0);
-				DuelClient::SendResponse();
-				return true;
-			} else {
-				select_ready = true;
-				wchar_t wbuf[256], *pwbuf = wbuf;
-				BufferIO::CopyWStrRef(dataManager.GetSysString(209), pwbuf, 256);
-				*pwbuf++ = L'\n';
-				BufferIO::CopyWStrRef(dataManager.GetSysString(210), pwbuf, 256);
-				mainGame->stQMessage->setText(wbuf);
-				mainGame->PopupElement(mainGame->wQuery);
-			}
-		} else
-			select_ready = false;
-	}
-	if (select_ready) {
-		ShowCancelOrFinishButton(2);
-	} else {
-		ShowCancelOrFinishButton(0);
-	}
-	return false;
 }
 bool ClientField::CheckSelectSum() {
 	std::set<ClientCard*> selable;

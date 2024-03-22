@@ -5,7 +5,6 @@
 #include "image_manager.h"
 #include "sound_manager.h"
 #include "game.h"
-#include "duelclient.h"
 
 namespace ygo {
 
@@ -624,28 +623,6 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->stDMMessage2->setVisible(false);
 				mainGame->ebDMName->setVisible(false);
 				mainGame->cbDMCategory->setVisible(false);
-				break;
-			}
-			case BUTTON_SIDE_OK: {
-				if(deckManager.current_deck.main.size() != pre_mainc
-					|| deckManager.current_deck.extra.size() != pre_extrac
-					|| deckManager.current_deck.side.size() != pre_sidec) {
-					soundManager.PlaySoundEffect(SOUND_INFO);
-					mainGame->env->addMessageBox(L"", dataManager.GetSysString(1410));
-					break;
-				}
-				mainGame->ClearCardInfo();
-				unsigned char deckbuf[1024];
-				auto pdeck = deckbuf;
-				BufferIO::WriteInt32(pdeck, deckManager.current_deck.main.size() + deckManager.current_deck.extra.size());
-				BufferIO::WriteInt32(pdeck, deckManager.current_deck.side.size());
-				for(size_t i = 0; i < deckManager.current_deck.main.size(); ++i)
-					BufferIO::WriteInt32(pdeck, deckManager.current_deck.main[i]->first);
-				for(size_t i = 0; i < deckManager.current_deck.extra.size(); ++i)
-					BufferIO::WriteInt32(pdeck, deckManager.current_deck.extra[i]->first);
-				for(size_t i = 0; i < deckManager.current_deck.side.size(); ++i)
-					BufferIO::WriteInt32(pdeck, deckManager.current_deck.side[i]->first);
-				DuelClient::SendBufferToServer(CTOS_UPDATE_DECK, deckbuf, pdeck - deckbuf);
 				break;
 			}
 			case BUTTON_SIDE_RELOAD: {

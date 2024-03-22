@@ -5,7 +5,6 @@
 #include "deck_manager.h"
 #include "sound_manager.h"
 #include "materials.h"
-#include "duelclient.h"
 
 const unsigned short PRO_VERSION = 0x1360;
 
@@ -1038,7 +1037,6 @@ void Game::MainLoop() {
 					dInfo.time_left[dInfo.time_player]--;
 		}
 	}
-	DuelClient::StopClient(true);
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	SaveConfig();
 //	device->drop();
@@ -2207,24 +2205,10 @@ bool Game::OnCommonEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::gui::EGET_EDITBOX_ENTER: {
-			switch (id) {
-			case EDITBOX_CHAT: {
-				if (dInfo.isReplay)
-					break;
-				const wchar_t* input = ebChatInput->getText();
-				if (input[0]) {
-					unsigned short msgbuf[256];
-					int len = BufferIO::CopyWStr(input, msgbuf, 256);
-					DuelClient::SendBufferToServer(CTOS_CHAT, msgbuf, (len + 1) * sizeof(short));
-					ebChatInput->setText(L"");
-					return true;
-				}
-				break;
-			}
-			}
 			break;
 		}
-		default: break;
+		default:
+			break;
 		}
 		break;
 	}

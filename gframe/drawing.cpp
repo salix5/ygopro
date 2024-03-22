@@ -3,7 +3,6 @@
 #include "image_manager.h"
 #include "deck_manager.h"
 #include "sound_manager.h"
-#include "duelclient.h"
 #include "../ocgcore/common.h"
 
 namespace ygo {
@@ -790,7 +789,6 @@ void Game::DrawGUI() {
 						fu.guiFading->setRelativePosition(irr::core::recti(fu.fadingUL, fu.fadingLR));
 				}
 				if(fu.signalAction && !fu.fadingFrame) {
-					DuelClient::SendResponse();
 					fu.signalAction = false;
 				}
 			}
