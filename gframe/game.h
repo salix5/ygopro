@@ -326,31 +326,8 @@ public:
 	irr::gui::IGUIButton* btnModeExit;
 	//lan
 	irr::gui::IGUIWindow* wLanWindow;
-	irr::gui::IGUIEditBox* ebNickName;
-	irr::gui::IGUIListBox* lstHostList;
-	irr::gui::IGUIButton* btnLanRefresh;
-	irr::gui::IGUIEditBox* ebJoinHost;
-	irr::gui::IGUIEditBox* ebJoinPort;
-	irr::gui::IGUIEditBox* ebJoinPass;
-	irr::gui::IGUIButton* btnJoinHost;
-	irr::gui::IGUIButton* btnJoinCancel;
-	irr::gui::IGUIButton* btnCreateHost;
 	//create host
 	irr::gui::IGUIWindow* wCreateHost;
-	irr::gui::IGUIComboBox* cbHostLFlist;
-	irr::gui::IGUIComboBox* cbMatchMode;
-	irr::gui::IGUIComboBox* cbRule;
-	irr::gui::IGUIEditBox* ebTimeLimit;
-	irr::gui::IGUIEditBox* ebStartLP;
-	irr::gui::IGUIEditBox* ebStartHand;
-	irr::gui::IGUIEditBox* ebDrawCount;
-	irr::gui::IGUIEditBox* ebServerName;
-	irr::gui::IGUIEditBox* ebServerPass;
-	irr::gui::IGUIComboBox* cbDuelRule;
-	irr::gui::IGUICheckBox* chkNoCheckDeck;
-	irr::gui::IGUICheckBox* chkNoShuffleDeck;
-	irr::gui::IGUIButton* btnHostConfirm;
-	irr::gui::IGUIButton* btnHostCancel;
 	//host panel
 	irr::gui::IGUIWindow* wHostPrepare;
 	irr::gui::IGUIButton* btnHostPrepDuelist;

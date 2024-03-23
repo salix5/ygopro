@@ -118,7 +118,6 @@ bool OnCommonEvent(const irr::SEvent& event) {
 				mainGame->gameConf.use_lflist = mainGame->chkLFlist->isChecked() ? 1 : 0;
 				mainGame->cbLFlist->setEnabled(mainGame->gameConf.use_lflist);
 				mainGame->cbLFlist->setSelected(mainGame->gameConf.use_lflist ? mainGame->gameConf.default_lflist : mainGame->cbLFlist->getItemCount() - 1);
-				mainGame->cbHostLFlist->setSelected(mainGame->gameConf.use_lflist ? mainGame->gameConf.default_lflist : mainGame->cbHostLFlist->getItemCount() - 1);
 				mainGame->deckBuilder.filterList = &deckManager._lfList[mainGame->cbLFlist->getSelected()].content;
 				return true;
 				break;
@@ -130,7 +129,6 @@ bool OnCommonEvent(const irr::SEvent& event) {
 			switch (id) {
 			case COMBOBOX_LFLIST: {
 				mainGame->gameConf.default_lflist = mainGame->cbLFlist->getSelected();
-				mainGame->cbHostLFlist->setSelected(mainGame->gameConf.default_lflist);
 				mainGame->deckBuilder.filterList = &deckManager._lfList[mainGame->gameConf.default_lflist].content;
 				return true;
 				break;
