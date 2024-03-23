@@ -1,5 +1,6 @@
 #include "config.h"
 #include "menu_handler.h"
+#include "event_handler.h"
 #include "deck_manager.h"
 #include "image_manager.h"
 #include "sound_manager.h"
@@ -8,7 +9,7 @@
 namespace ygo {
 
 bool MenuHandler::OnEvent(const irr::SEvent& event) {
-	if(mainGame->OnCommonEvent(event))
+	if(ygo::OnCommonEvent(event))
 		return false;
 	switch(event.EventType) {
 	case irr::EET_GUI_EVENT: {

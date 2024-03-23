@@ -2,7 +2,9 @@
 #define EVENT_HANDLER_H
 
 #include "config.h"
-#include "game.h"
-#include "client_card.h"
+
+namespace ygo {
+	bool OnCommonEvent(const irr::SEvent& event);
+}
 
 #endif //EVENT_HANDLER_H

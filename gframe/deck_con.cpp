@@ -1,5 +1,6 @@
 #include "config.h"
 #include "deck_con.h"
+#include "event_handler.h"
 #include "data_manager.h"
 #include "deck_manager.h"
 #include "image_manager.h"
@@ -111,7 +112,7 @@ void DeckBuilder::Terminate() {
 		mainGame->device->closeDevice();
 }
 bool DeckBuilder::OnEvent(const irr::SEvent& event) {
-	if(mainGame->OnCommonEvent(event))
+	if(ygo::OnCommonEvent(event))
 		return false;
 	switch(event.EventType) {
 	case irr::EET_GUI_EVENT: {
