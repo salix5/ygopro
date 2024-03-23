@@ -330,19 +330,8 @@ public:
 	irr::gui::IGUIWindow* wCreateHost;
 	//host panel
 	irr::gui::IGUIWindow* wHostPrepare;
-	irr::gui::IGUIButton* btnHostPrepDuelist;
-	irr::gui::IGUIButton* btnHostPrepOB;
-	irr::gui::IGUIStaticText* stHostPrepDuelist[4];
-	irr::gui::IGUICheckBox* chkHostPrepReady[4];
-	irr::gui::IGUIButton* btnHostPrepKick[4];
 	irr::gui::IGUIComboBox* cbCategorySelect;
 	irr::gui::IGUIComboBox* cbDeckSelect;
-	irr::gui::IGUIStaticText* stHostPrepRule;
-	irr::gui::IGUIStaticText* stHostPrepOB;
-	irr::gui::IGUIButton* btnHostPrepReady;
-	irr::gui::IGUIButton* btnHostPrepNotReady;
-	irr::gui::IGUIButton* btnHostPrepStart;
-	irr::gui::IGUIButton* btnHostPrepCancel;
 	//replay
 	irr::gui::IGUIWindow* wReplay;
 	irr::gui::IGUIListBox* lstReplayList;
