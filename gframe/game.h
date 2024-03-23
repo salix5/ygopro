@@ -334,38 +334,10 @@ public:
 	irr::gui::IGUIComboBox* cbDeckSelect;
 	//replay
 	irr::gui::IGUIWindow* wReplay;
-	irr::gui::IGUIListBox* lstReplayList;
-	irr::gui::IGUIStaticText* stReplayInfo;
-	irr::gui::IGUIButton* btnLoadReplay;
-	irr::gui::IGUIButton* btnDeleteReplay;
-	irr::gui::IGUIButton* btnRenameReplay;
-	irr::gui::IGUIButton* btnReplayCancel;
-	irr::gui::IGUIButton* btnExportDeck;
-	irr::gui::IGUIEditBox* ebRepStartTurn;
 	//single play
 	irr::gui::IGUIWindow* wSinglePlay;
-	irr::gui::IGUIListBox* lstBotList;
-	irr::gui::IGUIStaticText* stBotInfo;
-	irr::gui::IGUIButton* btnStartBot;
-	irr::gui::IGUIButton* btnBotCancel;
-	irr::gui::IGUIComboBox* cbBotDeckCategory;
-	irr::gui::IGUIComboBox* cbBotDeck;
-	irr::gui::IGUIComboBox* cbBotRule;
-	irr::gui::IGUICheckBox* chkBotHand;
-	irr::gui::IGUICheckBox* chkBotNoCheckDeck;
-	irr::gui::IGUICheckBox* chkBotNoShuffleDeck;
-	irr::gui::IGUIListBox* lstSinglePlayList;
-	irr::gui::IGUIStaticText* stSinglePlayInfo;
-	irr::gui::IGUICheckBox* chkSinglePlayReturnDeckTop;
-	irr::gui::IGUIButton* btnLoadSinglePlay;
-	irr::gui::IGUIButton* btnSinglePlayCancel;
-	//hand
-	irr::gui::IGUIWindow* wHand;
-	irr::gui::IGUIButton* btnHand[3];
 	//
 	irr::gui::IGUIWindow* wFTSelect;
-	irr::gui::IGUIButton* btnFirst;
-	irr::gui::IGUIButton* btnSecond;
 	//message
 	irr::gui::IGUIWindow* wMessage;
 	irr::gui::IGUIStaticText* stMessage;
@@ -380,9 +352,6 @@ public:
 	irr::gui::IGUIButton* btnNo;
 	//surrender yes/no
 	irr::gui::IGUIWindow* wSurrender;
-	irr::gui::IGUIStaticText* stSurrenderMessage;
-	irr::gui::IGUIButton* btnSurrenderYes;
-	irr::gui::IGUIButton* btnSurrenderNo;
 	//options
 	irr::gui::IGUIWindow* wOptions;
 	irr::gui::IGUIStaticText* stOptions;
@@ -393,33 +362,14 @@ public:
 	irr::gui::IGUIScrollBar* scrOption;
 	//announce number
 	irr::gui::IGUIWindow* wANNumber;
-	irr::gui::IGUIComboBox* cbANNumber;
-	irr::gui::IGUIButton* btnANNumber[12];
-	irr::gui::IGUIButton* btnANNumberOK;
 	//announce card
 	irr::gui::IGUIWindow* wANCard;
-	irr::gui::IGUIEditBox* ebANCard;
-	irr::gui::IGUIListBox* lstANCard;
-	irr::gui::IGUIButton* btnANCardOK;
 	//announce attribute
 	irr::gui::IGUIWindow* wANAttribute;
-	irr::gui::IGUICheckBox* chkAttribute[7];
 	//announce race
 	irr::gui::IGUIWindow* wANRace;
-	irr::gui::IGUICheckBox* chkRace[RACES_COUNT];
 	//cmd menu
 	irr::gui::IGUIWindow* wCmdMenu;
-	irr::gui::IGUIButton* btnActivate;
-	irr::gui::IGUIButton* btnSummon;
-	irr::gui::IGUIButton* btnSPSummon;
-	irr::gui::IGUIButton* btnMSet;
-	irr::gui::IGUIButton* btnSSet;
-	irr::gui::IGUIButton* btnRepos;
-	irr::gui::IGUIButton* btnAttack;
-	irr::gui::IGUIButton* btnShowList;
-	irr::gui::IGUIButton* btnOperation;
-	irr::gui::IGUIButton* btnReset;
-	irr::gui::IGUIButton* btnShuffle;
 	//chat window
 	irr::gui::IGUIWindow* wChat;
 	irr::gui::IGUIListBox* lstChatLog;
@@ -428,10 +378,6 @@ public:
 	irr::gui::IGUICheckBox* chkIgnore2;
 	//phase button
 	irr::gui::IGUIStaticText* wPhase;
-	irr::gui::IGUIButton* btnPhaseStatus;
-	irr::gui::IGUIButton* btnBP;
-	irr::gui::IGUIButton* btnM2;
-	irr::gui::IGUIButton* btnEP;
 	//deck edit
 	irr::gui::IGUIStaticText* wDeckEdit;
 	irr::gui::IGUIComboBox* cbDBCategory;
@@ -507,27 +453,8 @@ public:
 	irr::gui::IGUIComboBox* cbSortType;
 	//replay save
 	irr::gui::IGUIWindow* wReplaySave;
-	irr::gui::IGUIEditBox* ebRSName;
-	irr::gui::IGUIButton* btnRSYes;
-	irr::gui::IGUIButton* btnRSNo;
-	//replay control
-	irr::gui::IGUIStaticText* wReplayControl;
-	irr::gui::IGUIButton* btnReplayStart;
-	irr::gui::IGUIButton* btnReplayPause;
-	irr::gui::IGUIButton* btnReplayStep;
-	irr::gui::IGUIButton* btnReplayUndo;
-	irr::gui::IGUIButton* btnReplayExit;
-	irr::gui::IGUIButton* btnReplaySwap;
 	//surrender/leave
 	irr::gui::IGUIButton* btnLeaveGame;
-	//swap
-	irr::gui::IGUIButton* btnSpectatorSwap;
-	//chain control
-	irr::gui::IGUIButton* btnChainIgnore;
-	irr::gui::IGUIButton* btnChainAlways;
-	irr::gui::IGUIButton* btnChainWhenAvail;
-	//cancel or finish
-	irr::gui::IGUIButton* btnCancelOrFinish;
 	//big picture
 	irr::gui::IGUIWindow* wBigCard;
 	irr::gui::IGUIImage* imgBigCard;
