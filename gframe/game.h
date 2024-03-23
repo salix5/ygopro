@@ -269,14 +269,12 @@ public:
 	irr::gui::CGUITTFont* numFont;
 	irr::gui::CGUITTFont* adFont;
 	irr::gui::CGUITTFont* lpcFont;
-	std::map<irr::gui::CGUIImageButton*, int> imageLoading;
 	//card image
 	irr::gui::IGUIStaticText* wCardImg;
 	irr::gui::IGUIImage* imgCard;
 	//hint text
 	irr::gui::IGUIStaticText* stHintMsg;
 	irr::gui::IGUIStaticText* stTip;
-	irr::gui::IGUIStaticText* stCardListTip;
 	//infos
 	irr::gui::IGUITabControl* wInfos;
 	irr::gui::IGUIStaticText* stName;
@@ -428,24 +426,6 @@ public:
 	irr::gui::IGUIButton* btnOptionOK;
 	irr::gui::IGUIButton* btnOption[5];
 	irr::gui::IGUIScrollBar* scrOption;
-	//pos selection
-	irr::gui::IGUIWindow* wPosSelect;
-	irr::gui::CGUIImageButton* btnPSAU;
-	irr::gui::CGUIImageButton* btnPSAD;
-	irr::gui::CGUIImageButton* btnPSDU;
-	irr::gui::CGUIImageButton* btnPSDD;
-	//card selection
-	irr::gui::IGUIWindow* wCardSelect;
-	irr::gui::CGUIImageButton* btnCardSelect[5];
-	irr::gui::IGUIStaticText *stCardPos[5];
-	irr::gui::IGUIScrollBar *scrCardList;
-	irr::gui::IGUIButton* btnSelectOK;
-	//card display
-	irr::gui::IGUIWindow* wCardDisplay;
-	irr::gui::CGUIImageButton* btnCardDisplay[5];
-	irr::gui::IGUIStaticText *stDisplayPos[5];
-	irr::gui::IGUIScrollBar *scrDisplayList;
-	irr::gui::IGUIButton* btnDisplayOK;
 	//announce number
 	irr::gui::IGUIWindow* wANNumber;
 	irr::gui::IGUIComboBox* cbANNumber;
