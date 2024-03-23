@@ -233,11 +233,13 @@ bool OnCommonEvent(const irr::SEvent& event) {
 			return true;
 			break;
 		}
-		default: break;
+		default:
+			break;
 		}
 		break;
 	}
-	default: break;
+	default:
+		break;
 	}
 	return false;
 }
