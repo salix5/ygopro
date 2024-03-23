@@ -1,6 +1,4 @@
-#include "config.h"
-#include "game.h"
-#include "client_card.h"
+#include "event_handler.h"
 #include "client_field.h"
 #include "network.h"
 #include "data_manager.h"
