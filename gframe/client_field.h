@@ -92,36 +92,9 @@ public:
 	void Clear();
 	void Initial(int player, int deckc, int extrac);
 	ClientCard* GetCard(int controler, int location, int sequence, int sub_seq = 0);
-	void AddCard(ClientCard* pcard, int controler, int location, int sequence);
-	ClientCard* RemoveCard(int controler, int location, int sequence);
-	void UpdateCard(int controler, int location, int sequence, unsigned char* data);
-	void UpdateFieldCard(int controler, int location, unsigned char* data);
-	void ClearCommandFlag();
-	void ClearSelect();
-	void ClearChainSelect();
-	void ShowSelectCard(bool buttonok = false, bool chain = false);
-	void ShowChainCard();
-	void ShowLocationCard();
-	void ShowSelectOption(int select_hint = 0);
-	void ReplaySwap();
-	void RefreshAllCards();
 
-	void GetChainLocation(int controler, int location, int sequence, irr::core::vector3df* t);
 	void GetCardLocation(ClientCard* pcard, irr::core::vector3df* t, irr::core::vector3df* r, bool setTrans = false);
 	void MoveCard(ClientCard* pcard, int frame);
-	void FadeCard(ClientCard* pcard, int alpha, int frame);
-	bool ShowSelectSum(bool panelmode);
-	bool CheckSelectSum();
-	bool CheckSelectTribute();
-	bool check_min(const std::set<ClientCard*>& left, std::set<ClientCard*>::const_iterator index, int min, int max);
-	bool check_sel_sum_s(const std::set<ClientCard*>& left, int index, int acc);
-	void check_sel_sum_t(const std::set<ClientCard*>& left, int acc);
-	bool check_sum(std::set<ClientCard*>::const_iterator index, std::set<ClientCard*>::const_iterator end, int acc, int count);
-	bool check_sel_sum_trib_s(const std::set<ClientCard*>& left, int index, int acc);
-	void check_sel_sum_trib_t(const std::set<ClientCard*>& left, int acc);
-	bool check_sum_trib(std::set<ClientCard*>::const_iterator index, std::set<ClientCard*>::const_iterator end, int acc);
-
-	void UpdateDeclarableList();
 
 	irr::gui::IGUIElement* panel{ nullptr };
 	std::vector<int> ancard;
