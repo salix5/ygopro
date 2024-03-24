@@ -7,7 +7,7 @@
 
 namespace ygo {
 
-bool OnCommonEvent(const irr::SEvent& event) {
+bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 	switch (event.EventType) {
 	case irr::EET_GUI_EVENT: {
 		s32 id = event.GUIEvent.Caller->getID();
@@ -211,7 +211,7 @@ bool OnCommonEvent(const irr::SEvent& event) {
 	return false;
 }
 bool ClientField::OnEvent(const irr::SEvent& event) {
-	if(ygo::OnCommonEvent(event))
+	if(OnCommonEvent(event))
 		return false;
 	return false;
 }

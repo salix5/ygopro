@@ -113,6 +113,7 @@ public:
 	int list_command{ 0 };
 
 	virtual bool OnEvent(const irr::SEvent& event);
+	virtual bool OnCommonEvent(const irr::SEvent& event);
 };
 
 }

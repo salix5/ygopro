@@ -9,7 +9,7 @@
 namespace ygo {
 
 bool MenuHandler::OnEvent(const irr::SEvent& event) {
-	if(ygo::OnCommonEvent(event))
+	if(mainGame->dField.OnCommonEvent(event))
 		return false;
 	switch(event.EventType) {
 	case irr::EET_GUI_EVENT: {
