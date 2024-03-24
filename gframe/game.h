@@ -39,12 +39,9 @@ struct Config {
 	unsigned char textfontsize{ 14 };
 	wchar_t nickname[20]{};
 	//settings
-	int chkIgnore1{ 0 };
-	int chkIgnore2{ 0 };
 	int default_rule{ DEFAULT_DUEL_RULE };
 	int hide_hint_button{ 0 };
 	int draw_field_spell{ 1 };
-	int hide_player_name{ 0 };
 	bool enable_sound{ true };
 	bool enable_music{ true };
 	double sound_volume{ 0.5 };
@@ -270,7 +267,6 @@ public:
 	irr::gui::IGUIListBox* lstLog;
 	irr::gui::IGUIButton* btnClearLog;
 	irr::gui::IGUIButton* btnSaveLog;
-	irr::gui::IGUICheckBox* chkHidePlayerName;
 	irr::gui::IGUIWindow* tabSystem;
 	irr::gui::IGUIElement* elmTabSystemLast;
 	irr::gui::IGUIScrollBar* scrTabSystem;
@@ -347,8 +343,6 @@ public:
 	irr::gui::IGUIWindow* wChat;
 	irr::gui::IGUIListBox* lstChatLog;
 	irr::gui::IGUIEditBox* ebChatInput;
-	irr::gui::IGUICheckBox* chkIgnore1;
-	irr::gui::IGUICheckBox* chkIgnore2;
 	//phase button
 	irr::gui::IGUIStaticText* wPhase;
 	//deck edit

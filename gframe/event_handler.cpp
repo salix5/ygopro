@@ -84,21 +84,6 @@ bool OnCommonEvent(const irr::SEvent& event) {
 				return true;
 				break;
 			}
-			case CHECKBOX_DISABLE_CHAT: {
-				bool show = mainGame->is_building ? false : !mainGame->chkIgnore1->isChecked();
-				mainGame->wChat->setVisible(show);
-				if (!show)
-					mainGame->ClearChatMsg();
-				return true;
-				break;
-			}
-			case CHECKBOX_HIDE_PLAYER_NAME: {
-				mainGame->gameConf.hide_player_name = mainGame->chkHidePlayerName->isChecked() ? 1 : 0;
-				if (mainGame->gameConf.hide_player_name)
-					mainGame->ClearChatMsg();
-				return true;
-				break;
-			}
 			case CHECKBOX_PREFER_EXPANSION: {
 				mainGame->gameConf.prefer_expansion_script = mainGame->chkPreferExpansionScript->isChecked() ? 1 : 0;
 				return true;
