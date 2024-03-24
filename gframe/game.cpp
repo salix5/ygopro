@@ -248,47 +248,8 @@ bool Game::Initialize() {
 	lstLog = env->addListBox(rect<s32>(10, 10, 290, 290), tabLog, LISTBOX_LOG, false);
 	lstLog->setItemHeight(18);
 	btnClearLog = env->addButton(rect<s32>(160, 300, 260, 325), tabLog, BUTTON_CLEAR_LOG, dataManager.GetSysString(1272));
-	//helper
-	irr::gui::IGUITab* _tabHelper = wInfos->addTab(dataManager.GetSysString(1298));
-	_tabHelper->setRelativePosition(recti(16, 49, 299, 362));
-	tabHelper = env->addWindow(recti(0, 0, 250, 300), false, L"", _tabHelper);
-	tabHelper->setDrawTitlebar(false);
-	tabHelper->getCloseButton()->setVisible(false);
-	tabHelper->setDrawBackground(false);
-	tabHelper->setDraggable(false);
-	scrTabHelper = env->addScrollBar(false, rect<s32>(252, 0, 272, 300), _tabHelper, SCROLL_TAB_HELPER);
-	scrTabHelper->setLargeStep(1);
-	scrTabHelper->setSmallStep(1);
-	scrTabHelper->setVisible(false);
 	int posX = 0;
 	int posY = 0;
-	chkMAutoPos = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25), tabHelper, -1, dataManager.GetSysString(1274));
-	chkMAutoPos->setChecked(gameConf.chkMAutoPos != 0);
-	posY += 30;
-	chkSTAutoPos = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25), tabHelper, -1, dataManager.GetSysString(1278));
-	chkSTAutoPos->setChecked(gameConf.chkSTAutoPos != 0);
-	posY += 30;
-	chkRandomPos = env->addCheckBox(false, rect<s32>(posX + 20, posY, posX + 20 + 260, posY + 25), tabHelper, -1, dataManager.GetSysString(1275));
-	chkRandomPos->setChecked(gameConf.chkRandomPos != 0);
-	posY += 30;
-	chkAutoChain = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25), tabHelper, -1, dataManager.GetSysString(1276));
-	chkAutoChain->setChecked(gameConf.chkAutoChain != 0);
-	posY += 30;
-	chkWaitChain = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25), tabHelper, -1, dataManager.GetSysString(1277));
-	chkWaitChain->setChecked(gameConf.chkWaitChain != 0);
-	posY += 30;
-	chkDefaultShowChain = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25), tabHelper, -1, dataManager.GetSysString(1354));
-	chkDefaultShowChain->setChecked(gameConf.chkDefaultShowChain != 0);
-	posY += 30;
-	chkQuickAnimation = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25), tabHelper, CHECKBOX_QUICK_ANIMATION, dataManager.GetSysString(1299));
-	chkQuickAnimation->setChecked(gameConf.quick_animation != 0);
-	posY += 30;
-	chkDrawSingleChain = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25), tabHelper, CHECKBOX_DRAW_SINGLE_CHAIN, dataManager.GetSysString(1287));
-	chkDrawSingleChain->setChecked(gameConf.draw_single_chain != 0);
-	posY += 30;
-	chkAutoSaveReplay = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25), tabHelper, -1, dataManager.GetSysString(1366));
-	chkAutoSaveReplay->setChecked(gameConf.auto_save_replay != 0);
-	elmTabHelperLast = chkAutoSaveReplay;
 	//system
 	irr::gui::IGUITab* _tabSystem = wInfos->addTab(dataManager.GetSysString(1273));
 	_tabSystem->setRelativePosition(recti(16, 49, 299, 362));
@@ -977,18 +938,6 @@ void Game::LoadConfig() {
 		} else if(!strcmp(strbuf, "roompass")) {
 			BufferIO::DecodeUTF8(valbuf, wstr);
 			BufferIO::CopyWStr(wstr, gameConf.roompass, 20);
-		} else if(!strcmp(strbuf, "automonsterpos")) {
-			gameConf.chkMAutoPos = atoi(valbuf);
-		} else if(!strcmp(strbuf, "autospellpos")) {
-			gameConf.chkSTAutoPos = atoi(valbuf);
-		} else if(!strcmp(strbuf, "randompos")) {
-			gameConf.chkRandomPos = atoi(valbuf);
-		} else if(!strcmp(strbuf, "autochain")) {
-			gameConf.chkAutoChain = atoi(valbuf);
-		} else if(!strcmp(strbuf, "waitchain")) {
-			gameConf.chkWaitChain = atoi(valbuf);
-		} else if(!strcmp(strbuf, "showchain")) {
-			gameConf.chkDefaultShowChain = atoi(valbuf);
 		} else if(!strcmp(strbuf, "mute_opponent")) {
 			gameConf.chkIgnore1 = atoi(valbuf);
 		} else if(!strcmp(strbuf, "mute_spectators")) {
@@ -1023,8 +972,6 @@ void Game::LoadConfig() {
 			gameConf.enable_bot_mode = atoi(valbuf);
 		} else if(!strcmp(strbuf, "quick_animation")) {
 			gameConf.quick_animation = atoi(valbuf);
-		} else if(!strcmp(strbuf, "auto_save_replay")) {
-			gameConf.auto_save_replay = atoi(valbuf);
 		} else if(!strcmp(strbuf, "draw_single_chain")) {
 			gameConf.draw_single_chain = atoi(valbuf);
 		} else if(!strcmp(strbuf, "hide_player_name")) {
@@ -1100,12 +1047,6 @@ void Game::SaveConfig() {
 	BufferIO::EncodeUTF8(gameConf.lastport, linebuf);
 	fprintf(fp, "lastport = %s\n", linebuf);
 	//settings
-	fprintf(fp, "automonsterpos = %d\n", (chkMAutoPos->isChecked() ? 1 : 0));
-	fprintf(fp, "autospellpos = %d\n", (chkSTAutoPos->isChecked() ? 1 : 0));
-	fprintf(fp, "randompos = %d\n", (chkRandomPos->isChecked() ? 1 : 0));
-	fprintf(fp, "autochain = %d\n", (chkAutoChain->isChecked() ? 1 : 0));
-	fprintf(fp, "waitchain = %d\n", (chkWaitChain->isChecked() ? 1 : 0));
-	fprintf(fp, "showchain = %d\n", (chkDefaultShowChain->isChecked() ? 1 : 0));
 	fprintf(fp, "mute_opponent = %d\n", (chkIgnore1->isChecked() ? 1 : 0));
 	fprintf(fp, "mute_spectators = %d\n", (chkIgnore2->isChecked() ? 1 : 0));
 	fprintf(fp, "use_lflist = %d\n", gameConf.use_lflist);
@@ -1127,7 +1068,6 @@ void Game::SaveConfig() {
 	BufferIO::EncodeUTF8(gameConf.bot_deck_path, linebuf);
 	fprintf(fp, "bot_deck_path = %s\n", linebuf);
 	fprintf(fp, "quick_animation = %d\n", gameConf.quick_animation);
-	fprintf(fp, "auto_save_replay = %d\n", (chkAutoSaveReplay->isChecked() ? 1 : 0));
 	fprintf(fp, "draw_single_chain = %d\n", gameConf.draw_single_chain);
 	fprintf(fp, "hide_player_name = %d\n", gameConf.hide_player_name);
 	fprintf(fp, "prefer_expansion_script = %d\n", gameConf.prefer_expansion_script);
@@ -1486,18 +1426,6 @@ void Game::OnResize() {
 	//sound / music volume bar
 	scrSoundVolume->setRelativePosition(recti(scrSoundVolume->getRelativePosition().UpperLeftCorner.X, scrSoundVolume->getRelativePosition().UpperLeftCorner.Y, 20 + (300 * xScale) - 70, scrSoundVolume->getRelativePosition().LowerRightCorner.Y));
 	scrMusicVolume->setRelativePosition(recti(scrMusicVolume->getRelativePosition().UpperLeftCorner.X, scrMusicVolume->getRelativePosition().UpperLeftCorner.Y, 20 + (300 * xScale) - 70, scrMusicVolume->getRelativePosition().LowerRightCorner.Y));
-
-	recti tabHelperPos = recti(0, 0, 300 * xScale - 50, 365 * yScale - 65);
-	tabHelper->setRelativePosition(tabHelperPos);
-	scrTabHelper->setRelativePosition(recti(tabHelperPos.LowerRightCorner.X + 2, 0, tabHelperPos.LowerRightCorner.X + 22, tabHelperPos.LowerRightCorner.Y));
-	s32 tabHelperLastY = elmTabHelperLast->getRelativePosition().LowerRightCorner.Y;
-	if(tabHelperLastY > tabHelperPos.LowerRightCorner.Y) {
-		scrTabHelper->setMax(tabHelperLastY - tabHelperPos.LowerRightCorner.Y + 5);
-		scrTabHelper->setPos(0);
-		scrTabHelper->setVisible(true);
-	}
-	else
-		scrTabHelper->setVisible(false);
 
 	recti tabSystemPos = recti(0, 0, 300 * xScale - 50, 365 * yScale - 65);
 	tabSystem->setRelativePosition(tabSystemPos);

@@ -92,16 +92,6 @@ bool OnCommonEvent(const irr::SEvent& event) {
 				return true;
 				break;
 			}
-			case CHECKBOX_QUICK_ANIMATION: {
-				mainGame->gameConf.quick_animation = mainGame->chkQuickAnimation->isChecked() ? 1 : 0;
-				return true;
-				break;
-			}
-			case CHECKBOX_DRAW_SINGLE_CHAIN: {
-				mainGame->gameConf.draw_single_chain = mainGame->chkDrawSingleChain->isChecked() ? 1 : 0;
-				return true;
-				break;
-			}
 			case CHECKBOX_HIDE_PLAYER_NAME: {
 				mainGame->gameConf.hide_player_name = mainGame->chkHidePlayerName->isChecked() ? 1 : 0;
 				if (mainGame->gameConf.hide_player_name)
@@ -179,12 +169,6 @@ bool OnCommonEvent(const irr::SEvent& event) {
 				mainGame->gameConf.music_volume = (double)mainGame->scrMusicVolume->getPos() / 100;
 				soundManager.SetSoundVolume(mainGame->gameConf.sound_volume);
 				soundManager.SetMusicVolume(mainGame->gameConf.music_volume);
-				return true;
-				break;
-			}
-			case SCROLL_TAB_HELPER: {
-				rect<s32> pos = mainGame->tabHelper->getRelativePosition();
-				mainGame->tabHelper->setRelativePosition(recti(0, mainGame->scrTabHelper->getPos() * -1, pos.LowerRightCorner.X, pos.LowerRightCorner.Y));
 				return true;
 				break;
 			}
