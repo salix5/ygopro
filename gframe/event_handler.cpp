@@ -1,4 +1,3 @@
-#include "event_handler.h"
 #include "game.h"
 #include "deck_manager.h"
 #include "client_field.h"

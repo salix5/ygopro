@@ -1,6 +1,5 @@
 #include "config.h"
 #include "menu_handler.h"
-#include "event_handler.h"
 #include "deck_manager.h"
 #include "image_manager.h"
 #include "sound_manager.h"
