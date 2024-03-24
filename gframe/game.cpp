@@ -793,7 +793,7 @@ bool Game::Initialize() {
 	wLinkMarks->setDrawTitlebar(false);
 	wLinkMarks->setDraggable(false);
 	wLinkMarks->setVisible(false);
-	btnMarksOK = env->addButton(irr::core::recti(45, 45, 75, 75), wLinkMarks, BUTTON_MARKERS_OK, dataManager.GetSysString(1211));
+	btnMarksOK = env->addButton(irr::core::recti(45, 45, 75, 75), wLinkMarks, BUTTON_MARKERS_OK, L"OK");
 	btnMark[0] = env->addButton(irr::core::recti(10, 10, 40, 40), wLinkMarks, -1, L"\u2196");
 	btnMark[1] = env->addButton(irr::core::recti(45, 10, 75, 40), wLinkMarks, -1, L"\u2191");
 	btnMark[2] = env->addButton(irr::core::recti(80, 10, 110, 40), wLinkMarks, -1, L"\u2197");
