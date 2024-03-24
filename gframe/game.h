@@ -36,29 +36,14 @@ struct Config {
 	int window_width{ 1024 };
 	int window_height{ 640 };
 
-	unsigned short serverport{ 7911 };
 	unsigned char textfontsize{ 14 };
-	wchar_t lasthost[100]{};
-	wchar_t lastport[10]{};
 	wchar_t nickname[20]{};
-	wchar_t gamename[20]{};
-	wchar_t roompass[20]{};
 	//settings
-	int chkMAutoPos{ 0 };
-	int chkSTAutoPos{ 1 };
-	int chkRandomPos{ 0 };
-	int chkAutoChain{ 0 };
-	int chkWaitChain{ 0 };
-	int chkDefaultShowChain{ 0 };
 	int chkIgnore1{ 0 };
 	int chkIgnore2{ 0 };
 	int default_rule{ DEFAULT_DUEL_RULE };
 	int hide_hint_button{ 0 };
 	int draw_field_spell{ 1 };
-	int enable_bot_mode{ 0 };
-	int quick_animation{ 0 };
-	int auto_save_replay{ 0 };
-	int draw_single_chain{ 0 };
 	int hide_player_name{ 0 };
 	bool enable_sound{ true };
 	bool enable_music{ true };

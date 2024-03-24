@@ -481,29 +481,6 @@ void Game::DrawMisc() {
 		driver->setMaterial(matManager.mTexture);
 		driver->drawVertexPrimitiveList(matManager.vActivate, 4, matManager.iRectangle, 2);
 	}
-	if(dField.chains.size() > 1 || mainGame->gameConf.draw_single_chain) {
-		for(size_t i = 0; i < dField.chains.size(); ++i) {
-			if(dField.chains[i].solved)
-				break;
-			matManager.mTRTexture.setTexture(0, imageManager.tChain);
-			matManager.mTRTexture.AmbientColor = 0xffffff00;
-			ic.setRotationRadians(act_rot);
-			ic.setTranslation(dField.chains[i].chain_pos);
-			driver->setMaterial(matManager.mTRTexture);
-			driver->setTransform(irr::video::ETS_WORLD, ic);
-			driver->drawVertexPrimitiveList(matManager.vSymbol, 4, matManager.iRectangle, 2);
-			it.setScale(0.6f);
-			it.setTranslation(dField.chains[i].chain_pos);
-			matManager.mTRTexture.setTexture(0, imageManager.tNumber);
-			matManager.vChainNum[0].TCoords = vector2df(0.19375f * (i % 5), 0.2421875f * (i / 5));
-			matManager.vChainNum[1].TCoords = vector2df(0.19375f * (i % 5 + 1), 0.2421875f * (i / 5));
-			matManager.vChainNum[2].TCoords = vector2df(0.19375f * (i % 5), 0.2421875f * (i / 5 + 1));
-			matManager.vChainNum[3].TCoords = vector2df(0.19375f * (i % 5 + 1), 0.2421875f * (i / 5 + 1));
-			driver->setMaterial(matManager.mTRTexture);
-			driver->setTransform(irr::video::ETS_WORLD, it);
-			driver->drawVertexPrimitiveList(matManager.vChainNum, 4, matManager.iRectangle, 2);
-		}
-	}
 	if(dField.cant_check_grave) {
 		matManager.mTexture.setTexture(0, imageManager.tNegated);
 		driver->setMaterial(matManager.mTexture);
@@ -1032,7 +1009,7 @@ void Game::PopupElement(irr::gui::IGUIElement * element, int hideframe) {
 }
 void Game::WaitFrameSignal(int frame) {
 	frameSignal.Reset();
-	signalFrame = (gameConf.quick_animation && frame >= 12) ? 12 : frame;
+	signalFrame = frame;
 	frameSignal.Wait();
 }
 void Game::DrawThumb(code_pointer cp, position2di pos, const std::unordered_map<int,int>* lflist, bool drag) {

@@ -927,17 +927,6 @@ void Game::LoadConfig() {
 		} else if(!strcmp(strbuf, "numfont")) {
 			BufferIO::DecodeUTF8(valbuf, wstr);
 			BufferIO::CopyWStr(wstr, gameConf.numfont, 256);
-		} else if(!strcmp(strbuf, "serverport")) {
-			gameConf.serverport = atoi(valbuf);
-		} else if(!strcmp(strbuf, "lasthost")) {
-			BufferIO::DecodeUTF8(valbuf, wstr);
-			BufferIO::CopyWStr(wstr, gameConf.lasthost, 100);
-		} else if(!strcmp(strbuf, "lastport")) {
-			BufferIO::DecodeUTF8(valbuf, wstr);
-			BufferIO::CopyWStr(wstr, gameConf.lastport, 20);
-		} else if(!strcmp(strbuf, "roompass")) {
-			BufferIO::DecodeUTF8(valbuf, wstr);
-			BufferIO::CopyWStr(wstr, gameConf.roompass, 20);
 		} else if(!strcmp(strbuf, "mute_opponent")) {
 			gameConf.chkIgnore1 = atoi(valbuf);
 		} else if(!strcmp(strbuf, "mute_spectators")) {
@@ -968,12 +957,6 @@ void Game::LoadConfig() {
 			gameConf.chkIgnoreDeckChanges = atoi(valbuf);
 		} else if(!strcmp(strbuf, "default_ot")) {
 			gameConf.defaultOT = atoi(valbuf);
-		} else if (!strcmp(strbuf, "enable_bot_mode")) {
-			gameConf.enable_bot_mode = atoi(valbuf);
-		} else if(!strcmp(strbuf, "quick_animation")) {
-			gameConf.quick_animation = atoi(valbuf);
-		} else if(!strcmp(strbuf, "draw_single_chain")) {
-			gameConf.draw_single_chain = atoi(valbuf);
 		} else if(!strcmp(strbuf, "hide_player_name")) {
 			gameConf.hide_player_name = atoi(valbuf);
 		} else if(!strcmp(strbuf, "prefer_expansion_script")) {
@@ -1004,9 +987,6 @@ void Game::LoadConfig() {
 			if (!strcmp(strbuf, "nickname")) {
 				BufferIO::DecodeUTF8(valbuf, wstr);
 				BufferIO::CopyWStr(wstr, gameConf.nickname, 20);
-			} else if (!strcmp(strbuf, "gamename")) {
-				BufferIO::DecodeUTF8(valbuf, wstr);
-				BufferIO::CopyWStr(wstr, gameConf.gamename, 20);
 			} else if (!strcmp(strbuf, "lastcategory")) {
 				BufferIO::DecodeUTF8(valbuf, wstr);
 				BufferIO::CopyWStr(wstr, gameConf.lastcategory, 64);
@@ -1031,8 +1011,6 @@ void Game::SaveConfig() {
 	fprintf(fp, "errorlog = %d\n", enable_log);
 	BufferIO::EncodeUTF8(gameConf.nickname, linebuf);
 	fprintf(fp, "nickname = %s\n", linebuf);
-	BufferIO::EncodeUTF8(gameConf.gamename, linebuf);
-	fprintf(fp, "gamename = %s\n", linebuf);
 	BufferIO::EncodeUTF8(gameConf.lastcategory, linebuf);
 	fprintf(fp, "lastcategory = %s\n", linebuf);
 	BufferIO::EncodeUTF8(gameConf.lastdeck, linebuf);
@@ -1041,11 +1019,6 @@ void Game::SaveConfig() {
 	fprintf(fp, "textfont = %s %d\n", linebuf, gameConf.textfontsize);
 	BufferIO::EncodeUTF8(gameConf.numfont, linebuf);
 	fprintf(fp, "numfont = %s\n", linebuf);
-	fprintf(fp, "serverport = %d\n", gameConf.serverport);
-	BufferIO::EncodeUTF8(gameConf.lasthost, linebuf);
-	fprintf(fp, "lasthost = %s\n", linebuf);
-	BufferIO::EncodeUTF8(gameConf.lastport, linebuf);
-	fprintf(fp, "lastport = %s\n", linebuf);
 	//settings
 	fprintf(fp, "mute_opponent = %d\n", (chkIgnore1->isChecked() ? 1 : 0));
 	fprintf(fp, "mute_spectators = %d\n", (chkIgnore2->isChecked() ? 1 : 0));
@@ -1064,11 +1037,8 @@ void Game::SaveConfig() {
 	fprintf(fp, "search_multiple_keywords = %d\n", gameConf.search_multiple_keywords);
 	fprintf(fp, "ignore_deck_changes = %d\n", (chkIgnoreDeckChanges->isChecked() ? 1 : 0));
 	fprintf(fp, "default_ot = %d\n", gameConf.defaultOT);
-	fprintf(fp, "enable_bot_mode = %d\n", gameConf.enable_bot_mode);
 	BufferIO::EncodeUTF8(gameConf.bot_deck_path, linebuf);
 	fprintf(fp, "bot_deck_path = %s\n", linebuf);
-	fprintf(fp, "quick_animation = %d\n", gameConf.quick_animation);
-	fprintf(fp, "draw_single_chain = %d\n", gameConf.draw_single_chain);
 	fprintf(fp, "hide_player_name = %d\n", gameConf.hide_player_name);
 	fprintf(fp, "prefer_expansion_script = %d\n", gameConf.prefer_expansion_script);
 	fprintf(fp, "window_maximized = %d\n", (gameConf.window_maximized ? 1 : 0));
