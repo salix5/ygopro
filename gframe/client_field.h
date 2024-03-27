@@ -93,8 +93,6 @@ public:
 	void Initial(int player, int deckc, int extrac);
 	ClientCard* GetCard(int controler, int location, int sequence, int sub_seq = 0);
 
-	void GetCardLocation(ClientCard* pcard, irr::core::vector3df* t, irr::core::vector3df* r, bool setTrans = false);
-
 	irr::gui::IGUIElement* panel{ nullptr };
 	std::vector<int> ancard;
 	int hovered_controler{ 0 };
