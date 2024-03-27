@@ -411,36 +411,6 @@ void ClientField::GetCardLocation(ClientCard* pcard, irr::core::vector3df* t, ir
 		pcard->mTransform.setRotationRadians(*r);
 	}
 }
-void ClientField::MoveCard(ClientCard * pcard, int frame) {
-	irr::core::vector3df trans = pcard->curPos;
-	irr::core::vector3df rot = pcard->curRot;
-	GetCardLocation(pcard, &trans, &rot);
-	pcard->dPos = (trans - pcard->curPos) / frame;
-	float diff = rot.X - pcard->curRot.X;
-	while (diff < 0) diff += 3.1415926f * 2;
-	while (diff > 3.1415926f * 2)
-		diff -= 3.1415926f * 2;
-	if (diff < 3.1415926f)
-		pcard->dRot.X = diff / frame;
-	else
-		pcard->dRot.X = -(3.1415926f * 2 - diff) / frame;
-	diff = rot.Y - pcard->curRot.Y;
-	while (diff < 0) diff += 3.1415926f * 2;
-	while (diff > 3.1415926f * 2) diff -= 3.1415926f * 2;
-	if (diff < 3.1415926f)
-		pcard->dRot.Y = diff / frame;
-	else
-		pcard->dRot.Y = -(3.1415926f * 2 - diff) / frame;
-	diff = rot.Z - pcard->curRot.Z;
-	while (diff < 0) diff += 3.1415926f * 2;
-	while (diff > 3.1415926f * 2) diff -= 3.1415926f * 2;
-	if (diff < 3.1415926f)
-		pcard->dRot.Z = diff / frame;
-	else
-		pcard->dRot.Z = -(3.1415926f * 2 - diff) / frame;
-	pcard->is_moving = true;
-	pcard->aniFrame = frame;
-}
 template <class T>
 static bool is_declarable(T const& cd, const std::vector<int>& opcode) {
 	std::stack<int> stack;

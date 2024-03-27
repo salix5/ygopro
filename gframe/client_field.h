@@ -94,7 +94,6 @@ public:
 	ClientCard* GetCard(int controler, int location, int sequence, int sub_seq = 0);
 
 	void GetCardLocation(ClientCard* pcard, irr::core::vector3df* t, irr::core::vector3df* r, bool setTrans = false);
-	void MoveCard(ClientCard* pcard, int frame);
 
 	irr::gui::IGUIElement* panel{ nullptr };
 	std::vector<int> ancard;
