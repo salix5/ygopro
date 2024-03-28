@@ -667,9 +667,6 @@ void Game::MainLoop() {
 			else
 				soundManager.PlayBGM(BGM_DUEL);
 			DrawBackImage(imageManager.tBackGround);
-			DrawBackGround();
-			DrawCards();
-			DrawMisc();
 			smgr->drawAll();
 			driver->setMaterial(irr::video::IdentityMaterial);
 			driver->clearZBuffer();
