@@ -323,8 +323,6 @@ void Game::HideElement(irr::gui::IGUIElement * win, bool set_action) {
 void Game::PopupElement(irr::gui::IGUIElement * element, int hideframe) {
 	soundManager.PlayDialogSound(element);
 	element->getParent()->bringToFront(element);
-	if(!is_building)
-		dField.panel = element;
 	env->setFocus(element);
 	if(!hideframe)
 		ShowElement(element);
