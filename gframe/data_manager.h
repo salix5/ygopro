@@ -13,10 +13,12 @@ class DataManager {
 public:
 	DataManager();
 	bool LoadDB(const wchar_t* wfile);
+	bool LoadDatabase(const char* file);
 	bool LoadStrings(const char* file);
 	bool LoadStrings(IReadFile* reader);
 	void ReadStringConfLine(const char* linebuf);
 	bool Error(spmemvfs_db_t* pDB, sqlite3_stmt* pStmt = 0);
+	bool DatabaseError(sqlite3* pDB, sqlite3_stmt* pStmt = nullptr);
 	bool GetData(unsigned int code, CardData* pData);
 	code_pointer GetCodePointer(unsigned int code) const;
 	string_pointer GetStringPointer(unsigned int code) const;
