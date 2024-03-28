@@ -784,52 +784,6 @@ std::wstring Game::SetStaticText(irr::gui::IGUIStaticText* pControl, u32 cWidth,
 	return ret;
 }
 void Game::LoadExpansions() {
-	FileSystem::TraversalDir(L"./expansions", [](const wchar_t* name, bool isdir) {
-		wchar_t fpath[1024];
-		myswprintf(fpath, L"./expansions/%ls", name);
-		if(!isdir && wcsrchr(name, '.') && !mywcsncasecmp(wcsrchr(name, '.'), L".cdb", 4)) {
-			dataManager.LoadDB(fpath);
-		}
-		if(!isdir && wcsrchr(name, '.') && !mywcsncasecmp(wcsrchr(name, '.'), L".conf", 5)) {
-			char upath[1024];
-			BufferIO::EncodeUTF8(fpath, upath);
-			dataManager.LoadStrings(upath);
-		}
-		if(!isdir && wcsrchr(name, '.') && (!mywcsncasecmp(wcsrchr(name, '.'), L".zip", 4) || !mywcsncasecmp(wcsrchr(name, '.'), L".ypk", 4))) {
-#ifdef _WIN32
-			dataManager.FileSystem->addFileArchive(fpath, true, false, EFAT_ZIP);
-#else
-			char upath[1024];
-			BufferIO::EncodeUTF8(fpath, upath);
-			dataManager.FileSystem->addFileArchive(upath, true, false, EFAT_ZIP);
-#endif
-		}
-	});
-	for(u32 i = 0; i < DataManager::FileSystem->getFileArchiveCount(); ++i) {
-		const IFileList* archive = DataManager::FileSystem->getFileArchive(i)->getFileList();
-		for(u32 j = 0; j < archive->getFileCount(); ++j) {
-#ifdef _WIN32
-			const wchar_t* fname = archive->getFullFileName(j).c_str();
-#else
-			wchar_t fname[1024];
-			const char* uname = archive->getFullFileName(j).c_str();
-			BufferIO::DecodeUTF8(uname, fname);
-#endif
-			if(wcsrchr(fname, '.') && !mywcsncasecmp(wcsrchr(fname, '.'), L".cdb", 4))
-				dataManager.LoadDB(fname);
-			if(wcsrchr(fname, '.') && !mywcsncasecmp(wcsrchr(fname, '.'), L".conf", 5)) {
-#ifdef _WIN32
-				IReadFile* reader = DataManager::FileSystem->createAndOpenFile(fname);
-#else
-				IReadFile* reader = DataManager::FileSystem->createAndOpenFile(uname);
-#endif
-				dataManager.LoadStrings(reader);
-			}
-			if(wcsrchr(fname, '.') && !mywcsncasecmp(wcsrchr(fname, '.'), L".ydk", 4)) {
-				deckBuilder.expansionPacks.push_back(fname);
-			}
-		}
-	}
 }
 void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGUIComboBox* cbDeck, bool selectlastused) {
 	cbCategory->clear();
