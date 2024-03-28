@@ -91,7 +91,6 @@ public:
 	ClientCard() = default;
 	~ClientCard();
 	void SetCode(int code);
-	void UpdateInfo(unsigned char* buf);
 	void ClearTarget();
 	void ClearData();
 	static bool client_card_sort(ClientCard* c1, ClientCard* c2);
