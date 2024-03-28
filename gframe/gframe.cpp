@@ -47,10 +47,7 @@ int main(int argc, char* argv[]) {
 #endif //_DEBUG
 #endif //_WIN32
 #ifdef _WIN32
-	WORD wVersionRequested;
-	WSADATA wsaData;
-	wVersionRequested = MAKEWORD(2, 2);
-	WSAStartup(wVersionRequested, &wsaData);
+	//WSAStartup
 #else
 	evthread_use_pthreads();
 #endif //_WIN32
@@ -131,7 +128,7 @@ int main(int argc, char* argv[]) {
 	}
 	ygo::mainGame->MainLoop();
 #ifdef _WIN32
-	WSACleanup();
+	//WSACleanup
 #else
 
 #endif //_WIN32
