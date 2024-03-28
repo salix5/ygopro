@@ -2,7 +2,7 @@
 #define DATAMANAGER_H
 
 #include "config.h"
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include "spmemvfs/spmemvfs.h"
 #include "client_card.h"
 #include <unordered_map>
