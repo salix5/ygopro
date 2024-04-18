@@ -325,8 +325,6 @@ public:
 	irr::gui::IGUIWindow* wANAttribute;
 	//announce race
 	irr::gui::IGUIWindow* wANRace;
-	//cmd menu
-	irr::gui::IGUIWindow* wCmdMenu;
 	//chat window
 	irr::gui::IGUIWindow* wChat;
 	irr::gui::IGUIListBox* lstChatLog;

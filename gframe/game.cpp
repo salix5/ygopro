@@ -375,11 +375,6 @@ bool Game::Initialize() {
 	stHintMsg->setBackgroundColor(0xc0ffffff);
 	stHintMsg->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	stHintMsg->setVisible(false);
-	//cmd menu
-	wCmdMenu = env->addWindow(rect<s32>(10, 10, 110, 179), false, L"");
-	wCmdMenu->setDrawTitlebar(false);
-	wCmdMenu->setVisible(false);
-	wCmdMenu->getCloseButton()->setVisible(false);
 	//deck edit
 	wDeckEdit = env->addStaticText(L"", rect<s32>(309, 5, 605, 130), true, false, 0, -1, true);
 	wDeckEdit->setVisible(false);
@@ -899,8 +894,6 @@ void Game::LoadConfig() {
 			gameConf.window_width = atoi(valbuf);
 		} else if(!strcmp(strbuf, "window_height")) {
 			gameConf.window_height = atoi(valbuf);
-		} else if(!strcmp(strbuf, "resize_popup_menu")) {
-			gameConf.resize_popup_menu = atoi(valbuf) > 0;
 #ifdef YGOPRO_USE_IRRKLANG
 		} else if(!strcmp(strbuf, "enable_sound")) {
 			gameConf.enable_sound = atoi(valbuf) > 0;
@@ -956,7 +949,7 @@ void Game::SaveConfig() {
 	fprintf(fp, "default_lflist = %d\n", gameConf.default_lflist);
 	fprintf(fp, "default_rule = %d\n", gameConf.default_rule == DEFAULT_DUEL_RULE ? 0 : gameConf.default_rule);
 	fprintf(fp, "hide_setname = %d\n", gameConf.hide_setname);
-	fprintf(fp, "#control_mode = 0: Key A/S/D/R Chain Buttons. control_mode = 1: MouseLeft/MouseRight/NULL/F9 Without Chain Buttons\n");
+	fprintf(fp, "#control_mode = 0: R, control_mode = 1: F9\n");
 	fprintf(fp, "control_mode = %d\n", gameConf.control_mode);
 	fprintf(fp, "separate_clear_button = %d\n", gameConf.separate_clear_button);
 	fprintf(fp, "#auto_search_limit >= 0: Start search automatically when the user enters N chars\n");
@@ -971,7 +964,6 @@ void Game::SaveConfig() {
 	fprintf(fp, "window_maximized = %d\n", (gameConf.window_maximized ? 1 : 0));
 	fprintf(fp, "window_width = %d\n", gameConf.window_width);
 	fprintf(fp, "window_height = %d\n", gameConf.window_height);
-	fprintf(fp, "resize_popup_menu = %d\n", gameConf.resize_popup_menu ? 1 : 0);
 #ifdef YGOPRO_USE_IRRKLANG
 	fprintf(fp, "enable_sound = %d\n", (chkEnableSound->isChecked() ? 1 : 0));
 	fprintf(fp, "enable_music = %d\n", (chkEnableMusic->isChecked() ? 1 : 0));
@@ -1183,7 +1175,6 @@ void Game::CloseGameWindow() {
 	wANCard->setVisible(false);
 	wANNumber->setVisible(false);
 	wANRace->setVisible(false);;
-	wCmdMenu->setVisible(false);
 	wMessage->setVisible(false);
 	wOptions->setVisible(false);
 	wPhase->setVisible(false);
@@ -1335,11 +1326,6 @@ void Game::OnResize() {
 	} else
 		scrTabSystem->setVisible(false);
 
-	if(gameConf.resize_popup_menu) {
-		int width = 100 * xScale;
-		int height = (yScale >= 0.666) ? 21 * yScale : 14;
-		wCmdMenu->setRelativePosition(recti(1, 1, width + 1, 1));
-	}
 
 	wCardImg->setRelativePosition(ResizeCardImgWin(1, 1, 20, 18));
 	imgCard->setRelativePosition(ResizeCardImgWin(10, 9, 0, 0));
