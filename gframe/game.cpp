@@ -8,7 +8,7 @@
 
 const unsigned short PRO_VERSION = 0x1360;
 
-constexpr char config_filename[] = "setting.conf";
+constexpr char config_filename[] = "settings.conf";
 
 namespace ygo {
 
