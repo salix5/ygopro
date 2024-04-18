@@ -40,8 +40,6 @@ struct Config {
 	wchar_t nickname[20]{};
 	//settings
 	int default_rule{ DEFAULT_DUEL_RULE };
-	int hide_hint_button{ 0 };
-	int draw_field_spell{ 1 };
 	bool enable_sound{ true };
 	bool enable_music{ true };
 	double sound_volume{ 0.5 };

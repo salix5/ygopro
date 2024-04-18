@@ -879,12 +879,8 @@ void Game::LoadConfig() {
 				gameConf.default_rule = DEFAULT_DUEL_RULE;
 		} else if(!strcmp(strbuf, "hide_setname")) {
 			gameConf.hide_setname = atoi(valbuf);
-		} else if(!strcmp(strbuf, "hide_hint_button")) {
-			gameConf.hide_hint_button = atoi(valbuf);
 		} else if(!strcmp(strbuf, "control_mode")) {
 			gameConf.control_mode = atoi(valbuf);
-		} else if(!strcmp(strbuf, "draw_field_spell")) {
-			gameConf.draw_field_spell = atoi(valbuf);
 		} else if(!strcmp(strbuf, "separate_clear_button")) {
 			gameConf.separate_clear_button = atoi(valbuf);
 		} else if(!strcmp(strbuf, "auto_search_limit")) {
@@ -960,10 +956,8 @@ void Game::SaveConfig() {
 	fprintf(fp, "default_lflist = %d\n", gameConf.default_lflist);
 	fprintf(fp, "default_rule = %d\n", gameConf.default_rule == DEFAULT_DUEL_RULE ? 0 : gameConf.default_rule);
 	fprintf(fp, "hide_setname = %d\n", gameConf.hide_setname);
-	fprintf(fp, "hide_hint_button = %d\n", gameConf.hide_hint_button);
 	fprintf(fp, "#control_mode = 0: Key A/S/D/R Chain Buttons. control_mode = 1: MouseLeft/MouseRight/NULL/F9 Without Chain Buttons\n");
 	fprintf(fp, "control_mode = %d\n", gameConf.control_mode);
-	fprintf(fp, "draw_field_spell = %d\n", gameConf.draw_field_spell);
 	fprintf(fp, "separate_clear_button = %d\n", gameConf.separate_clear_button);
 	fprintf(fp, "#auto_search_limit >= 0: Start search automatically when the user enters N chars\n");
 	fprintf(fp, "auto_search_limit = %d\n", gameConf.auto_search_limit);
