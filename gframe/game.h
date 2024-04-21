@@ -280,6 +280,7 @@ public:
 	HWND hWnd;
 #endif
 
+	std::vector<irr::gui::IGUIEditBox* > editbox_list;
 	//GUI
 	irr::gui::IGUIEnvironment* env;
 	irr::gui::CGUITTFont* guiFont;
@@ -615,6 +616,8 @@ extern Game* mainGame;
 }
 
 #define SIZE_QUERY_BUFFER	0x4000
+
+#define MAX_INPUT_LENGTH	256
 
 #define CARD_IMG_WIDTH		177
 #define CARD_IMG_HEIGHT		254
