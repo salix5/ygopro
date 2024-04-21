@@ -952,7 +952,7 @@ bool Game::Initialize() {
 	env->setFocus(wMainMenu);
 	for (int i = 0; i < irr::gui::EGDC_COUNT; ++i) {
 		auto col = env->getSkin()->getColor((irr::gui::EGUI_DEFAULT_COLOR)i);
-		col.setAlpha(224);
+		col.setAlpha(230);
 		env->getSkin()->setColor((irr::gui::EGUI_DEFAULT_COLOR)i, col);
 	}
 	auto size = driver->getScreenSize();
