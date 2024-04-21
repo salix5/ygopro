@@ -960,7 +960,7 @@ bool Game::Initialize() {
 	env->setFocus(wMainMenu);
 	for (u32 i = 0; i < EGDC_COUNT; ++i) {
 		SColor col = env->getSkin()->getColor((EGUI_DEFAULT_COLOR)i);
-		col.setAlpha(224);
+		col.setAlpha(245);
 		env->getSkin()->setColor((EGUI_DEFAULT_COLOR)i, col);
 	}
 	dimension2du size = driver->getScreenSize();
