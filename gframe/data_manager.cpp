@@ -166,6 +166,16 @@ bool DataManager::Error(sqlite3* pDB, sqlite3_stmt* pStmt) {
 	sqlite3_finalize(pStmt);
 	return false;
 }
+bool DataManager::LoadDatabase(const char* file) {
+	sqlite3* pDB{};
+	bool ret{};
+	if (sqlite3_open_v2(file, &pDB, SQLITE_OPEN_READONLY, 0) != SQLITE_OK)
+		ret = Error(pDB);
+	else
+		ret = ReadDB(pDB);
+	sqlite3_close(pDB);
+	return ret;
+}
 code_pointer DataManager::GetCodePointer(uint32_t code) const {
 	return _datas.find(code);
 }

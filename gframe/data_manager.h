@@ -65,6 +65,7 @@ public:
 	bool LoadStrings(irr::io::IReadFile* reader);
 	void ReadStringConfLine(const char* linebuf);
 	bool Error(sqlite3* pDB, sqlite3_stmt* pStmt = nullptr);
+	bool LoadDatabase(const char* file);
 
 	code_pointer GetCodePointer(uint32_t code) const;
 	string_pointer GetStringPointer(uint32_t code) const;
