@@ -20,6 +20,7 @@ public:
 	bool LoadStrings(IReadFile* reader);
 	void ReadStringConfLine(const char* linebuf);
 	bool Error(sqlite3* pDB, sqlite3_stmt* pStmt = nullptr);
+	bool LoadDatabase(const char* file);
 
 	bool GetData(unsigned int code, CardData* pData) const;
 	code_pointer GetCodePointer(unsigned int code) const;
