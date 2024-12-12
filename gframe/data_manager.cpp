@@ -68,7 +68,8 @@ bool DataManager::ReadDB(sqlite3* pDB) {
 				BufferIO::DecodeUTF8(text, strBuffer);
 				cs.text = strBuffer;
 			}
-			for (int i = 0; i < 16; ++i) {
+			constexpr int desc_count = sizeof cs.desc / sizeof cs.desc[0];
+			for (int i = 0; i < desc_count; ++i) {
 				if (const char* text = (const char*)sqlite3_column_text(pStmt, i + 14)) {
 					BufferIO::DecodeUTF8(text, strBuffer);
 					cs.desc[i] = strBuffer;
@@ -88,7 +89,7 @@ bool DataManager::LoadDB(const wchar_t* wfile) {
 #else
 	IReadFile* reader = FileSystem->createAndOpenFile(file);
 #endif
-	if(reader == NULL)
+	if(reader == nullptr)
 		return false;
 	spmemvfs_db_t db;
 	spmembuffer_t* mem = (spmembuffer_t*)calloc(sizeof(spmembuffer_t), 1);
@@ -187,16 +188,16 @@ code_pointer DataManager::GetCodePointer(unsigned int code) const {
 string_pointer DataManager::GetStringPointer(unsigned int code) const {
 	return _strings.find(code);
 }
-code_pointer DataManager::datas_begin() {
+code_pointer DataManager::datas_begin() const {
 	return _datas.cbegin();
 }
-code_pointer DataManager::datas_end() {
+code_pointer DataManager::datas_end() const {
 	return _datas.cend();
 }
-string_pointer DataManager::strings_begin() {
+string_pointer DataManager::strings_begin() const {
 	return _strings.cbegin();
 }
-string_pointer DataManager::strings_end() {
+string_pointer DataManager::strings_end() const {
 	return _strings.cend();
 }
 bool DataManager::GetData(unsigned int code, CardData* pData) const {
@@ -395,7 +396,7 @@ std::wstring DataManager::FormatLinkMarker(unsigned int link_marker) const {
 		buffer.append(L"[\u2198]");
 	return buffer;
 }
-uint32 DataManager::CardReader(uint32 code, card_data* pData) {
+uint32_t DataManager::CardReader(uint32_t code, card_data* pData) {
 	if (!dataManager.GetData(code, pData))
 		pData->clear();
 	return 0;

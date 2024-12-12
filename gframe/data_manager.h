@@ -23,10 +23,10 @@ public:
 
 	code_pointer GetCodePointer(unsigned int code) const;
 	string_pointer GetStringPointer(unsigned int code) const;
-	code_pointer datas_begin();
-	code_pointer datas_end();
-	string_pointer strings_begin();
-	string_pointer strings_end();
+	code_pointer datas_begin() const;
+	code_pointer datas_end() const;
+	string_pointer strings_begin() const;
+	string_pointer strings_end() const;
 	bool GetData(unsigned int code, CardData* pData) const;
 	bool GetString(unsigned int code, CardString* pStr) const;
 	const wchar_t* GetName(unsigned int code) const;
@@ -53,7 +53,7 @@ public:
 
 	static unsigned char scriptBuffer[0x20000];
 	static const wchar_t* unknown_string;
-	static uint32 CardReader(uint32, card_data*);
+	static uint32_t CardReader(uint32_t, card_data*);
 	static unsigned char* ScriptReaderEx(const char* script_name, int* slen);
 	static unsigned char* ScriptReader(const char* script_name, int* slen);
 	static IFileSystem* FileSystem;
