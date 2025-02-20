@@ -29,9 +29,9 @@ public:
 	irr::core::vector3df vFieldContiAct[4];
 	irr::video::S3DVertex vArrow[40];
 	irr::video::SColor c2d[4];
-	u16 iRectangle[6];
-	//u16 iBackLine[116];
-	u16 iArrow[40];
+	irr::u16 iRectangle[6];
+	//irr::u16 iBackLine[116];
+	irr::u16 iArrow[40];
 	irr::video::SMaterial mCard;
 	irr::video::SMaterial mTexture;
 	irr::video::SMaterial mBackLine;
