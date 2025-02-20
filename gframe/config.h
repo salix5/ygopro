@@ -72,7 +72,6 @@ inline FILE* myfopen(const wchar_t* filename, const char* mode) {
 
 #include <irrlicht.h>
 using namespace irr;
-using namespace core;
 
 extern const unsigned short PRO_VERSION;
 extern unsigned int enable_log;
