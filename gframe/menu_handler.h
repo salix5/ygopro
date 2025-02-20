@@ -8,7 +8,7 @@ namespace ygo {
 class MenuHandler: public irr::IEventReceiver {
 public:
 	bool OnEvent(const irr::SEvent& event) override;
-	s32 prev_operation;
+	irr::s32 prev_operation;
 	int prev_sel;
 
 };

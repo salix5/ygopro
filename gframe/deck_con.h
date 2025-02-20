@@ -28,7 +28,7 @@ public:
 	void ChangeCategory(int catesel);
 	void ShowDeckManage();
 	void ShowBigCard(int code, float zoom);
-	void ZoomBigCard(s32 centerx = -1, s32 centery = -1);
+	void ZoomBigCard(irr::s32 centerx = -1, irr::s32 centery = -1);
 	void CloseBigCard();
 
 	bool CardNameContains(const wchar_t *haystack, const wchar_t *needle);
@@ -74,7 +74,7 @@ public:
 	code_pointer draging_pointer;
 	int prev_category{};
 	int prev_deck{};
-	s32 prev_operation{};
+	irr::s32 prev_operation{};
 	int prev_sel{ -1 };
 	bool is_modified{};
 	bool readonly{};

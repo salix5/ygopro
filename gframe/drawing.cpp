@@ -413,9 +413,9 @@ void Game::DrawCard(ClientCard* pcard) {
 	}
 }
 template<typename T>
-void Game::DrawShadowText(irr::gui::CGUITTFont* font, const T& text, const irr::core::rect<s32>& position, const irr::core::rect<s32>& padding,
-			irr::video::SColor color, irr::video::SColor shadowcolor, bool hcenter, bool vcenter, const irr::core::rect<s32>* clip) {
-	irr::core::rect<s32> shadowposition = irr::core::recti(position.UpperLeftCorner.X - padding.UpperLeftCorner.X, position.UpperLeftCorner.Y - padding.UpperLeftCorner.Y, 
+void Game::DrawShadowText(irr::gui::CGUITTFont* font, const T& text, const irr::core::rect<irr::s32>& position, const irr::core::rect<irr::s32>& padding,
+			irr::video::SColor color, irr::video::SColor shadowcolor, bool hcenter, bool vcenter, const irr::core::rect<irr::s32>* clip) {
+	irr::core::rect<irr::s32> shadowposition = irr::core::recti(position.UpperLeftCorner.X - padding.UpperLeftCorner.X, position.UpperLeftCorner.Y - padding.UpperLeftCorner.Y, 
 										   position.LowerRightCorner.X - padding.LowerRightCorner.X, position.LowerRightCorner.Y - padding.LowerRightCorner.Y);
 	font->drawUstring(text, shadowposition, shadowcolor, hcenter, vcenter, clip);
 	font->drawUstring(text, position, color, hcenter, vcenter, clip);
@@ -808,8 +808,8 @@ void Game::DrawGUI() {
 	env->drawAll();
 }
 void Game::DrawSpec() {
-	s32 midx = 574 + (CARD_IMG_WIDTH * 0.5);
-	s32 midy = 150 + (CARD_IMG_HEIGHT * 0.5);
+	irr::s32 midx = 574 + (CARD_IMG_WIDTH * 0.5);
+	irr::s32 midy = 150 + (CARD_IMG_HEIGHT * 0.5);
 	if(showcard) {
 		switch(showcard) {
 		case 1: {
@@ -874,15 +874,15 @@ void Game::DrawSpec() {
 			float mul = xScale;
 			if(xScale > yScale)
 				mul = yScale;
-			core::position2d<s32> corner[4];
+			core::position2d<irr::s32> corner[4];
 			float y = sin(showcarddif * 3.1415926f / 180.0f) * CARD_IMG_HEIGHT * mul;
-			s32 winx = midx * xScale + (574 - midx) * mul;
-			s32 winx2 = midx * xScale + (751 - midx) * mul;
-			s32 winy = midy * yScale + (404 - midy) * mul;
-			corner[0] = core::position2d<s32>(winx - (CARD_IMG_HEIGHT * mul - y) * 0.3f, winy - y);
-			corner[1] = core::position2d<s32>(winx2 + (CARD_IMG_HEIGHT * mul - y) * 0.3f, winy - y);
-			corner[2] = core::position2d<s32>(winx, winy);
-			corner[3] = core::position2d<s32>(winx2, winy);
+			irr::s32 winx = midx * xScale + (574 - midx) * mul;
+			irr::s32 winx2 = midx * xScale + (751 - midx) * mul;
+			irr::s32 winy = midy * yScale + (404 - midy) * mul;
+			corner[0] = core::position2d<irr::s32>(winx - (CARD_IMG_HEIGHT * mul - y) * 0.3f, winy - y);
+			corner[1] = core::position2d<irr::s32>(winx2 + (CARD_IMG_HEIGHT * mul - y) * 0.3f, winy - y);
+			corner[2] = core::position2d<irr::s32>(winx, winy);
+			corner[3] = core::position2d<irr::s32>(winx2, winy);
 			irr::gui::Draw2DImageQuad(driver, imageManager.GetTexture(showcardcode, true), ResizeFit(0, 0, CARD_IMG_WIDTH, CARD_IMG_HEIGHT), corner);
 			showcardp++;
 			showcarddif += 9;
@@ -1134,7 +1134,7 @@ void Game::DrawThumb(code_pointer cp, irr::core::vector2di pos, const std::unord
 	irr::video::ITexture* img = imageManager.GetTextureThumb(code);
 	if(img == nullptr)
 		return; //nullptr->getSize() will cause a crash
-	irr::core::dimension2d<u32> size = img->getOriginalSize();
+	irr::core::dimension2d<irr::u32> size = img->getOriginalSize();
 	irr::core::recti dragloc = mainGame->Resize(pos.X, pos.Y, pos.X + CARD_THUMB_WIDTH, pos.Y + CARD_THUMB_HEIGHT);
 	irr::core::recti limitloc = mainGame->Resize(pos.X, pos.Y, pos.X + 20, pos.Y + 20);
 	irr::core::recti otloc = Resize(pos.X + 7, pos.Y + 50, pos.X + 37, pos.Y + 65);
@@ -1143,7 +1143,7 @@ void Game::DrawThumb(code_pointer cp, irr::core::vector2di pos, const std::unord
 		limitloc = irr::core::recti(pos.X, pos.Y, pos.X + 20 * mainGame->xScale, pos.Y + 20 * mainGame->yScale);
 		otloc = irr::core::recti(pos.X + 7, pos.Y + 50 * mainGame->yScale, pos.X + 37 * mainGame->xScale, pos.Y + 65 * mainGame->yScale);
 	}
-	driver->draw2DImage(img, dragloc, irr::core::rect<s32>(0, 0, size.Width, size.Height));
+	driver->draw2DImage(img, dragloc, irr::core::rect<irr::s32>(0, 0, size.Width, size.Height));
 	if(lflist->count(lcode)) {
 		switch((*lflist).at(lcode)) {
 		case 0:
