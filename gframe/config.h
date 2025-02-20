@@ -76,7 +76,6 @@ using namespace core;
 using namespace scene;
 using namespace video;
 using namespace io;
-using namespace gui;
 
 extern const unsigned short PRO_VERSION;
 extern unsigned int enable_log;
