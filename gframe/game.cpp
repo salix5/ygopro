@@ -13,8 +13,6 @@
 #include <thread>
 #include <filesystem>
 
-const unsigned short PRO_VERSION = 0x1362;
-
 namespace ygo {
 
 Game* mainGame;
