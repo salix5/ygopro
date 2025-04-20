@@ -1528,11 +1528,10 @@ void TagDuel::EndDuel() {
 	if(!pduel)
 		return;
 	last_replay.EndRecord();
-	char replaybuf[0x2000], *pbuf = replaybuf;
-	std::memcpy(pbuf, &last_replay.pheader, sizeof(ReplayHeader));
-	pbuf += sizeof(ReplayHeader);
-	std::memcpy(pbuf, last_replay.comp_data, last_replay.comp_size);
-	NetServer::SendBufferToPlayer(players[0], STOC_REPLAY, replaybuf, sizeof(ReplayHeader) + last_replay.comp_size);
+	std::vector<unsigned char> replaybuf;
+	vector_write_block(replaybuf, &last_replay.pheader, sizeof(ReplayHeader));
+	replaybuf.insert(replaybuf.end(), last_replay.comp_data.begin(), last_replay.comp_data.end());
+	NetServer::SendBufferToPlayer(players[0], STOC_REPLAY, replaybuf.data(), replaybuf.size());
 	NetServer::ReSendToPlayer(players[1]);
 	NetServer::ReSendToPlayer(players[2]);
 	NetServer::ReSendToPlayer(players[3]);

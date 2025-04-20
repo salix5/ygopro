@@ -13,7 +13,7 @@ namespace ygo {
 #define REPLAY_UNIFORM		0x10
 
 // max size
-constexpr int MAX_REPLAY_SIZE = 0x20000;
+constexpr int MAX_REPLAY_SIZE = 0x100000;
 constexpr int MAX_COMP_SIZE = UINT16_MAX + 1;
 
 struct ReplayHeader {
@@ -28,8 +28,8 @@ struct ReplayHeader {
 
 class Replay {
 public:
-	Replay();
-	~Replay();
+	Replay() = default;
+	~Replay() = default;
 
 	// record
 	void BeginRecord();
@@ -68,12 +68,10 @@ public:
 #endif
 
 	ReplayHeader pheader;
-	unsigned char* comp_data;
-	size_t comp_size{};
+	std::vector<unsigned char> comp_data;
 
 private:
-	unsigned char* replay_data;
-	size_t replay_size{};
+	std::vector<unsigned char> replay_data;
 	size_t data_position{};
 	bool is_recording{};
 	bool is_replaying{};

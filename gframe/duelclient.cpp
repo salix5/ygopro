@@ -751,8 +751,7 @@ void DuelClient::HandleSTOCPacketLan(unsigned char* data, int len) {
 		}
 		if(mainGame->actionParam || !is_host) {
 			prep += sizeof(ReplayHeader);
-			std::memcpy(new_replay.comp_data, prep, len - sizeof(ReplayHeader) - 1);
-			new_replay.comp_size = len - sizeof(ReplayHeader) - 1;
+			vector_write_block(new_replay.comp_data, prep, len - 1 - sizeof(ReplayHeader));
 			if(mainGame->actionParam)
 				new_replay.SaveReplay(mainGame->ebRSName->getText());
 			else
