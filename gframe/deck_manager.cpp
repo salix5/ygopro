@@ -319,13 +319,13 @@ bool DeckManager::SaveDeck(Deck& deck, const wchar_t* file) {
 		return false;
 	std::fprintf(fp, "#created by ...\n#main\n");
 	for(size_t i = 0; i < deck.main.size(); ++i)
-		std::fprintf(fp, "%d\n", deck.main[i]->first);
+		std::fprintf(fp, "%u\n", deck.main[i]->first);
 	std::fprintf(fp, "#extra\n");
 	for(size_t i = 0; i < deck.extra.size(); ++i)
-		std::fprintf(fp, "%d\n", deck.extra[i]->first);
+		std::fprintf(fp, "%u\n", deck.extra[i]->first);
 	std::fprintf(fp, "!side\n");
 	for(size_t i = 0; i < deck.side.size(); ++i)
-		std::fprintf(fp, "%d\n", deck.side[i]->first);
+		std::fprintf(fp, "%u\n", deck.side[i]->first);
 	std::fclose(fp);
 	return true;
 }
