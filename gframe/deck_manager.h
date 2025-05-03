@@ -49,7 +49,6 @@ public:
 	unsigned int CheckDeck(const Deck& deck, unsigned int lfhash, int rule);
 	bool LoadCurrentDeck(const wchar_t* file, bool is_packlist = false);
 	bool LoadCurrentDeck(int category_index, const wchar_t* category_name, const wchar_t* deckname);
-	bool SaveDeckBuffer(const int deckbuf[], const wchar_t* name);
 
 	static uint32_t LoadDeck(Deck& deck, uint32_t dbuf[], int mainc, int sidec, bool is_packlist = false);
 	static uint32_t LoadDeckFromStream(Deck& deck, std::istringstream& deckStream, bool is_packlist = false);
@@ -63,6 +62,7 @@ public:
 	static bool CreateCategory(const wchar_t* name);
 	static bool RenameCategory(const wchar_t* oldname, const wchar_t* newname);
 	static bool DeleteCategory(const wchar_t* name);
+	static bool SaveDeckBuffer(const uint32_t deckbuf[], const wchar_t* name);
 };
 
 extern DeckManager deckManager;
