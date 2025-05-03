@@ -98,6 +98,7 @@ private:
 	size_t data_position{};
 	bool is_recording{};
 	bool is_replaying{};
+	bool can_read{};
 };
 
 }
