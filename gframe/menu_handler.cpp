@@ -299,43 +299,40 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				auto selected = mainGame->lstReplayList->getSelected();
 				if(selected == -1)
 					break;
-				Replay replay;
+				Replay replay1;
 				wchar_t ex_filename[256]{};
 				wchar_t namebuf[4][20]{};
 				wchar_t filename[256]{};
 				wchar_t replay_path[256]{};
 				BufferIO::CopyWideString(mainGame->lstReplayList->getListItem(selected), ex_filename);
 				myswprintf(replay_path, L"./replay/%ls", ex_filename);
-				if (!replay.OpenReplay(replay_path))
+				if (!replay1.OpenReplay(replay_path))
 					break;
-				const ReplayHeader& rh = replay.pheader;
-				if(rh.flag & REPLAY_SINGLE_MODE)
+				if (replay1.pheader.flag & REPLAY_SINGLE_MODE)
 					break;
-				int player_count = (rh.flag & REPLAY_TAG) ? 4 : 2;
-				//player name
-				for(int i = 0; i < player_count; ++i)
-					replay.ReadName(namebuf[i]);
-				//skip pre infos
-				for(int i = 0; i < 4; ++i)
-					replay.ReadInt32();
-				//deck
-				std::vector<int> deckbuf;
-				for(int i = 0; i < player_count; ++i) {
+				std::vector<uint32_t> deckbuf;
+				for(size_t i = 0; i < replay1.decks.size(); ++i) {
+					BufferIO::CopyWideString(replay1.players[i].c_str(), namebuf[i]);
+					const auto& deck = replay1.decks[i];
+					size_t pos = 0;
 					deckbuf.clear();
-					int main = replay.ReadInt32();
-					deckbuf.push_back(main);
-					for (int j = 0; j < main; ++j) {
-						deckbuf.push_back(replay.ReadInt32());
+					deckbuf.resize(2 + deck.main.size() + deck.extra.size());
+					deckbuf[pos] = deck.main.size();
+					pos += 1;
+					if (deck.main.size()) {
+						std::memcpy(&deckbuf[pos], deck.main.data(), deck.main.size() * sizeof(uint32_t));
+						pos += deck.main.size();
 					}
-					int extra = replay.ReadInt32();
-					deckbuf.push_back(extra);
-					for (int j = 0; j < extra; ++j) {
-						deckbuf.push_back(replay.ReadInt32());
+					deckbuf[pos] = deck.extra.size();
+					pos += 1;
+					if (deck.extra.size()) {
+						std::memcpy(&deckbuf[pos], deck.extra.data(), deck.extra.size() * sizeof(uint32_t));
+						pos += deck.extra.size();
 					}
 					deckbuf.push_back(0);
 					FileSystem::SafeFileName(namebuf[i]);
 					myswprintf(filename, L"deck/%ls-%d %ls.ydk", ex_filename, i + 1, namebuf[i]);
-					deckManager.SaveDeckBuffer(deckbuf.data(), filename);
+					DeckManager::SaveDeckBuffer(deckbuf.data(), filename);
 				}
 				mainGame->stACMessage->setText(dataManager.GetSysString(1335));
 				mainGame->PopupElement(mainGame->wACMessage, 20);
