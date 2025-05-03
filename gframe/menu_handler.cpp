@@ -310,9 +310,12 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 					break;
 				if (replay1.pheader.flag & REPLAY_SINGLE_MODE)
 					break;
+				for (size_t i = 0; i < replay1.decks.size(); ++i) {
+					BufferIO::CopyWideString(replay1.players[Replay::GetDeckPlayer(i)].c_str(), namebuf[i]);
+					FileSystem::SafeFileName(namebuf[i]);
+				}
 				std::vector<uint32_t> deckbuf;
 				for(size_t i = 0; i < replay1.decks.size(); ++i) {
-					BufferIO::CopyWideString(replay1.players[i].c_str(), namebuf[i]);
 					const auto& deck = replay1.decks[i];
 					size_t pos = 0;
 					deckbuf.clear();
