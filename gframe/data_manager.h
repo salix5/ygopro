@@ -50,7 +50,7 @@ public:
 	void ReadStringConfLine(const char* linebuf);
 	bool Error(sqlite3* pDB, sqlite3_stmt* pStmt = nullptr);
 
-	code_pointer GetCodePointer(unsigned int code) const;
+	const CardDataC* GetCardData(unsigned int code) const;
 	string_pointer GetStringPointer(unsigned int code) const;
 	code_pointer datas_begin() const;
 	code_pointer datas_end() const;
@@ -92,10 +92,10 @@ public:
 	
 	static irr::io::IFileSystem* FileSystem;
 
-	static bool deck_sort_lv(code_pointer l1, code_pointer l2);
-	static bool deck_sort_atk(code_pointer l1, code_pointer l2);
-	static bool deck_sort_def(code_pointer l1, code_pointer l2);
-	static bool deck_sort_name(code_pointer l1, code_pointer l2);
+	static bool deck_sort_lv(const CardDataC* l1, const CardDataC* l2);
+	static bool deck_sort_atk(const CardDataC* l1, const CardDataC* l2);
+	static bool deck_sort_def(const CardDataC* l1, const CardDataC* l2);
+	static bool deck_sort_name(const CardDataC* l1, const CardDataC* l2);
 
 private:
 	std::unordered_map<unsigned int, CardDataC> _datas;

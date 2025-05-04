@@ -156,16 +156,16 @@ uint32_t DeckManager::LoadDeck(Deck& deck, uint32_t dbuf[], int mainc, int sidec
 			continue;
 		}
 		if(is_packlist) {
-			deck.main.push_back(dataManager.GetCodePointer(code));
+			deck.main.push_back(dataManager.GetCardData(code));
 			continue;
 		}
 		if (cd.type & TYPES_EXTRA_DECK) {
 			if (deck.extra.size() < EXTRA_MAX_SIZE)
-				deck.extra.push_back(dataManager.GetCodePointer(code));
+				deck.extra.push_back(dataManager.GetCardData(code));
 		}
 		else {
 			if (deck.main.size() < DECK_MAX_SIZE)
-				deck.main.push_back(dataManager.GetCodePointer(code));
+				deck.main.push_back(dataManager.GetCardData(code));
 		}
 	}
 	for(int i = 0; i < sidec; ++i) {
@@ -179,7 +179,7 @@ uint32_t DeckManager::LoadDeck(Deck& deck, uint32_t dbuf[], int mainc, int sidec
 			continue;
 		}
 		if(deck.side.size() < SIDE_MAX_SIZE)
-			deck.side.push_back(dataManager.GetCodePointer(code));
+			deck.side.push_back(dataManager.GetCardData(code));
 	}
 	return errorcode;
 }
