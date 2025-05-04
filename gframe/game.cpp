@@ -1529,13 +1529,11 @@ void Game::ShowCardInfo(int code, bool resize) {
 	if(showingcode == code && !resize)
 		return;
 	wchar_t formatBuffer[256];
-	auto cit = dataManager.GetCodePointer(code);
-	bool is_valid = (cit != dataManager.datas_end());
+	auto cit = dataManager.GetCardData(code);
 	imgCard->setImage(imageManager.GetTexture(code, true));
-	if (is_valid) {
-		auto& cd = cit->second;
-		if (cd.is_alternative())
-			myswprintf(formatBuffer, L"%ls[%08d]", dataManager.GetName(cd.alias), cd.alias);
+	if (cit) {
+		if (cit->is_alternative())
+			myswprintf(formatBuffer, L"%ls[%08d]", dataManager.GetName(cit->alias), cit->alias);
 		else
 			myswprintf(formatBuffer, L"%ls[%08d]", dataManager.GetName(code), code);
 	}
@@ -1548,15 +1546,14 @@ void Game::ShowCardInfo(int code, bool resize) {
 	else
 		stName->setToolTipText(nullptr);
 	int offset = 0;
-	if (is_valid && !gameConf.hide_setname) {
-		auto& cd = cit->second;
+	if (cit && !gameConf.hide_setname) {
 		auto target = cit;
-		if (cd.alias && dataManager.GetCodePointer(cd.alias) != dataManager.datas_end()) {
-			target = dataManager.GetCodePointer(cd.alias);
+		if (cit->alias && dataManager.GetCardData(cit->alias)) {
+			target = dataManager.GetCardData(cit->alias);
 		}
-		if (target->second.setcode[0]) {
+		if (target->setcode[0]) {
 			offset = 23;// *yScale;
-			myswprintf(formatBuffer, L"%ls%ls", dataManager.GetSysString(1329), dataManager.FormatSetName(target->second.setcode).c_str());
+			myswprintf(formatBuffer, L"%ls%ls", dataManager.GetSysString(1329), dataManager.FormatSetName(target->setcode).c_str());
 			stSetName->setText(formatBuffer);
 		}
 		else
@@ -1565,8 +1562,8 @@ void Game::ShowCardInfo(int code, bool resize) {
 	else {
 		stSetName->setText(L"");
 	}
-	if(is_valid && cit->second.type & TYPE_MONSTER) {
-		auto& cd = cit->second;
+	if(cit && cit->type & TYPE_MONSTER) {
+		auto& cd = *cit;
 		myswprintf(formatBuffer, L"[%ls] %ls/%ls", dataManager.FormatType(cd.type).c_str(), dataManager.FormatRace(cd.race).c_str(), dataManager.FormatAttribute(cd.attribute).c_str());
 		stInfo->setText(formatBuffer);
 		int offset_info = 0;
@@ -1610,8 +1607,8 @@ void Game::ShowCardInfo(int code, bool resize) {
 		scrCardText->setRelativePosition(irr::core::rect<irr::s32>(287 * xScale - 20, (83 + offset_arrows) + offset, 287 * xScale, 324 * yScale));
 	}
 	else {
-		if (is_valid)
-			myswprintf(formatBuffer, L"[%ls]", dataManager.FormatType(cit->second.type).c_str());
+		if (cit)
+			myswprintf(formatBuffer, L"[%ls]", dataManager.FormatType(cit->type).c_str());
 		else
 			myswprintf(formatBuffer, L"[%ls]", dataManager.unknown_string);
 		stInfo->setText(formatBuffer);

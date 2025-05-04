@@ -661,11 +661,11 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				BufferIO::WriteInt32(pdeck, deckManager.current_deck.main.size() + deckManager.current_deck.extra.size());
 				BufferIO::WriteInt32(pdeck, deckManager.current_deck.side.size());
 				for(size_t i = 0; i < deckManager.current_deck.main.size(); ++i)
-					BufferIO::WriteInt32(pdeck, deckManager.current_deck.main[i]->first);
+					BufferIO::WriteInt32(pdeck, deckManager.current_deck.main[i]->code);
 				for(size_t i = 0; i < deckManager.current_deck.extra.size(); ++i)
-					BufferIO::WriteInt32(pdeck, deckManager.current_deck.extra[i]->first);
+					BufferIO::WriteInt32(pdeck, deckManager.current_deck.extra[i]->code);
 				for(size_t i = 0; i < deckManager.current_deck.side.size(); ++i)
-					BufferIO::WriteInt32(pdeck, deckManager.current_deck.side[i]->first);
+					BufferIO::WriteInt32(pdeck, deckManager.current_deck.side[i]->code);
 				DuelClient::SendBufferToServer(CTOS_UPDATE_DECK, deckbuf, pdeck - deckbuf);
 				break;
 			}
@@ -1033,8 +1033,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			dragx = event.MouseInput.X;
 			dragy = event.MouseInput.Y;
-			draging_pointer = dataManager.GetCodePointer(hovered_code);
-			if(draging_pointer == dataManager.datas_end())
+			draging_pointer = dataManager.GetCardData(hovered_code);
+			if(!draging_pointer)
 				break;
 			if(hovered_pos == 4) {
 				if(!check_limit(draging_pointer))
@@ -1087,8 +1087,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					break;
 				if(hovered_pos == 0 || hovered_seq == -1)
 					break;
-				auto pointer = dataManager.GetCodePointer(hovered_code);
-				if(pointer == dataManager.datas_end())
+				auto pointer = dataManager.GetCardData(hovered_code);
+				if(!pointer)
 					break;
 				soundManager.PlaySoundEffect(SOUND_CARD_DROP);
 				if(hovered_pos == 1) {
@@ -1122,8 +1122,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				} else if(hovered_pos == 3) {
 					pop_side(hovered_seq);
 				} else {
-					auto pointer = dataManager.GetCodePointer(hovered_code);
-					if(pointer == dataManager.datas_end())
+					auto pointer = dataManager.GetCardData(hovered_code);
+					if(!pointer)
 						break;
 					if(!check_limit(pointer))
 						break;
@@ -1157,8 +1157,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			if (is_draging)
 				break;
-			auto pointer = dataManager.GetCodePointer(hovered_code);
-			if (pointer == dataManager.datas_end())
+			auto pointer = dataManager.GetCardData(hovered_code);
+			if (!pointer)
 				break;
 			if(!check_limit(pointer))
 				break;
@@ -1263,7 +1263,7 @@ void DeckBuilder::GetHoveredCard() {
 					hovered_seq = -1;
 					hovered_code = 0;
 				} else {
-					hovered_code = deckManager.current_deck.main[hovered_seq]->first;
+					hovered_code = deckManager.current_deck.main[hovered_seq]->code;
 				}
 			}
 		} else if(y >= 164 && y <= 435) {
@@ -1280,7 +1280,7 @@ void DeckBuilder::GetHoveredCard() {
 				hovered_seq = -1;
 				hovered_code = 0;
 			} else {
-				hovered_code = deckManager.current_deck.main[hovered_seq]->first;
+				hovered_code = deckManager.current_deck.main[hovered_seq]->code;
 			}
 		} else if(y >= 466 && y <= 530) {
 			int lx = deckManager.current_deck.extra.size();
@@ -1295,7 +1295,7 @@ void DeckBuilder::GetHoveredCard() {
 				hovered_seq = -1;
 				hovered_code = 0;
 			} else {
-				hovered_code = deckManager.current_deck.extra[hovered_seq]->first;
+				hovered_code = deckManager.current_deck.extra[hovered_seq]->code;
 				if(x >= 772)
 					is_lastcard = 1;
 			}
@@ -1312,7 +1312,7 @@ void DeckBuilder::GetHoveredCard() {
 				hovered_seq = -1;
 				hovered_code = 0;
 			} else {
-				hovered_code = deckManager.current_deck.side[hovered_seq]->first;
+				hovered_code = deckManager.current_deck.side[hovered_seq]->code;
 				if(x >= 772)
 					is_lastcard = 1;
 			}
@@ -1325,7 +1325,7 @@ void DeckBuilder::GetHoveredCard() {
 			hovered_seq = -1;
 			hovered_code = 0;
 		} else {
-			hovered_code = results[current_pos]->first;
+			hovered_code = results[current_pos]->code;
 		}
 	}
 	if(is_draging) {
@@ -1427,7 +1427,7 @@ void DeckBuilder::FilterCards() {
 			query_elements.push_back(element);
 		}
 	}
-	for(code_pointer ptr = dataManager.datas_begin(); ptr != dataManager.datas_end(); ++ptr) {
+	for(auto ptr = dataManager.datas_begin(); ptr != dataManager.datas_end(); ++ptr) {
 		const CardDataC& data = ptr->second;
 		auto strpointer = dataManager.GetCardString(ptr->first);
 		if (!strpointer)
@@ -1525,7 +1525,7 @@ void DeckBuilder::FilterCards() {
 			}
 		}
 		if(is_target)
-			results.push_back(ptr);
+			results.push_back(&ptr->second);
 		else
 			continue;
 	}
@@ -1582,7 +1582,7 @@ void DeckBuilder::SortList() {
 	auto left = results.begin();
 	const wchar_t* pstr = mainGame->ebCardName->getText();
 	for(auto it = results.begin(); it != results.end(); ++it) {
-		if(std::wcscmp(pstr, dataManager.GetName((*it)->first)) == 0) {
+		if(std::wcscmp(pstr, dataManager.GetName((*it)->code)) == 0) {
 			std::iter_swap(left, it);
 			++left;
 		}
@@ -1768,8 +1768,8 @@ bool DeckBuilder::CardNameContains(const wchar_t* haystack, const wchar_t* needl
 	}
 	return false;
 }
-bool DeckBuilder::push_main(code_pointer pointer, int seq) {
-	if(pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK))
+bool DeckBuilder::push_main(const CardDataC* pointer, int seq) {
+	if(pointer->type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK))
 		return false;
 	auto& container = deckManager.current_deck.main;
 	int maxc = mainGame->is_siding ? DECK_MAX_SIZE + 5 : DECK_MAX_SIZE;
@@ -1783,8 +1783,8 @@ bool DeckBuilder::push_main(code_pointer pointer, int seq) {
 	GetHoveredCard();
 	return true;
 }
-bool DeckBuilder::push_extra(code_pointer pointer, int seq) {
-	if(!(pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)))
+bool DeckBuilder::push_extra(const CardDataC* pointer, int seq) {
+	if(!(pointer->type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)))
 		return false;
 	auto& container = deckManager.current_deck.extra;
 	int maxc = mainGame->is_siding ? EXTRA_MAX_SIZE + 5 : EXTRA_MAX_SIZE;
@@ -1798,7 +1798,7 @@ bool DeckBuilder::push_extra(code_pointer pointer, int seq) {
 	GetHoveredCard();
 	return true;
 }
-bool DeckBuilder::push_side(code_pointer pointer, int seq) {
+bool DeckBuilder::push_side(const CardDataC* pointer, int seq) {
 	auto& container = deckManager.current_deck.side;
 	int maxc = mainGame->is_siding ? SIDE_MAX_SIZE + 5 : SIDE_MAX_SIZE;
 	if((int)container.size() >= maxc)
@@ -1829,22 +1829,22 @@ void DeckBuilder::pop_side(int seq) {
 	is_modified = true;
 	GetHoveredCard();
 }
-bool DeckBuilder::check_limit(code_pointer pointer) {
-	unsigned int limitcode = pointer->second.alias ? pointer->second.alias : pointer->first;
+bool DeckBuilder::check_limit(const CardDataC* pointer) {
+	unsigned int limitcode = pointer->alias ? pointer->alias : pointer->code;
 	int limit = 3;
 	auto flit = filterList->content.find(limitcode);
 	if(flit != filterList->content.end())
 		limit = flit->second;
-	for(auto it = deckManager.current_deck.main.begin(); it != deckManager.current_deck.main.end(); ++it) {
-		if((*it)->first == limitcode || (*it)->second.alias == limitcode)
+	for(auto it : deckManager.current_deck.main) {
+		if(it->code == limitcode || it->alias == limitcode)
 			limit--;
 	}
-	for(auto it = deckManager.current_deck.extra.begin(); it != deckManager.current_deck.extra.end(); ++it) {
-		if((*it)->first == limitcode || (*it)->second.alias == limitcode)
+	for(auto it : deckManager.current_deck.extra) {
+		if(it->code == limitcode || it->alias == limitcode)
 			limit--;
 	}
-	for(auto it = deckManager.current_deck.side.begin(); it != deckManager.current_deck.side.end(); ++it) {
-		if((*it)->first == limitcode || (*it)->second.alias == limitcode)
+	for(auto it : deckManager.current_deck.side) {
+		if(it->code == limitcode || it->alias == limitcode)
 			limit--;
 	}
 	return limit > 0;
