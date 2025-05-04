@@ -1429,10 +1429,9 @@ void DeckBuilder::FilterCards() {
 	}
 	for(auto ptr = dataManager.datas_begin(); ptr != dataManager.datas_end(); ++ptr) {
 		const CardDataC& data = ptr->second;
-		auto strpointer = dataManager.GetStringPointer(ptr->first);
-		if (strpointer == dataManager.strings_end())
+		auto strpointer = dataManager.GetCardString(ptr->first);
+		if (!strpointer)
 			continue;
-		const CardString& text = strpointer->second;
 		if(data.type & TYPE_TOKEN)
 			continue;
 		switch(filter_type) {
@@ -1508,14 +1507,14 @@ void DeckBuilder::FilterCards() {
 		for (auto elements_iterator = query_elements.begin(); elements_iterator != query_elements.end(); ++elements_iterator) {
 			bool match = false;
 			if (elements_iterator->type == element_t::type_t::name) {
-				match = CardNameContains(text.name.c_str(), elements_iterator->keyword.c_str());
+				match = CardNameContains(strpointer->name.c_str(), elements_iterator->keyword.c_str());
 			} else if (elements_iterator->type == element_t::type_t::setcode) {
 				match = data.is_setcodes(elements_iterator->setcodes);
 			} else if (trycode && (data.code == trycode || data.alias == trycode && data.is_alternative())){
 				match = true;
 			} else {
-				match = CardNameContains(text.name.c_str(), elements_iterator->keyword.c_str())
-					|| text.text.find(elements_iterator->keyword) != std::wstring::npos
+				match = CardNameContains(strpointer->name.c_str(), elements_iterator->keyword.c_str())
+					|| strpointer->text.find(elements_iterator->keyword) != std::wstring::npos
 					|| data.is_setcodes(elements_iterator->setcodes);
 			}
 			if(elements_iterator->exclude)
