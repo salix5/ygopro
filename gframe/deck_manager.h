@@ -19,9 +19,9 @@ struct LFList {
 	std::unordered_map<unsigned int, int> content;
 };
 struct Deck {
-	std::vector<code_pointer> main;
-	std::vector<code_pointer> extra;
-	std::vector<code_pointer> side;
+	std::vector<const CardDataC*> main;
+	std::vector<const CardDataC*> extra;
+	std::vector<const CardDataC*> side;
 	Deck() = default;
 	Deck(const Deck& ndeck) {
 		main = ndeck.main;
