@@ -177,8 +177,11 @@ const CardDataC* DataManager::GetCardData(unsigned int code) const {
 		return &it->second;
 	return nullptr;
 }
-string_pointer DataManager::GetStringPointer(unsigned int code) const {
-	return _strings.find(code);
+const CardString* DataManager::GetCardString(unsigned int code) const {
+	auto it = _strings.find(code);
+	if (it != _strings.end())
+		return &it->second;
+	return nullptr;
 }
 code_pointer DataManager::datas_begin() const {
 	return _datas.cbegin();

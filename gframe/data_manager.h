@@ -51,7 +51,7 @@ public:
 	bool Error(sqlite3* pDB, sqlite3_stmt* pStmt = nullptr);
 
 	const CardDataC* GetCardData(unsigned int code) const;
-	string_pointer GetStringPointer(unsigned int code) const;
+	const CardString* GetCardString(unsigned int code) const;
 	code_pointer datas_begin() const;
 	code_pointer datas_end() const;
 	string_pointer strings_begin() const;
