@@ -95,49 +95,49 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 	if (rule >= 0 && rule < (int)(sizeof rule_map / sizeof rule_map[0]))
 		avail = rule_map[rule];
 	for (auto& cit : deck.main) {
-		auto gameruleDeckError = checkAvail(cit->second.ot, avail);
-		if(gameruleDeckError)
-			return (gameruleDeckError << 28) | cit->first;
-		if (cit->second.type & (TYPES_EXTRA_DECK | TYPE_TOKEN))
+		auto gameruleDeckError = checkAvail(cit->ot, avail);
+		if (gameruleDeckError)
+			return (gameruleDeckError << 28) | cit->code;
+		if (cit->type & (TYPES_EXTRA_DECK | TYPE_TOKEN))
 			return (DECKERROR_MAINCOUNT << 28);
-		int code = cit->second.alias ? cit->second.alias : cit->first;
+		int code = cit->alias ? cit->alias : cit->code;
 		ccount[code]++;
 		int dc = ccount[code];
 		if(dc > 3)
-			return (DECKERROR_CARDCOUNT << 28) | cit->first;
+			return (DECKERROR_CARDCOUNT << 28) | cit->code;
 		auto it = list.find(code);
 		if(it != list.end() && dc > it->second)
-			return (DECKERROR_LFLIST << 28) | cit->first;
+			return (DECKERROR_LFLIST << 28) | cit->code;
 	}
 	for (auto& cit : deck.extra) {
-		auto gameruleDeckError = checkAvail(cit->second.ot, avail);
+		auto gameruleDeckError = checkAvail(cit->ot, avail);
 		if(gameruleDeckError)
-			return (gameruleDeckError << 28) | cit->first;
-		if (!(cit->second.type & TYPES_EXTRA_DECK) || cit->second.type & TYPE_TOKEN)
+			return (gameruleDeckError << 28) | cit->code;
+		if (!(cit->type & TYPES_EXTRA_DECK) || cit->type & TYPE_TOKEN)
 			return (DECKERROR_EXTRACOUNT << 28);
-		int code = cit->second.alias ? cit->second.alias : cit->first;
+		int code = cit->alias ? cit->alias : cit->code;
 		ccount[code]++;
 		int dc = ccount[code];
 		if(dc > 3)
-			return (DECKERROR_CARDCOUNT << 28) | cit->first;
+			return (DECKERROR_CARDCOUNT << 28) | cit->code;
 		auto it = list.find(code);
 		if(it != list.end() && dc > it->second)
-			return (DECKERROR_LFLIST << 28) | cit->first;
+			return (DECKERROR_LFLIST << 28) | cit->code;
 	}
 	for (auto& cit : deck.side) {
-		auto gameruleDeckError = checkAvail(cit->second.ot, avail);
+		auto gameruleDeckError = checkAvail(cit->ot, avail);
 		if(gameruleDeckError)
-			return (gameruleDeckError << 28) | cit->first;
-		if (cit->second.type & TYPE_TOKEN)
+			return (gameruleDeckError << 28) | cit->code;
+		if (cit->type & TYPE_TOKEN)
 			return (DECKERROR_SIDECOUNT << 28);
-		int code = cit->second.alias ? cit->second.alias : cit->first;
+		int code = cit->alias ? cit->alias : cit->code;
 		ccount[code]++;
 		int dc = ccount[code];
 		if(dc > 3)
-			return (DECKERROR_CARDCOUNT << 28) | cit->first;
+			return (DECKERROR_CARDCOUNT << 28) | cit->code;
 		auto it = list.find(code);
 		if(it != list.end() && dc > it->second)
-			return (DECKERROR_LFLIST << 28) | cit->first;
+			return (DECKERROR_LFLIST << 28) | cit->code;
 	}
 	return 0;
 }
@@ -211,21 +211,21 @@ bool DeckManager::LoadSide(Deck& deck, uint32_t dbuf[], int mainc, int sidec) {
 	std::unordered_map<uint32_t, int> pcount;
 	std::unordered_map<uint32_t, int> ncount;
 	for(size_t i = 0; i < deck.main.size(); ++i)
-		pcount[deck.main[i]->first]++;
+		pcount[deck.main[i]->code]++;
 	for(size_t i = 0; i < deck.extra.size(); ++i)
-		pcount[deck.extra[i]->first]++;
+		pcount[deck.extra[i]->code]++;
 	for(size_t i = 0; i < deck.side.size(); ++i)
-		pcount[deck.side[i]->first]++;
+		pcount[deck.side[i]->code]++;
 	Deck ndeck;
 	LoadDeck(ndeck, dbuf, mainc, sidec);
 	if (ndeck.main.size() != deck.main.size() || ndeck.extra.size() != deck.extra.size() || ndeck.side.size() != deck.side.size())
 		return false;
 	for(size_t i = 0; i < ndeck.main.size(); ++i)
-		ncount[ndeck.main[i]->first]++;
+		ncount[ndeck.main[i]->code]++;
 	for(size_t i = 0; i < ndeck.extra.size(); ++i)
-		ncount[ndeck.extra[i]->first]++;
+		ncount[ndeck.extra[i]->code]++;
 	for(size_t i = 0; i < ndeck.side.size(); ++i)
-		ncount[ndeck.side[i]->first]++;
+		ncount[ndeck.side[i]->code]++;
 	for (auto& cdit : ncount)
 		if (cdit.second != pcount[cdit.first])
 			return false;
@@ -319,13 +319,13 @@ bool DeckManager::SaveDeck(const Deck& deck, const wchar_t* file) {
 		return false;
 	std::fprintf(fp, "#created by ...\n#main\n");
 	for(size_t i = 0; i < deck.main.size(); ++i)
-		std::fprintf(fp, "%u\n", deck.main[i]->first);
+		std::fprintf(fp, "%u\n", deck.main[i]->code);
 	std::fprintf(fp, "#extra\n");
 	for(size_t i = 0; i < deck.extra.size(); ++i)
-		std::fprintf(fp, "%u\n", deck.extra[i]->first);
+		std::fprintf(fp, "%u\n", deck.extra[i]->code);
 	std::fprintf(fp, "!side\n");
 	for(size_t i = 0; i < deck.side.size(); ++i)
-		std::fprintf(fp, "%u\n", deck.side[i]->first);
+		std::fprintf(fp, "%u\n", deck.side[i]->code);
 	std::fclose(fp);
 	return true;
 }
