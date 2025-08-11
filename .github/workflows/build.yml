@@ -2,9 +2,9 @@ name: Automated Test Build
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "build" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "build" ]
 
 jobs:
   build-windows:
@@ -192,7 +192,7 @@ jobs:
 
     - name: Download irrlicht
       run: |
-        git clone --depth=1 https://github.com/mercury233/irrlicht
+        git clone --depth=1 https://github.com/salix5/irrlicht
 
     - name: Check DirectX SDK
       if: matrix.nodxsdk != true
@@ -433,7 +433,7 @@ jobs:
 
     - name: Download irrlicht
       run: |
-        git clone --depth=1 https://github.com/mercury233/irrlicht
+        git clone --depth=1 https://github.com/salix5/irrlicht
 
     - name: Copy premake files
       run: |
@@ -511,10 +511,6 @@ jobs:
         git checkout master
         git pull origin master
         cd ..
-#        cd script
-#        git checkout master
-#        git pull origin master
-#        cd ..
 
     - name: Install dependencies
       if: matrix.static-link != true
@@ -654,7 +650,7 @@ jobs:
 
     - name: Download irrlicht
       run: |
-        git clone --depth=1 https://github.com/mercury233/irrlicht
+        git clone --depth=1 https://github.com/salix5/irrlicht
 
     - name: Copy premake files
       run: |
