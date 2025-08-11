@@ -62,16 +62,10 @@ inline int myswprintf(wchar_t(&buf)[N], const wchar_t* fmt, TR... args) {
 
 inline FILE* mywfopen(const wchar_t* filename, const char* mode) {
 	FILE* fp{};
-#if !defined(_WIN32) || defined(FOPEN_WINDOWS_SUPPORT_UTF8)
 	char fname[1024]{};
 	std::mbstate_t state{};
 	std::wcsrtombs(fname, &filename, sizeof fname, &state);
 	fp = std::fopen(fname, mode);
-#else
-	wchar_t wmode[20]{};
-	BufferIO::CopyCharArray(mode, wmode);
-	fp = _wfopen(filename, wmode);
-#endif
 	return fp;
 }
 
