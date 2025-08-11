@@ -108,7 +108,7 @@ void SoundManager::PlaySoundEffect(int sound) {
 		std::strncpy(soundName, "set", sizeof soundName);
 		break;
 	}
-	case SOUND_FILP: {
+	case SOUND_FLIP: {
 		std::strncpy(soundName, "flip", sizeof soundName);
 		break;
 	}
