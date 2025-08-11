@@ -212,7 +212,7 @@ bool ReplayMode::StartDuel() {
 		}
 	} else {
 		char filename[256]{};
-		mysnprintf(filename, "./single/%s", cur_replay.script_name.c_str());
+		std::snprintf(filename, sizeof filename, "./single/%s", cur_replay.script_name.c_str());
 		if(!preload_script(pduel, filename)) {
 			return false;
 		}

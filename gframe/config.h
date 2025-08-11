@@ -54,12 +54,8 @@
 #include "../ocgcore/ocgapi.h"
 
 template<size_t N, typename... TR>
-inline int myswprintf(wchar_t(&buf)[N], const wchar_t* fmt, TR&&... args) {
-	return std::swprintf(buf, N, fmt, std::forward<TR>(args)...);
-}
-template<size_t N, typename... TR>
-inline int mysnprintf(char(&buf)[N], const char* fmt, TR&&... args) {
-	return std::snprintf(buf, N, fmt, std::forward<TR>(args)...);
+inline int myswprintf(wchar_t(&buf)[N], const wchar_t* fmt, TR... args) {
+	return std::swprintf(buf, N, fmt, args...);
 }
 
 #if !defined(_WIN32)
