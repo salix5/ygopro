@@ -18,7 +18,7 @@ void Replay::BeginRecord() {
 		return;
 	if(is_recording)
 		std::fclose(fp);
-	fp = myfopen("./replay/_LastReplay.yrp", "wb");
+	fp = std::fopen("./replay/_LastReplay.yrp", "wb");
 	if(!fp)
 		return;
 	Reset();

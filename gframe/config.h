@@ -58,8 +58,6 @@ inline int myswprintf(wchar_t(&buf)[N], const wchar_t* fmt, TR... args) {
 	return std::swprintf(buf, N, fmt, args...);
 }
 
-#define myfopen std::fopen
-
 inline FILE* mywfopen(const wchar_t* filename, const char* mode) {
 	FILE* fp{};
 	char fname[1024]{};
