@@ -12,8 +12,6 @@ namespace ygo {
 
 SoundManager soundManager;
 
-#define YGOPRO_USE_AUDIO
-
 bool SoundManager::Init() {
 #ifdef YGOPRO_USE_AUDIO
 	bgm_scene = -1;
