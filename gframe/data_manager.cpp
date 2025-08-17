@@ -65,9 +65,7 @@ bool DataManager::ReadDB(sqlite3* pDB) {
 		}
 	}
 	sqlite3_finalize(pStmt);
-	for (const auto& entry : extra_setcode) {
-		const auto& code = entry.first;
-		const auto& list = entry.second;
+	for (const auto& [code, list] : extra_setcode) {
 		if (list.size() > SIZE_SETCODE || list.empty())
 			continue;
 		auto it = _datas.find(code);
