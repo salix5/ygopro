@@ -269,10 +269,6 @@ void DeckManager::GetDeckFile(wchar_t* ret, int category_index, const wchar_t* c
 		BufferIO::CopyWStr(L"", ret, 256);
 	}
 }
-FILE* DeckManager::OpenDeckFile(const wchar_t* file, const char* mode) {
-	FILE* fp = mywfopen(file, mode);
-	return fp;
-}
 irr::io::IReadFile* DeckManager::OpenDeckReader(const wchar_t* file) {
 #ifdef _WIN32
 	auto reader = DataManager::FileSystem->createAndOpenFile(file);
@@ -336,7 +332,7 @@ void DeckManager::SaveDeck(const Deck& deck, std::stringstream& deckStream) {
 bool DeckManager::SaveDeck(const Deck& deck, const wchar_t* file) {
 	if(!FileSystem::IsDirExists(L"./deck") && !FileSystem::MakeDir(L"./deck"))
 		return false;
-	FILE* fp = OpenDeckFile(file, "w");
+	FILE* fp = mywfopen(file, "w");
 	if(!fp)
 		return false;
 	std::stringstream deckStream;
@@ -378,7 +374,7 @@ bool DeckManager::DeleteCategory(const wchar_t* name) {
 bool DeckManager::SaveDeckArray(const DeckArray& deck, const wchar_t* name) {
 	if (!FileSystem::IsDirExists(L"./deck") && !FileSystem::MakeDir(L"./deck"))
 		return false;
-	FILE* fp = OpenDeckFile(name, "w");
+	FILE* fp = mywfopen(name, "w");
 	if (!fp)
 		return false;
 	std::fprintf(fp, "#created by ...\n#main\n");
