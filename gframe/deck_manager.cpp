@@ -5,7 +5,6 @@
 
 namespace ygo {
 
-char DeckManager::deckBuffer[0x10000]{};
 DeckManager deckManager;
 
 void DeckManager::LoadLFListSingle(const char* path) {
@@ -289,6 +288,7 @@ bool DeckManager::LoadCurrentDeck(std::istringstream& deckStream, bool is_packli
 	return true;  // the above LoadDeck has return value but we ignore it here for now
 }
 bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
+	char deckBuffer[0x10000]{};
 	current_deck.clear();
 	auto reader = OpenDeckReader(file);
 	if(!reader) {
@@ -303,7 +303,6 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 	}
 	if(!reader)
 		return false;
-	std::memset(deckBuffer, 0, sizeof deckBuffer);
 	int size = reader->read(deckBuffer, sizeof deckBuffer);
 	reader->drop();
 	if (size >= (int)sizeof deckBuffer) {

@@ -49,8 +49,6 @@ public:
 	Deck current_deck;
 	std::vector<LFList> _lfList;
 
-	static char deckBuffer[0x10000];
-
 	void LoadLFListSingle(const char* path);
 	void LoadLFList();
 	const wchar_t* GetLFListName(unsigned int lfhash);
