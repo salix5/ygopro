@@ -73,7 +73,7 @@ public:
 	size_t pre_mainc{};
 	size_t pre_extrac{};
 	size_t pre_sidec{};
-	const CardDataC* draging_pointer;
+	const CardDataC* draging_pointer{};
 	int prev_category{};
 	int prev_deck{};
 	irr::s32 prev_operation{};
