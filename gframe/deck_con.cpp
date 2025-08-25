@@ -1097,8 +1097,6 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			}
 			if(!is_draging)
 				break;
-			if (!draging_pointer)
-				break;
 			soundManager.PlaySoundEffect(SOUND_CARD_DROP);
 			bool pushed = false;
 			if(hovered_pos == 1)
@@ -1180,8 +1178,6 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						push_side(cd);
 				}
 			} else {
-				if(!draging_pointer)
-					break;
 				soundManager.PlaySoundEffect(SOUND_CARD_PICK);
 				if(click_pos == 1) {
 					push_side(draging_pointer);
