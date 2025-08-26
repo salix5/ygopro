@@ -641,9 +641,9 @@ bool Game::Initialize() {
 	btnOperation = env->addButton(irr::core::rect<irr::s32>(1, 169, 99, 189), wCmdMenu, BUTTON_CMD_ACTIVATE, dataManager.GetSysString(1161));
 	btnReset = env->addButton(irr::core::rect<irr::s32>(1, 190, 99, 210), wCmdMenu, BUTTON_CMD_RESET, dataManager.GetSysString(1162));
 	//deck edit
-	wDeckEdit = env->addStaticText(L"", irr::core::rect<irr::s32>(309, 5, 605, 130), true, false, 0, -1, true);
+	wDeckEdit = env->addStaticText(L"", irr::core::rect<irr::s32>(300, 5, 610, 130), true, false, 0, -1, true);
 	wDeckEdit->setVisible(false);
-	btnManageDeck = env->addButton(irr::core::rect<irr::s32>(225, 5, 290, 30), wDeckEdit, BUTTON_MANAGE_DECK, dataManager.GetSysString(1328));
+	btnManageDeck = env->addButton(irr::core::rect<irr::s32>(240, 5, 305, 30), wDeckEdit, BUTTON_MANAGE_DECK, dataManager.GetSysString(1328));
 	//deck manage
 	wDeckManage = env->addWindow(irr::core::rect<irr::s32>(310, 135, 800, 515), false, dataManager.GetSysString(1460), 0, WINDOW_DECK_MANAGE);
 	wDeckManage->setVisible(false);
@@ -691,18 +691,18 @@ bool Game::Initialize() {
 	scrPackCards->setSmallStep(1);
 	scrPackCards->setVisible(false);
 
-	stDBCategory = env->addStaticText(dataManager.GetSysString(1300), irr::core::rect<irr::s32>(10, 9, 100, 29), false, false, wDeckEdit);
-	cbDBCategory = env->addComboBox(irr::core::rect<irr::s32>(80, 5, 220, 30), wDeckEdit, COMBOBOX_DBCATEGORY);
+	stDBCategory = env->addStaticText(dataManager.GetSysString(1300), irr::core::rect<irr::s32>(5, 9, 100, 29), false, false, wDeckEdit);
+	cbDBCategory = env->addComboBox(irr::core::rect<irr::s32>(55, 5, 235, 30), wDeckEdit, COMBOBOX_DBCATEGORY);
 	cbDBCategory->setMaxSelectionRows(15);
-	stDeck = env->addStaticText(dataManager.GetSysString(1301), irr::core::rect<irr::s32>(10, 39, 100, 59), false, false, wDeckEdit);
-	cbDBDecks = env->addComboBox(irr::core::rect<irr::s32>(80, 35, 220, 60), wDeckEdit, COMBOBOX_DBDECKS);
+	stDeck = env->addStaticText(dataManager.GetSysString(1301), irr::core::rect<irr::s32>(5, 39, 100, 59), false, false, wDeckEdit);
+	cbDBDecks = env->addComboBox(irr::core::rect<irr::s32>(55, 35, 235, 60), wDeckEdit, COMBOBOX_DBDECKS);
 	cbDBDecks->setMaxSelectionRows(15);
-	btnSaveDeck = env->addButton(irr::core::rect<irr::s32>(225, 35, 290, 60), wDeckEdit, BUTTON_SAVE_DECK, dataManager.GetSysString(1302));
-	ebDeckname = env->addEditBox(L"", irr::core::rect<irr::s32>(80, 65, 220, 90), true, wDeckEdit, -1);
+	btnSaveDeck = env->addButton(irr::core::rect<irr::s32>(240, 35, 305, 60), wDeckEdit, BUTTON_SAVE_DECK, dataManager.GetSysString(1302));
+	ebDeckname = env->addEditBox(L"", irr::core::rect<irr::s32>(55, 65, 235, 90), true, wDeckEdit, -1);
 	ebDeckname->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	editbox_list.push_back(ebDeckname);
-	btnSaveDeckAs = env->addButton(irr::core::rect<irr::s32>(225, 65, 290, 90), wDeckEdit, BUTTON_SAVE_DECK_AS, dataManager.GetSysString(1303));
-	btnDeleteDeck = env->addButton(irr::core::rect<irr::s32>(225, 95, 290, 120), wDeckEdit, BUTTON_DELETE_DECK, dataManager.GetSysString(1308));
+	btnSaveDeckAs = env->addButton(irr::core::rect<irr::s32>(240, 65, 305, 90), wDeckEdit, BUTTON_SAVE_DECK_AS, dataManager.GetSysString(1303));
+	btnDeleteDeck = env->addButton(irr::core::rect<irr::s32>(240, 95, 305, 120), wDeckEdit, BUTTON_DELETE_DECK, dataManager.GetSysString(1308));
 	btnShuffleDeck = env->addButton(irr::core::rect<irr::s32>(5, 99, 55, 120), wDeckEdit, BUTTON_SHUFFLE_DECK, dataManager.GetSysString(1307));
 	btnSortDeck = env->addButton(irr::core::rect<irr::s32>(60, 99, 110, 120), wDeckEdit, BUTTON_SORT_DECK, dataManager.GetSysString(1305));
 	btnClearDeck = env->addButton(irr::core::rect<irr::s32>(115, 99, 165, 120), wDeckEdit, BUTTON_CLEAR_DECK, dataManager.GetSysString(1304));
@@ -1886,16 +1886,17 @@ void Game::OnResize() {
 	imageManager.ResizeTexture();
 
 	wMainMenu->setRelativePosition(ResizeWin(370, 200, 650, 415));
-	wDeckEdit->setRelativePosition(Resize(309, 5, 605, 130));
-	cbDBDecks->setRelativePosition(Resize(80, 35, 220, 60));
+	wDeckEdit->setRelativePosition(Resize(300, 5, 610, 130));
+	cbDBCategory->setRelativePosition(Resize(55, 5, 235, 30));
+	cbDBDecks->setRelativePosition(Resize(55, 35, 235, 60));
+	ebDeckname->setRelativePosition(Resize(55, 65, 235, 90));
 	btnClearDeck->setRelativePosition(Resize(115, 99, 165, 120));
 	btnSortDeck->setRelativePosition(Resize(60, 99, 110, 120));
 	btnShuffleDeck->setRelativePosition(Resize(5, 99, 55, 120));
-	btnSaveDeck->setRelativePosition(Resize(225, 35, 290, 60));
-	btnSaveDeckAs->setRelativePosition(Resize(225, 65, 290, 90));
-	ebDeckname->setRelativePosition(Resize(80, 65, 220, 90));
-	cbDBCategory->setRelativePosition(Resize(80, 5, 220, 30));
-	btnManageDeck->setRelativePosition(Resize(225, 5, 290, 30));
+	btnSaveDeck->setRelativePosition(Resize(240, 35, 305, 60));
+	btnSaveDeckAs->setRelativePosition(Resize(240, 65, 305, 90));
+	btnManageDeck->setRelativePosition(Resize(240, 5, 305, 30));
+	btnDeleteDeck->setRelativePosition(Resize(240, 95, 305, 120));
 	wDeckManage->setRelativePosition(ResizeWin(310, 135, 800, 515));
 	scrPackCards->setRelativePosition(Resize(775, 161, 795, 629));
 
@@ -1927,8 +1928,8 @@ void Game::OnResize() {
 		btncatepos.LowerRightCorner.Y - btncatepos.getHeight() / 2 + 245));
 
 	wLinkMarks->setRelativePosition(ResizeWin(700, 30, 820, 150));
-	stDBCategory->setRelativePosition(Resize(10, 9, 100, 29));
-	stDeck->setRelativePosition(Resize(10, 39, 100, 59));
+	stDBCategory->setRelativePosition(Resize(5, 9, 100, 29));
+	stDeck->setRelativePosition(Resize(5, 39, 100, 59));
 	stCategory->setRelativePosition(Resize(10, 2 + 25 / 6, 70, 22 + 25 / 6));
 	stLimit->setRelativePosition(Resize(205, 2 + 25 / 6, 280, 22 + 25 / 6));
 	stAttribute->setRelativePosition(Resize(10, 22 + 50 / 6, 70, 42 + 50 / 6));
@@ -1942,7 +1943,6 @@ void Game::OnResize() {
 	btnSideShuffle->setRelativePosition(Resize(310, 100, 370, 130));
 	btnSideSort->setRelativePosition(Resize(375, 100, 435, 130));
 	btnSideReload->setRelativePosition(Resize(440, 100, 500, 130));
-	btnDeleteDeck->setRelativePosition(Resize(225, 95, 290, 120));
 
 	wLanWindow->setRelativePosition(ResizeWin(220, 100, 800, 520));
 	wCreateHost->setRelativePosition(ResizeWin(320, 100, 700, 520));
