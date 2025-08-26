@@ -1,9 +1,9 @@
 #ifndef DECKMANAGER_H
 #define DECKMANAGER_H
 
+#include <sstream>
 #include <unordered_map>
 #include <vector>
-#include <sstream>
 #include "data_manager.h"
 
 namespace ygo {

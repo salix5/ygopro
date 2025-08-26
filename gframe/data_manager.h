@@ -1,9 +1,10 @@
 #ifndef DATAMANAGER_H
 #define DATAMANAGER_H
 
+#include <cstdint>
+#include <string>
 #include <unordered_map>
 #include <vector>
-#include <string>
 #include <sqlite3.h>
 #include "../ocgcore/card_data.h"
 
