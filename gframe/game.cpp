@@ -645,30 +645,31 @@ bool Game::Initialize() {
 	wDeckEdit->setVisible(false);
 	btnManageDeck = env->addButton(irr::core::rect<irr::s32>(240, 5, 305, 30), wDeckEdit, BUTTON_MANAGE_DECK, dataManager.GetSysString(1328));
 	//deck manage
-	wDeckManage = env->addWindow(irr::core::rect<irr::s32>(310, 135, 800, 515), false, dataManager.GetSysString(1460), 0, WINDOW_DECK_MANAGE);
+	wDeckManage = env->addWindow(irr::core::rect<irr::s32>(310, 135, 950, 515), false, dataManager.GetSysString(1460), 0, WINDOW_DECK_MANAGE);
 	wDeckManage->setVisible(false);
 	lstCategories = env->addListBox(irr::core::rect<irr::s32>(10, 30, 140, 370), wDeckManage, LISTBOX_CATEGORIES, true);
-	lstDecks = env->addListBox(irr::core::rect<irr::s32>(150, 30, 340, 370), wDeckManage, LISTBOX_DECKS, true);
+	lstDecks = env->addListBox(irr::core::rect<irr::s32>(150, 30, 490, 370), wDeckManage, LISTBOX_DECKS, true);
+	int dm_posX = 500;
 	posY = 30;
-	btnNewCategory = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_NEW_CATEGORY, dataManager.GetSysString(1461));
+	btnNewCategory = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_NEW_CATEGORY, dataManager.GetSysString(1461));
 	posY += 35;
-	btnRenameCategory = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_RENAME_CATEGORY, dataManager.GetSysString(1462));
+	btnRenameCategory = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_RENAME_CATEGORY, dataManager.GetSysString(1462));
 	posY += 35;
-	btnDeleteCategory = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_DELETE_CATEGORY, dataManager.GetSysString(1463));
+	btnDeleteCategory = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_DELETE_CATEGORY, dataManager.GetSysString(1463));
 	posY += 35;
-	btnNewDeck = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_NEW_DECK, dataManager.GetSysString(1464));
+	btnNewDeck = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_NEW_DECK, dataManager.GetSysString(1464));
 	posY += 35;
-	btnRenameDeck = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_RENAME_DECK, dataManager.GetSysString(1465));
+	btnRenameDeck = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_RENAME_DECK, dataManager.GetSysString(1465));
 	posY += 35;
-	btnDMDeleteDeck = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_DELETE_DECK_DM, dataManager.GetSysString(1466));
+	btnDMDeleteDeck = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_DELETE_DECK_DM, dataManager.GetSysString(1466));
 	posY += 35;
-	btnMoveDeck = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_MOVE_DECK, dataManager.GetSysString(1467));
+	btnMoveDeck = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_MOVE_DECK, dataManager.GetSysString(1467));
 	posY += 35;
-	btnCopyDeck = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_COPY_DECK, dataManager.GetSysString(1468));
+	btnCopyDeck = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_COPY_DECK, dataManager.GetSysString(1468));
 	posY += 35;
-	btnImportDeckCode = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_IMPORT_DECK_CODE, dataManager.GetSysString(1478));
+	btnImportDeckCode = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_IMPORT_DECK_CODE, dataManager.GetSysString(1478));
 	posY += 35;
-	btnExportDeckCode = env->addButton(irr::core::rect<irr::s32>(350, posY, 480, posY + 25), wDeckManage, BUTTON_EXPORT_DECK_CODE, dataManager.GetSysString(1479));
+	btnExportDeckCode = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_EXPORT_DECK_CODE, dataManager.GetSysString(1479));
 	//deck manage query
 	wDMQuery = env->addWindow(irr::core::rect<irr::s32>(400, 200, 710, 320), false, dataManager.GetSysString(1460));
 	wDMQuery->getCloseButton()->setVisible(false);
@@ -1897,7 +1898,7 @@ void Game::OnResize() {
 	btnSaveDeckAs->setRelativePosition(Resize(240, 65, 305, 90));
 	btnManageDeck->setRelativePosition(Resize(240, 5, 305, 30));
 	btnDeleteDeck->setRelativePosition(Resize(240, 95, 305, 120));
-	wDeckManage->setRelativePosition(ResizeWin(310, 135, 800, 515));
+	wDeckManage->setRelativePosition(ResizeWin(310, 135, 950, 515));
 	scrPackCards->setRelativePosition(Resize(775, 161, 795, 629));
 
 	wSort->setRelativePosition(Resize(930, 132, 1020, 156));
