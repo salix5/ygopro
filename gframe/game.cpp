@@ -90,9 +90,6 @@ bool Game::Initialize() {
 	numFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 16);
 	if(!numFont) {
 		const wchar_t* numFontPaths[] = {
-			L"./fonts/numFont.ttf",
-			L"./fonts/numFont.ttc",
-			L"./fonts/numFont.otf",
 			L"C:/Windows/Fonts/arialbd.ttf",
 			L"/usr/share/fonts/truetype/DroidSansFallbackFull.ttf",
 			L"/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
@@ -111,9 +108,7 @@ bool Game::Initialize() {
 	textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
 	if(!textFont) {
 		const wchar_t* textFontPaths[] = {
-			L"./fonts/textFont.ttf",
-			L"./fonts/textFont.ttc",
-			L"./fonts/textFont.otf",
+			L"C:/Windows/Fonts/NotoSansCJK-Regular.ttc",
 			L"C:/Windows/Fonts/msyh.ttc",
 			L"C:/Windows/Fonts/msyh.ttf",
 			L"C:/Windows/Fonts/simsun.ttc",
