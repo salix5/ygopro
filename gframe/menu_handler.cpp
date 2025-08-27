@@ -310,7 +310,11 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				wchar_t filename[256]{};
 				wchar_t replay_path[256]{};
 				BufferIO::CopyWideString(mainGame->lstReplayList->getListItem(selected), replay_filename);
-				myswprintf(replay_path, L"./replay/%ls", replay_filename);
+				auto len = std::wcslen(replay_filename);
+				if (len < 4)
+					break;
+				if (myswprintf(replay_path, L"./replay/%ls", replay_filename) < 0)
+					break;
 				if (!replay.OpenReplay(replay_path))
 					break;
 				if (replay.pheader.base.flag & REPLAY_SINGLE_MODE)
@@ -319,7 +323,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 					BufferIO::CopyWideString(replay.players[Replay::GetDeckPlayer(i)].c_str(), namebuf[i]);
 					FileSystem::SafeFileName(namebuf[i]);
 				}
-				auto len = std::wcslen(replay_filename);
 				replay_filename[len - 4] = 0;
 				for (size_t i = 0; i < replay.decks.size(); ++i) {
 					myswprintf(filename, L"./deck/%ls-p%d %ls.ydk", replay_filename, i + 1, namebuf[i]);
