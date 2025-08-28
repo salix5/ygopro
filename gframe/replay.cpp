@@ -137,8 +137,11 @@ bool Replay::OpenReplay(const wchar_t* name) {
 	return true;
 }
 bool Replay::DeleteReplay(const wchar_t* name) {
+	if (std::wcschr(name, L'/') || std::wcschr(name, L'\\'))
+		return false;
 	wchar_t fname[256];
-	myswprintf(fname, L"./replay/%ls", name);
+	if(myswprintf(fname, L"./replay/%ls", name) <= 0)
+		return false;
 	return FileSystem::RemoveFile(fname);
 }
 bool Replay::RenameReplay(const wchar_t* oldname, const wchar_t* newname) {
