@@ -84,7 +84,8 @@ bool Replay::OpenReplay(const wchar_t* name) {
 	FILE* rfp = mywfopen(name, "rb");
 	if(!rfp) {
 		wchar_t fname[256];
-		myswprintf(fname, L"./replay/%ls", name);
+		if (myswprintf(fname, L"./replay/%ls", name) <= 0)
+			return false;
 		rfp = mywfopen(fname, "rb");
 	}
 	if(!rfp)
