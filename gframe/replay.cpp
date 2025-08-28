@@ -146,15 +146,14 @@ bool Replay::DeleteReplay(const wchar_t* name) {
 }
 bool Replay::RenameReplay(const wchar_t* oldname, const wchar_t* newname) {
 	wchar_t old_path[256];
-	wchar_t safe_newname[256];
 	wchar_t new_path[256];
 	if (std::wcschr(oldname, L'/') || std::wcschr(oldname, L'\\'))
 		return false;
+	if (std::wcschr(newname, L'/') || std::wcschr(newname, L'\\'))
+		return false;
 	if (myswprintf(old_path, L"./replay/%ls", oldname) <= 0)
 		return false;
-	BufferIO::CopyWideString(newname, safe_newname);
-	FileSystem::SafeFileName(safe_newname);
-	if (myswprintf(new_path, L"./replay/%ls", safe_newname) <= 0)
+	if (myswprintf(new_path, L"./replay/%ls", newname) <= 0)
 		return false;
 	char oldfilefn[1024];
 	char newfilefn[1024];
