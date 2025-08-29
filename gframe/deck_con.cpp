@@ -1048,14 +1048,13 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					mainGame->lstDecks->setSelected(prev_deck);
 					break;
 				}
+				int catesel = mainGame->lstCategories->getSelected();
 				int decksel = mainGame->lstDecks->getSelected();
 				mainGame->cbDBDecks->setSelected(decksel);
 				if(decksel == -1)
 					break;
-				wchar_t filepath[256];
-				wchar_t catepath[256];
-				DeckManager::GetCategoryPath(catepath, mainGame->lstCategories->getSelected(), mainGame->lstCategories->getListItem(mainGame->lstCategories->getSelected()));
-				myswprintf(filepath, L"%ls/%ls.ydk", catepath, mainGame->lstDecks->getListItem(decksel));
+				wchar_t filepath[256]{};
+				DeckManager::GetDeckFile(filepath, catesel, mainGame->lstCategories->getListItem(catesel), mainGame->lstDecks->getListItem(decksel));
 				deckManager.LoadCurrentDeck(filepath, showing_pack);
 				RefreshPackListScroll();
 				prev_deck = decksel;
