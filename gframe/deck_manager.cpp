@@ -281,7 +281,7 @@ void DeckManager::GetDeckFile(wchar_t* ret, int category_index, const wchar_t* c
 	wchar_t filepath[256]{};
 	wchar_t catepath[256]{};
 	GetCategoryPath(catepath, category_index, category_name);
-	if (std::wcschr(catepath, L'/') || std::wcschr(catepath, L'\\')) {
+	if (!catepath[0]) {
 		ret[0] = 0;
 		return;
 	}
