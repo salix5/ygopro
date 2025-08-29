@@ -497,11 +497,14 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				}
 				case BUTTON_NEW_DECK:
 				case BUTTON_IMPORT_DECK_CODE: {
+					int category_index = mainGame->lstCategories->getSelected();
+					if (category_index < 2)
+						break;
 					const wchar_t* deckname = mainGame->ebDMName->getText();
-					wchar_t catepath[256];
-					DeckManager::GetCategoryPath(catepath, mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText());
-					wchar_t filepath[256];
-					myswprintf(filepath, L"%ls/%ls.ydk", catepath, deckname);
+					wchar_t filepath[256]{};
+					DeckManager::GetDeckFile(filepath, category_index, mainGame->lstCategories->getListItem(category_index), deckname);
+					if (!filepath[0])
+						break;
 					bool res = false;
 					if(!FileSystem::IsFileExists(filepath)) {
 						if(dmquery_operation == BUTTON_NEW_DECK) {
