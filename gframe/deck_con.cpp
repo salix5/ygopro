@@ -538,17 +538,21 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				}
 				case BUTTON_RENAME_DECK: {
 					int catesel = mainGame->lstCategories->getSelected();
+					if (catesel < 2)
+						break;
 					int decksel = mainGame->lstDecks->getSelected();
+					if (decksel == -1)
+						break;
 					const wchar_t* catename = mainGame->lstCategories->getListItem(catesel);
-					wchar_t oldfilepath[256];
-					get_deck_file(oldfilepath);
+					wchar_t oldfilepath[256]{};
+					DeckManager::GetDeckFile(oldfilepath, catesel, catename, mainGame->lstDecks->getListItem(decksel));
+					if (!oldfilepath[0])
+						break;
 					const wchar_t* newdeckname = mainGame->ebDMName->getText();
-					wchar_t newfilepath[256];
-					if(catesel == 2) {
-						myswprintf(newfilepath, L"./deck/%ls.ydk", newdeckname);
-					} else {
-						myswprintf(newfilepath, L"./deck/%ls/%ls.ydk", catename, newdeckname);
-					}
+					wchar_t newfilepath[256]{};
+					DeckManager::GetDeckFile(newfilepath, catesel, catename, newdeckname);
+					if (!newfilepath[0])
+						break;
 					bool res = false;
 					if(!FileSystem::IsFileExists(newfilepath)) {
 						res = FileSystem::Rename(oldfilepath, newfilepath);
