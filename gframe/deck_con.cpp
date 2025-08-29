@@ -307,7 +307,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->ebDMName->setText(L"");
 				mainGame->PopupElement(mainGame->wDMQuery);
 				mainGame->gMutex.unlock();
-				prev_operation = id;
+				dmquery_operation = id;
 				break;
 			}
 			case BUTTON_RENAME_CATEGORY: {
@@ -319,7 +319,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->ebDMName->setText(mainGame->lstCategories->getListItem(mainGame->lstCategories->getSelected()));
 				mainGame->PopupElement(mainGame->wDMQuery);
 				mainGame->gMutex.unlock();
-				prev_operation = id;
+				dmquery_operation = id;
 				break;
 			}
 			case BUTTON_DELETE_CATEGORY: {
@@ -329,7 +329,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->stDMMessage2->setText(mainGame->lstCategories->getListItem(mainGame->lstCategories->getSelected()));
 				mainGame->PopupElement(mainGame->wDMQuery);
 				mainGame->gMutex.unlock();
-				prev_operation = id;
+				dmquery_operation = id;
 				break;
 			}
 			case BUTTON_NEW_DECK: {
@@ -339,7 +339,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->ebDMName->setText(L"");
 				mainGame->PopupElement(mainGame->wDMQuery);
 				mainGame->gMutex.unlock();
-				prev_operation = id;
+				dmquery_operation = id;
 				break;
 			}
 			case BUTTON_RENAME_DECK: {
@@ -349,7 +349,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->ebDMName->setText(mainGame->lstDecks->getListItem(mainGame->lstDecks->getSelected()));
 				mainGame->PopupElement(mainGame->wDMQuery);
 				mainGame->gMutex.unlock();
-				prev_operation = id;
+				dmquery_operation = id;
 				break;
 			}
 			case BUTTON_DELETE_DECK_DM: {
@@ -359,7 +359,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->stDMMessage2->setText(mainGame->lstDecks->getListItem(mainGame->lstDecks->getSelected()));
 				mainGame->PopupElement(mainGame->wDMQuery);
 				mainGame->gMutex.unlock();
-				prev_operation = id;
+				dmquery_operation = id;
 				break;
 			}
 			case BUTTON_MOVE_DECK: {
@@ -376,7 +376,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				}
 				mainGame->PopupElement(mainGame->wDMQuery);
 				mainGame->gMutex.unlock();
-				prev_operation = id;
+				dmquery_operation = id;
 				break;
 			}
 			case BUTTON_COPY_DECK: {
@@ -393,7 +393,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				}
 				mainGame->PopupElement(mainGame->wDMQuery);
 				mainGame->gMutex.unlock();
-				prev_operation = id;
+				dmquery_operation = id;
 				break;
 			}
 			case BUTTON_IMPORT_DECK_CODE: {
@@ -406,7 +406,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->ebDMName->setText(timetext);
 				mainGame->PopupElement(mainGame->wDMQuery);
 				mainGame->gMutex.unlock();
-				prev_operation = id;
+				dmquery_operation = id;
 				break;
 			}
 			case BUTTON_EXPORT_DECK_CODE: {
@@ -420,7 +420,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_DM_OK: {
-				switch(prev_operation) {
+				switch (dmquery_operation) {
 				case BUTTON_NEW_CATEGORY: {
 					int catesel = 0;
 					const wchar_t* catename = mainGame->ebDMName->getText();
@@ -504,7 +504,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					myswprintf(filepath, L"%ls/%ls.ydk", catepath, deckname);
 					bool res = false;
 					if(!FileSystem::IsFileExists(filepath)) {
-						if(prev_operation == BUTTON_NEW_DECK) {
+						if(dmquery_operation == BUTTON_NEW_DECK) {
 							deckManager.current_deck.main.clear();
 							deckManager.current_deck.extra.clear();
 							deckManager.current_deck.side.clear();
@@ -675,7 +675,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				default:
 					break;
 				}
-				prev_operation = 0;
+				dmquery_operation = 0;
 				mainGame->HideElement(mainGame->wDMQuery);
 				mainGame->stDMMessage2->setVisible(false);
 				mainGame->ebDMName->setVisible(false);
@@ -684,6 +684,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			}
 			case BUTTON_DM_CANCEL: {
 				mainGame->HideElement(mainGame->wDMQuery);
+				dmquery_operation = 0;
 				mainGame->stDMMessage2->setVisible(false);
 				mainGame->ebDMName->setVisible(false);
 				mainGame->cbDMCategory->setVisible(false);

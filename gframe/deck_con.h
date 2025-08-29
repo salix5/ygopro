@@ -77,6 +77,7 @@ public:
 	int prev_category{};
 	int prev_deck{};
 	irr::s32 prev_operation{};
+	irr::s32 dmquery_operation{};
 	int prev_sel{ -1 };
 	bool is_modified{};
 	bool readonly{};
