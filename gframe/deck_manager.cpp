@@ -262,18 +262,26 @@ void DeckManager::GetCategoryPath(wchar_t* ret, int index, const wchar_t* text) 
 	BufferIO::CopyWStr(catepath, ret, 256);
 }
 void DeckManager::GetDeckFile(wchar_t* ret, int category_index, const wchar_t* category_name, const wchar_t* deckname) {
+	if (!deckname) {
+		ret[0] = 0;
+		return;
+	}
+	if (std::wcschr(deckname, L'/') || std::wcschr(deckname, L'\\')) {
+		ret[0] = 0;
+		return;
+	}
 	wchar_t filepath[256]{};
 	wchar_t catepath[256]{};
-	if (deckname) {
-		GetCategoryPath(catepath, category_index, category_name);
-		if (myswprintf(filepath, L"%ls/%ls.ydk", catepath, deckname) > 0)
-			BufferIO::CopyWStr(filepath, ret, 256);
-		else
-			BufferIO::CopyWStr(L"", ret, 256);
+	GetCategoryPath(catepath, category_index, category_name);
+	if (std::wcschr(catepath, L'/') || std::wcschr(catepath, L'\\')) {
+		ret[0] = 0;
+		return;
 	}
-	else {
-		BufferIO::CopyWStr(L"", ret, 256);
+	if (myswprintf(filepath, L"%ls/%ls.ydk", catepath, deckname) <= 0) {
+		ret[0] = 0;
+		return;
 	}
+	BufferIO::CopyWStr(filepath, ret, 256);
 }
 irr::io::IReadFile* DeckManager::OpenDeckReader(const wchar_t* file) {
 #ifdef _WIN32
