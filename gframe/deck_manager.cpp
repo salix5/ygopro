@@ -355,6 +355,8 @@ bool DeckManager::CreateCategory(const wchar_t* name) {
 		return false;
 	if(name[0] == 0)
 		return false;
+	if(std::wcschr(name, L'/') || std::wcschr(name, L'\\'))
+		return false;
 	wchar_t localname[256];
 	myswprintf(localname, L"./deck/%ls", name);
 	return FileSystem::MakeDir(localname);
@@ -364,6 +366,10 @@ bool DeckManager::RenameCategory(const wchar_t* oldname, const wchar_t* newname)
 		return false;
 	if(newname[0] == 0)
 		return false;
+	if (std::wcschr(oldname, L'/') || std::wcschr(oldname, L'\\'))
+		return false;
+	if (std::wcschr(newname, L'/') || std::wcschr(newname, L'\\'))
+		return false;
 	wchar_t oldlocalname[256];
 	wchar_t newlocalname[256];
 	myswprintf(oldlocalname, L"./deck/%ls", oldname);
@@ -371,6 +377,8 @@ bool DeckManager::RenameCategory(const wchar_t* oldname, const wchar_t* newname)
 	return FileSystem::Rename(oldlocalname, newlocalname);
 }
 bool DeckManager::DeleteCategory(const wchar_t* name) {
+	if (std::wcschr(name, L'/') || std::wcschr(name, L'\\'))
+		return false;
 	wchar_t localname[256];
 	myswprintf(localname, L"./deck/%ls", name);
 	if(!FileSystem::IsDirExists(localname))
