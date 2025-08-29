@@ -199,11 +199,16 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_SAVE_DECK_AS: {
+				int catesel = mainGame->cbDBCategory->getSelected();
 				const wchar_t* dname = mainGame->ebDeckname->getText();
-				if(*dname == 0)
+				if (!dname[0])
+					break;
+				wchar_t filepath[256]{};
+				DeckManager::GetDeckFile(filepath, catesel, mainGame->cbDBCategory->getText(), dname);
+				if (!filepath[0])
 					break;
 				int sel = -1;
-				for(int i = 0; i < (int)mainGame->cbDBDecks->getItemCount(); ++i) {
+				for(irr::u32 i = 0; i < mainGame->cbDBDecks->getItemCount(); ++i) {
 					if(!std::wcscmp(dname, mainGame->cbDBDecks->getItem(i))) {
 						sel = i;
 						break;
@@ -216,12 +221,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					mainGame->cbDBDecks->setSelected(mainGame->cbDBDecks->getItemCount() - 1);
 				}
 				prev_deck = mainGame->cbDBDecks->getSelected();
-				int catesel = mainGame->cbDBCategory->getSelected();
-				wchar_t catepath[256];
-				DeckManager::GetCategoryPath(catepath, catesel, mainGame->cbDBCategory->getText());
-				wchar_t filepath[256];
-				myswprintf(filepath, L"%ls/%ls.ydk", catepath, dname);
-				if(DeckManager::SaveDeck(deckManager.current_deck, filepath)) {
+				if (DeckManager::SaveDeck(deckManager.current_deck, filepath)) {
 					mainGame->stACMessage->setText(dataManager.GetSysString(1335));
 					mainGame->PopupElement(mainGame->wACMessage, 20);
 					is_modified = false;
