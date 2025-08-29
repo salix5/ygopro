@@ -257,7 +257,15 @@ void DeckManager::GetCategoryPath(wchar_t* ret, int index, const wchar_t* text) 
 		myswprintf(catepath, L"./deck");
 		break;
 	default:
-		myswprintf(catepath, L"./deck/%ls", text);
+		if (std::wcschr(text, L'/') || std::wcschr(text, L'\\')) {
+			catepath[0] = 0;
+			break;
+		}
+		if (myswprintf(catepath, L"./deck/%ls", text) <= 0) {
+			catepath[0] = 0;
+			break;
+		}
+		break;
 	}
 	BufferIO::CopyWStr(catepath, ret, 256);
 }
