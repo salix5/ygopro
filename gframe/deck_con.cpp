@@ -161,8 +161,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			if(id == WINDOW_DECK_MANAGE) {
 				mainGame->HideElement(mainGame->wDeckManage);
 				return true;
-				break;
 			}
+			break;
 		}
 		case irr::gui::EGET_BUTTON_CLICKED: {
 			soundManager.PlaySoundEffect(SOUND_BUTTON);
@@ -189,13 +189,13 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				int sel = mainGame->cbDBDecks->getSelected();
 				if(sel == -1)
 					break;
-				wchar_t filepath[256];
+				wchar_t filepath[256]{};
 				get_deck_file(filepath);
-				if(DeckManager::SaveDeck(deckManager.current_deck, filepath)) {
-					mainGame->stACMessage->setText(dataManager.GetSysString(1335));
-					mainGame->PopupElement(mainGame->wACMessage, 20);
-					is_modified = false;
-				}
+				if (!DeckManager::SaveDeck(deckManager.current_deck, filepath))
+					break;
+				mainGame->stACMessage->setText(dataManager.GetSysString(1335));
+				mainGame->PopupElement(mainGame->wACMessage, 40);
+				is_modified = false;
 				break;
 			}
 			case BUTTON_SAVE_DECK_AS: {
@@ -207,33 +207,34 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				DeckManager::GetDeckFile(filepath, catesel, mainGame->cbDBCategory->getText(), dname);
 				if (!filepath[0])
 					break;
+				bool is_exist = FileSystem::IsFileExists(filepath);
+				if (!DeckManager::SaveDeck(deckManager.current_deck, filepath))
+					break;
 				int sel = -1;
-				for(irr::u32 i = 0; i < mainGame->cbDBDecks->getItemCount(); ++i) {
-					if(!std::wcscmp(dname, mainGame->cbDBDecks->getItem(i))) {
-						sel = i;
-						break;
+				if (is_exist) {
+					for (irr::u32 i = 0; i < mainGame->cbDBDecks->getItemCount(); ++i) {
+						if (!mywcsncasecmp(dname, mainGame->cbDBDecks->getItem(i), 256)) {
+							sel = i;
+							break;
+						}
 					}
 				}
 				if(sel >= 0)
 					mainGame->cbDBDecks->setSelected(sel);
-				else {
-					mainGame->cbDBDecks->addItem(dname);
-					mainGame->cbDBDecks->setSelected(mainGame->cbDBDecks->getItemCount() - 1);
-				}
+				else
+					mainGame->cbDBDecks->setSelected(mainGame->cbDBDecks->addItem(dname));
 				prev_deck = mainGame->cbDBDecks->getSelected();
-				if (DeckManager::SaveDeck(deckManager.current_deck, filepath)) {
-					mainGame->stACMessage->setText(dataManager.GetSysString(1335));
-					mainGame->PopupElement(mainGame->wACMessage, 20);
-					is_modified = false;
-					if(catesel == -1) {
-						catesel = 2;
-						prev_category = catesel;
-						RefreshReadonly(catesel);
-						mainGame->cbDBCategory->setSelected(catesel);
-						mainGame->btnManageDeck->setEnabled(true);
-						mainGame->cbDBCategory->setEnabled(true);
-						mainGame->cbDBDecks->setEnabled(true);
-					}
+				mainGame->stACMessage->setText(dataManager.GetSysString(1335));
+				mainGame->PopupElement(mainGame->wACMessage, 40);
+				is_modified = false;
+				if (catesel == -1) {
+					catesel = 2;
+					prev_category = catesel;
+					RefreshReadonly(catesel);
+					mainGame->cbDBCategory->setSelected(catesel);
+					mainGame->btnManageDeck->setEnabled(true);
+					mainGame->cbDBCategory->setEnabled(true);
+					mainGame->cbDBDecks->setEnabled(true);
 				}
 				break;
 			}
@@ -1020,6 +1021,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				InstantSearch();
 				break;
 			}
+			break;
 		}
 		case irr::gui::EGET_LISTBOX_CHANGED: {
 			switch(id) {
@@ -1061,7 +1063,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			}
 			break;
 		}
-		default: break;
+		default:
+			break;
 		}
 		break;
 	}
@@ -1274,10 +1277,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		}
 		break;
 	}
-	case irr::EET_KEY_INPUT_EVENT: {
+	default:
 		break;
-	}
-	default: break;
 	}
 	return false;
 }
