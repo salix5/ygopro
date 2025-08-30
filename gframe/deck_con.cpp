@@ -429,7 +429,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						mainGame->cbDBCategory->addItem(catename);
 						catesel = mainGame->lstCategories->addItem(catename);
 					} else {
-						for(irr::u32 i = 3; i < mainGame->lstCategories->getItemCount(); i++) {
+						for(irr::u32 i = DECK_CATEGORY_CUSTOM; i < mainGame->lstCategories->getItemCount(); i++) {
 							if(!mywcsncasecmp(mainGame->lstCategories->getListItem(i), catename, 256)) {
 								catesel = i;
 								mainGame->stACMessage->setText(dataManager.GetSysString(1474));
@@ -449,6 +449,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				}
 				case BUTTON_RENAME_CATEGORY: {
 					int catesel = mainGame->lstCategories->getSelected();
+					if (catesel < DECK_CATEGORY_CUSTOM)
+						break;
 					const wchar_t* oldcatename = mainGame->lstCategories->getListItem(catesel);
 					const wchar_t* newcatename = mainGame->ebDMName->getText();
 					if(DeckManager::RenameCategory(oldcatename, newcatename)) {
@@ -458,7 +460,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						catesel = mainGame->lstCategories->addItem(newcatename);
 					} else {
 						catesel = 0;
-						for(int i = 3; i < (int)mainGame->lstCategories->getItemCount(); i++) {
+						for(irr::u32 i = DECK_CATEGORY_CUSTOM; i < mainGame->lstCategories->getItemCount(); i++) {
 							if(!mywcsncasecmp(mainGame->lstCategories->getListItem(i), newcatename, 256)) {
 								catesel = i;
 								mainGame->stACMessage->setText(dataManager.GetSysString(1474));
@@ -478,11 +480,13 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				}
 				case BUTTON_DELETE_CATEGORY: {
 					int catesel = mainGame->lstCategories->getSelected();
+					if (catesel < DECK_CATEGORY_CUSTOM)
+						break;
 					const wchar_t* catename = mainGame->lstCategories->getListItem(catesel);
 					if(DeckManager::DeleteCategory(catename)) {
 						mainGame->cbDBCategory->removeItem(catesel);
 						mainGame->lstCategories->removeItem(catesel);
-						catesel = 2;
+						catesel = DECK_CATEGORY_NONE;
 						mainGame->lstCategories->setSelected(catesel);
 						mainGame->cbDBCategory->setSelected(catesel);
 						ChangeCategory(catesel);
