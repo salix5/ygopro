@@ -311,12 +311,14 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 	auto reader = OpenDeckReader(file);
 	if(!reader) {
 		wchar_t localfile[256];
-		myswprintf(localfile, L"./deck/%ls.ydk", file);
+		if (myswprintf(localfile, L"./deck/%ls.ydk", file) <= 0)
+			return false;
 		reader = OpenDeckReader(localfile);
 	}
 	if(!reader && !mywcsncasecmp(file, L"./pack", 6)) {
 		wchar_t zipfile[256];
-		myswprintf(zipfile, L"%ls", file + 2);
+		if (myswprintf(zipfile, L"%ls", file + 2) <= 0)
+			return false;
 		reader = OpenDeckReader(zipfile);
 	}
 	if(!reader)
@@ -379,7 +381,8 @@ bool DeckManager::CreateCategory(const wchar_t* name) {
 	if(std::wcschr(name, L'/') || std::wcschr(name, L'\\'))
 		return false;
 	wchar_t localname[256];
-	myswprintf(localname, L"./deck/%ls", name);
+	if (myswprintf(localname, L"./deck/%ls", name) <= 0)
+		return false;
 	return FileSystem::MakeDir(localname);
 }
 bool DeckManager::RenameCategory(const wchar_t* oldname, const wchar_t* newname) {
@@ -393,15 +396,18 @@ bool DeckManager::RenameCategory(const wchar_t* oldname, const wchar_t* newname)
 		return false;
 	wchar_t oldlocalname[256];
 	wchar_t newlocalname[256];
-	myswprintf(oldlocalname, L"./deck/%ls", oldname);
-	myswprintf(newlocalname, L"./deck/%ls", newname);
+	if (myswprintf(oldlocalname, L"./deck/%ls", oldname) <= 0)
+		return false;
+	if (myswprintf(newlocalname, L"./deck/%ls", newname) <= 0)
+		return false;
 	return FileSystem::Rename(oldlocalname, newlocalname);
 }
 bool DeckManager::DeleteCategory(const wchar_t* name) {
 	if (std::wcschr(name, L'/') || std::wcschr(name, L'\\'))
 		return false;
 	wchar_t localname[256];
-	myswprintf(localname, L"./deck/%ls", name);
+	if (myswprintf(localname, L"./deck/%ls", name) <= 0)
+		return false;
 	if(!FileSystem::IsDirExists(localname))
 		return false;
 	return FileSystem::DeleteDir(localname);
