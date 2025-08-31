@@ -45,10 +45,6 @@ static inline bool havePopupWindow() {
 	return mainGame->wQuery->isVisible() || mainGame->wCategories->isVisible() || mainGame->wLinkMarks->isVisible() || mainGame->wDeckManage->isVisible() || mainGame->wDMQuery->isVisible();
 }
 
-static inline void get_deck_file(wchar_t* ret) {
-	DeckManager::GetDeckFile(ret, mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
-}
-
 static inline void load_current_deck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGUIComboBox* cbDeck) {
 	deckManager.LoadCurrentDeck(cbCategory->getSelected(), cbCategory->getText(), cbDeck->getText());
 }
@@ -190,7 +186,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				if(sel == -1)
 					break;
 				wchar_t filepath[256]{};
-				get_deck_file(filepath);
+				DeckManager::GetDeckFile(filepath, mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
 				if (!DeckManager::SaveDeck(deckManager.current_deck, filepath))
 					break;
 				mainGame->stACMessage->setText(dataManager.GetSysString(1335));
