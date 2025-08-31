@@ -230,12 +230,12 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				if (catesel == -1) {
 					catesel = 2;
 					prev_category = catesel;
-					RefreshReadonly(catesel);
 					mainGame->cbDBCategory->setSelected(catesel);
 					mainGame->btnManageDeck->setEnabled(true);
 					mainGame->cbDBCategory->setEnabled(true);
 					mainGame->cbDBDecks->setEnabled(true);
 				}
+				RefreshReadonly(catesel);
 				break;
 			}
 			case BUTTON_DELETE_DECK: {
@@ -717,19 +717,12 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					int sel = prev_sel;
 					mainGame->cbDBDecks->setSelected(sel);
 					wchar_t filepath[256];
-					get_deck_file(filepath);
+					int category_index = mainGame->cbDBCategory->getSelected();
+					DeckManager::GetDeckFile(filepath, category_index, mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
 					if(DeckManager::DeleteDeck(filepath)) {
-						mainGame->cbDBDecks->removeItem(sel);
-						int count = mainGame->cbDBDecks->getItemCount();
-						if(sel >= count)
-							sel = count - 1;
-						mainGame->cbDBDecks->setSelected(sel);
-						if(sel != -1)
-							load_current_deck(mainGame->cbDBCategory, mainGame->cbDBDecks);
+						ChangeCategory(category_index);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1338));
 						mainGame->PopupElement(mainGame->wACMessage, 20);
-						prev_deck = sel;
-						is_modified = false;
 					}
 					prev_sel = -1;
 				} else if(prev_operation == BUTTON_LEAVE_GAME) {
@@ -1623,7 +1616,7 @@ void DeckBuilder::RefreshDeckList() {
 }
 void DeckBuilder::RefreshReadonly(int catesel) {
 	bool hasDeck = mainGame->cbDBDecks->getItemCount() != 0;
-	readonly = catesel < 2;
+	readonly = catesel < DECK_CATEGORY_NONE;
 	showing_pack = catesel == 0;
 	mainGame->btnSaveDeck->setEnabled(!readonly);
 	mainGame->btnSaveDeckAs->setEnabled(!readonly);
@@ -1631,8 +1624,8 @@ void DeckBuilder::RefreshReadonly(int catesel) {
 	mainGame->btnShuffleDeck->setEnabled(!readonly);
 	mainGame->btnSortDeck->setEnabled(!readonly);
 	mainGame->btnDeleteDeck->setEnabled(hasDeck && !readonly);
-	mainGame->btnRenameCategory->setEnabled(catesel > 3);
-	mainGame->btnDeleteCategory->setEnabled(catesel > 3);
+	mainGame->btnRenameCategory->setEnabled(catesel > DECK_CATEGORY_SEPARATOR);
+	mainGame->btnDeleteCategory->setEnabled(catesel > DECK_CATEGORY_SEPARATOR);
 	mainGame->btnNewDeck->setEnabled(!readonly);
 	mainGame->btnRenameDeck->setEnabled(hasDeck && !readonly);
 	mainGame->btnDMDeleteDeck->setEnabled(hasDeck && !readonly);
