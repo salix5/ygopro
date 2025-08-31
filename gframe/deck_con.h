@@ -24,10 +24,9 @@ public:
 	void ClearSearch();
 	void SortList();
 
-	void RefreshDeckList();
 	void RefreshReadonly(int catesel);
 	void RefreshPackListScroll();
-	void ChangeCategory(int catesel);
+	void ChangeCategory(int category_index, const wchar_t* deck_name = nullptr);
 	void ShowDeckManage();
 	void ShowBigCard(int code, float zoom);
 	void ZoomBigCard(irr::s32 centerx = -1, irr::s32 centery = -1);

@@ -1662,14 +1662,6 @@ void DeckBuilder::SortList() {
 	}
 }
 
-void DeckBuilder::RefreshDeckList() {
-	irr::gui::IGUIListBox* lstCategories = mainGame->lstCategories;
-	irr::gui::IGUIListBox* lstDecks = mainGame->lstDecks;
-	wchar_t catepath[256];
-	DeckManager::GetCategoryPath(catepath, lstCategories->getSelected(), lstCategories->getListItem(lstCategories->getSelected()));
-	lstDecks->clear();
-	mainGame->RefreshDeck(catepath, [lstDecks](const wchar_t* item) { lstDecks->addItem(item); });
-}
 void DeckBuilder::RefreshReadonly(int catesel) {
 	bool hasDeck = mainGame->cbDBDecks->getItemCount() != 0;
 	readonly = catesel < 2;
@@ -1703,14 +1695,28 @@ void DeckBuilder::RefreshPackListScroll() {
 		mainGame->scrPackCards->setPos(0);
 	}
 }
-void DeckBuilder::ChangeCategory(int catesel) {
+void DeckBuilder::ChangeCategory(int category_index, const wchar_t* deck_name) {
 	mainGame->RefreshDeck(mainGame->cbDBCategory, mainGame->cbDBDecks);
-	mainGame->cbDBDecks->setSelected(0);
-	RefreshReadonly(catesel);
-	load_current_deck(mainGame->cbDBCategory, mainGame->cbDBDecks);
+	RefreshReadonly(category_index);
 	is_modified = false;
-	prev_category = catesel;
-	prev_deck = 0;
+	prev_category = category_index;
+	mainGame->lstDecks->clear();
+	for (int i = 0; i < (int)mainGame->cbDBDecks->getItemCount(); ++i) {
+		mainGame->lstDecks->addItem(mainGame->cbDBDecks->getItem(i));
+	}
+	int sel = 0;
+	if(deck_name) {
+		for (int i = 0; i < (int)mainGame->cbDBDecks->getItemCount(); ++i) {
+			if (mywcsncasecmp(mainGame->cbDBDecks->getItem(i), deck_name, 256) == 0) {
+				sel = i;
+				break;
+			}
+		}
+	}
+	mainGame->cbDBDecks->setSelected(sel);
+	mainGame->lstDecks->setSelected(sel);
+	deckManager.LoadCurrentDeck(mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
+	prev_deck = sel;
 }
 void DeckBuilder::ShowDeckManage() {
 	mainGame->RefreshCategoryDeck(mainGame->cbDBCategory, mainGame->cbDBDecks, false);
