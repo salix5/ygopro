@@ -245,15 +245,15 @@ bool DeckManager::LoadSide(Deck& deck, uint32_t dbuf[], int mainc, int sidec) {
 void DeckManager::GetCategoryPath(wchar_t* ret, int index, const wchar_t* text) {
 	wchar_t catepath[256]{};
 	switch(index) {
-	case 0:
+	case DECK_CATEGORY_PACK:
 		myswprintf(catepath, L"./pack");
 		break;
-	case 1:
+	case DECK_CATEGORY_BOT:
 		BufferIO::CopyWideString(mainGame->gameConf.bot_deck_path, catepath);
 		break;
 	case -1:
-	case 2:
-	case 3:
+	case DECK_CATEGORY_NONE:
+	case DECK_CATEGORY_SEPARATOR:
 		myswprintf(catepath, L"./deck");
 		break;
 	default:
@@ -333,11 +333,16 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 bool DeckManager::LoadCurrentDeck(int category_index, const wchar_t* category_name, const wchar_t* deckname) {
 	wchar_t filepath[256];
 	GetDeckFile(filepath, category_index, category_name, deckname);
-	bool is_packlist = (category_index == 0);
-	bool res = LoadCurrentDeck(filepath, is_packlist);
-	if (res && mainGame->is_building)
+	if (!filepath[0]) {
+		current_deck.clear();
+		return false;
+	}
+	bool is_packlist = (category_index == DECK_CATEGORY_PACK);
+	if(!LoadCurrentDeck(filepath, is_packlist))
+		return false;
+	if (mainGame->is_building)
 		mainGame->deckBuilder.RefreshPackListScroll();
-	return res;
+	return true;
 }
 void DeckManager::SaveDeck(const Deck& deck, std::stringstream& deckStream) {
 	deckStream << "#created by ..." << std::endl;
