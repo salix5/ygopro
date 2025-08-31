@@ -413,7 +413,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				BufferIO::DecodeUTF8(textStream.str().c_str(), text);
 				mainGame->env->getOSOperator()->copyToClipboard(text);
 				mainGame->stACMessage->setText(dataManager.GetSysString(1480));
-				mainGame->PopupElement(mainGame->wACMessage, 20);
+				mainGame->PopupElement(mainGame->wACMessage, 40);
 				break;
 			}
 			case BUTTON_DM_OK: {
@@ -429,7 +429,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 							if(!mywcsncasecmp(mainGame->lstCategories->getListItem(i), catename, 256)) {
 								catesel = i;
 								mainGame->stACMessage->setText(dataManager.GetSysString(1474));
-								mainGame->PopupElement(mainGame->wACMessage, 20);
+								mainGame->PopupElement(mainGame->wACMessage, 40);
 								break;
 							}
 						}
@@ -458,7 +458,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 							if(!mywcsncasecmp(mainGame->lstCategories->getListItem(i), newcatename, 256)) {
 								catesel = i;
 								mainGame->stACMessage->setText(dataManager.GetSysString(1474));
-								mainGame->PopupElement(mainGame->wACMessage, 20);
+								mainGame->PopupElement(mainGame->wACMessage, 40);
 								break;
 							}
 						}
@@ -483,7 +483,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						ChangeCategory(DECK_CATEGORY_NONE);
 					} else {
 						mainGame->stACMessage->setText(dataManager.GetSysString(1476));
-						mainGame->PopupElement(mainGame->wACMessage, 20);
+						mainGame->PopupElement(mainGame->wACMessage, 40);
 					}
 					break;
 				}
@@ -500,7 +500,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if (FileSystem::IsFileExists(filepath)) {
 						ChangeCategory(category_index, deckname);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1475));
-						mainGame->PopupElement(mainGame->wACMessage, 20);
+						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
 					}
 					Deck new_deck;
@@ -537,7 +537,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if(FileSystem::IsFileExists(newfilepath)) {
 						ChangeCategory(catesel, newdeckname);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1475));
-						mainGame->PopupElement(mainGame->wACMessage, 20);
+						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
 					}
 					if (!FileSystem::Rename(oldfilepath, newfilepath))
@@ -556,7 +556,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					DeckManager::GetDeckFile(filepath, catesel, mainGame->lstCategories->getListItem(catesel), mainGame->lstDecks->getListItem(decksel));
 					if (!DeckManager::DeleteDeck(filepath)) {
 						mainGame->stACMessage->setText(dataManager.GetSysString(1476));
-						mainGame->PopupElement(mainGame->wACMessage, 20);
+						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
 					}
 					ChangeCategory(catesel);
@@ -588,7 +588,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						mainGame->cbDBCategory->setSelected(new_category_index);
 						ChangeCategory(new_category_index, deckname);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1475));
-						mainGame->PopupElement(mainGame->wACMessage, 20);
+						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
 					}
 					if (!FileSystem::Rename(oldfilepath, newfilepath))
@@ -624,7 +624,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						mainGame->cbDBCategory->setSelected(new_category_index);
 						ChangeCategory(new_category_index, deckname);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1475));
-						mainGame->PopupElement(mainGame->wACMessage, 20);
+						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
 					}
 					if (!DeckManager::SaveDeck(deckManager.current_deck, newfilepath))
@@ -718,7 +718,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if(DeckManager::DeleteDeck(filepath)) {
 						ChangeCategory(category_index);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1338));
-						mainGame->PopupElement(mainGame->wACMessage, 20);
+						mainGame->PopupElement(mainGame->wACMessage, 40);
 					}
 					prev_sel = -1;
 				} else if(prev_operation == BUTTON_LEAVE_GAME) {
