@@ -301,10 +301,6 @@ irr::io::IReadFile* DeckManager::OpenDeckReader(const wchar_t* file) {
 #endif
 	return reader;
 }
-bool DeckManager::LoadCurrentDeck(std::istringstream& deckStream, bool is_packlist) {
-	LoadDeckFromStream(current_deck, deckStream, is_packlist);
-	return true;
-}
 bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 	char deckBuffer[0x10000]{};
 	current_deck.clear();

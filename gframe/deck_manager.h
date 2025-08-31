@@ -62,7 +62,6 @@ public:
 	unsigned int CheckDeck(const Deck& deck, unsigned int lfhash, int rule);
 	bool LoadCurrentDeck(const wchar_t* file, bool is_packlist = false);
 	bool LoadCurrentDeck(int category_index, const wchar_t* category_name, const wchar_t* deckname);
-	bool LoadCurrentDeck(std::istringstream& deckStream, bool is_packlist = false);
 
 	static uint32_t LoadDeck(Deck& deck, uint32_t dbuf[], int mainc, int sidec, bool is_packlist = false);
 	static uint32_t LoadDeckFromStream(Deck& deck, std::istringstream& deckStream, bool is_packlist = false);
