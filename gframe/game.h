@@ -815,6 +815,8 @@ extern Game* mainGame;
 #define BUTTON_MARKERS_OK			323
 #define COMBOBOX_SORTTYPE			324
 #define EDITBOX_INPUTS				325
+
+// Deck Manage
 #define WINDOW_DECK_MANAGE			330
 #define BUTTON_NEW_CATEGORY			331
 #define BUTTON_RENAME_CATEGORY		332
