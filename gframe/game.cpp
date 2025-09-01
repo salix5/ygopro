@@ -1234,7 +1234,7 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 	}
 }
 void Game::RefreshDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGUIComboBox* cbDeck) {
-	if(cbCategory != cbDBCategory && cbCategory->getSelected() == 0) {
+	if(cbCategory != cbDBCategory && cbCategory->getSelected() == DECK_CATEGORY_PACK) {
 		// can't use pack list in duel
 		cbDeck->clear();
 		return;
