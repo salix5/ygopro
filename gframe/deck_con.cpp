@@ -129,12 +129,10 @@ void DeckBuilder::Terminate() {
 	mainGame->scrFilter->setVisible(false);
 	mainGame->scrPackCards->setVisible(false);
 	mainGame->scrPackCards->setPos(0);
-	int catesel = mainGame->cbDBCategory->getSelected();
-	if (catesel >= 0)
-		BufferIO::CopyWideString(mainGame->cbDBCategory->getItem(catesel), mainGame->gameConf.lastcategory);
-	int decksel = mainGame->cbDBDecks->getSelected();
-	if (decksel >= 0)
-		BufferIO::CopyWideString(mainGame->cbDBDecks->getItem(decksel), mainGame->gameConf.lastdeck);
+	if (const wchar_t* name = mainGame->cbDBCategory->getText())
+		BufferIO::CopyWideString(name, mainGame->gameConf.lastcategory);
+	if (const wchar_t* name = mainGame->cbDBDecks->getText())
+		BufferIO::CopyWideString(name, mainGame->gameConf.lastdeck);
 	if(exit_on_return)
 		mainGame->device->closeDevice();
 }
