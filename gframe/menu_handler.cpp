@@ -426,7 +426,8 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			}
 			case BUTTON_DECK_EDIT: {
 				mainGame->RefreshCategoryDeck(mainGame->cbDBCategory, mainGame->cbDBDecks);
-				if(open_file && deckManager.LoadCurrentDeck(open_file_name)) {
+				if (open_file) {
+					deckManager.LoadCurrentDeck(open_file_name);
 #ifdef _WIN32
 					wchar_t *dash = std::wcsrchr(open_file_name, L'\\');
 #else
@@ -463,7 +464,7 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 					}
 					open_file = false;
 				} 
-				else if(mainGame->cbDBCategory->getSelected() != -1 && mainGame->cbDBDecks->getSelected() != -1) {
+				else {
 					deckManager.LoadCurrentDeck(mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
 					mainGame->ebDeckname->setText(L"");
 				}
