@@ -210,7 +210,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				int sel = -1;
 				if (is_exist) {
 					for (int i = 0; i < (int)mainGame->cbDBDecks->getItemCount(); ++i) {
-						if (!mywcsncasecmp(dname, mainGame->cbDBDecks->getItem(i), 256)) {
+						if (mywcsncasecmp(dname, mainGame->cbDBDecks->getItem(i), 256) == 0) {
 							sel = i;
 							break;
 						}
@@ -224,7 +224,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->PopupElement(mainGame->wACMessage, 40);
 				is_modified = false;
 				if (catesel == -1) {
-					catesel = 2;
+					catesel = DECK_CATEGORY_NONE;
 					mainGame->cbDBCategory->setSelected(catesel);
 					mainGame->btnManageDeck->setEnabled(true);
 					mainGame->cbDBCategory->setEnabled(true);
@@ -311,7 +311,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_RENAME_CATEGORY: {
-				if(mainGame->lstCategories->getSelected() < 4)
+				if (mainGame->lstCategories->getSelected() < DECK_CATEGORY_CUSTOM)
 					break;
 				mainGame->gMutex.lock();
 				EnableManageWindow(false);
@@ -324,6 +324,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_DELETE_CATEGORY: {
+				if (mainGame->lstCategories->getSelected() < DECK_CATEGORY_CUSTOM)
+					break;
 				mainGame->gMutex.lock();
 				EnableManageWindow(false);
 				mainGame->stDMMessage->setText(dataManager.GetSysString(1470));
@@ -437,7 +439,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						catesel = mainGame->lstCategories->addItem(catename);
 					} else {
 						for(int i = DECK_CATEGORY_CUSTOM; i < (int)mainGame->lstCategories->getItemCount(); i++) {
-							if(!mywcsncasecmp(mainGame->lstCategories->getListItem(i), catename, 256)) {
+							if (mywcsncasecmp(mainGame->lstCategories->getListItem(i), catename, 256) == 0) {
 								catesel = i;
 								mainGame->stACMessage->setText(dataManager.GetSysString(1474));
 								mainGame->PopupElement(mainGame->wACMessage, 40);
@@ -466,7 +468,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					} else {
 						catesel = 0;
 						for(int i = DECK_CATEGORY_CUSTOM; i < (int)mainGame->lstCategories->getItemCount(); i++) {
-							if(!mywcsncasecmp(mainGame->lstCategories->getListItem(i), newcatename, 256)) {
+							if (mywcsncasecmp(mainGame->lstCategories->getListItem(i), newcatename, 256) == 0) {
 								catesel = i;
 								mainGame->stACMessage->setText(dataManager.GetSysString(1474));
 								mainGame->PopupElement(mainGame->wACMessage, 40);
