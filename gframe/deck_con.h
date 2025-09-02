@@ -74,8 +74,6 @@ public:
 	size_t pre_extrac{};
 	size_t pre_sidec{};
 	const CardDataC* draging_pointer{};
-	int prev_category{};
-	int prev_deck{};
 	irr::s32 prev_operation{};
 	irr::s32 dmquery_operation{};
 	int prev_sel{ -1 };
