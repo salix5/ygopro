@@ -141,17 +141,16 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 	switch(event.EventType) {
 	case irr::EET_GUI_EVENT: {
 		irr::s32 id = event.GUIEvent.Caller->getID();
-		if(((mainGame->wCategories->isVisible() && id != BUTTON_CATEGORY_OK) ||
-			(mainGame->wQuery->isVisible() && id != BUTTON_YES && id != BUTTON_NO) ||
-			(mainGame->wLinkMarks->isVisible() && id != BUTTON_MARKERS_OK) ||
-			(mainGame->wDMQuery->isVisible() && id != BUTTON_DM_OK && id != BUTTON_DM_CANCEL) ||
-			(mainGame->wDeckManage->isVisible() && !(id >= WINDOW_DECK_MANAGE && id < COMBOBOX_LFLIST)))
-			&& event.GUIEvent.EventType != irr::gui::EGET_LISTBOX_CHANGED
-			&& event.GUIEvent.EventType != irr::gui::EGET_COMBO_BOX_CHANGED) {
-			if(mainGame->wDMQuery->isVisible())
-				mainGame->wDMQuery->getParent()->bringToFront(mainGame->wDMQuery);
+		if (mainGame->wDMQuery->isVisible() && id != BUTTON_DM_OK && id != BUTTON_DM_CANCEL)
 			break;
-		}
+		if (mainGame->wDeckManage->isVisible() && !(id >= WINDOW_DECK_MANAGE && id < COMBOBOX_LFLIST))
+			break;
+		if (mainGame->wQuery->isVisible() && id != BUTTON_YES && id != BUTTON_NO)
+			break;
+		if (mainGame->wCategories->isVisible() && id != BUTTON_CATEGORY_OK)
+			break;
+		if (mainGame->wLinkMarks->isVisible() && id != BUTTON_MARKERS_OK)
+			break;
 		switch(event.GUIEvent.EventType) {
 		case irr::gui::EGET_ELEMENT_CLOSED: {
 			if(id == WINDOW_DECK_MANAGE) {
@@ -726,8 +725,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					int sel = prev_sel;
 					mainGame->cbDBDecks->setSelected(sel);
 					wchar_t filepath[256];
-					int category_index = mainGame->cbDBCategory->getSelected();
-					DeckManager::GetDeckFile(filepath, category_index, mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
+					DeckManager::GetDeckFile(filepath, mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
 					if(DeckManager::DeleteDeck(filepath)) {
 						ChangeCategory();
 						mainGame->stACMessage->setText(dataManager.GetSysString(1338));
