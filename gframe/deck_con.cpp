@@ -1665,21 +1665,28 @@ void DeckBuilder::ChangeCategory(const wchar_t* deck_name) {
 	prev_deck = sel;
 }
 void DeckBuilder::ShowDeckManage() {
+	wchar_t category_name[256]{};
+	wchar_t deck_name[256]{};
+	const wchar_t* current_deck = nullptr;
+	BufferIO::CopyWideString(mainGame->cbDBCategory->getText(), category_name);
+	if (mainGame->cbDBDecks->getSelected() >= 0) {
+		BufferIO::CopyWideString(mainGame->cbDBDecks->getText(), deck_name);
+		current_deck = deck_name;
+	}
+	mainGame->RefreshCategoryDeck(mainGame->cbDBCategory, mainGame->cbDBDecks, false);
 	irr::gui::IGUIListBox* lstCategories = mainGame->lstCategories;
 	lstCategories->clear();
-	lstCategories->addItem(dataManager.GetSysString(1450));
-	lstCategories->addItem(dataManager.GetSysString(1451));
-	lstCategories->addItem(dataManager.GetSysString(1452));
-	lstCategories->addItem(dataManager.GetSysString(1453));
-	FileSystem::TraversalDir(L"./deck", [lstCategories](const wchar_t* name, bool isdir) {
-		if(isdir) {
-			lstCategories->addItem(name);
+	for (int i = 0; i < (int)mainGame->cbDBCategory->getItemCount(); ++i) {
+		lstCategories->addItem(mainGame->cbDBCategory->getItem(i));	
+	}
+	lstCategories->setSelected(DECK_CATEGORY_NONE);
+	for (int i = 0; i < (int)mainGame->cbDBCategory->getItemCount(); ++i) {
+		if (std::wcscmp(mainGame->cbDBCategory->getItem(i), category_name) == 0) {
+			mainGame->cbDBCategory->setSelected(i);
+			lstCategories->setSelected(i);
 		}
-	});
-	lstCategories->setSelected(prev_category);
-	mainGame->cbDBCategory->setSelected(prev_category);
-	ChangeCategory(prev_category, mainGame->cbDBDecks->getText());
-	mainGame->lstDecks->setSelected(prev_deck);
+	}
+	ChangeCategory(current_deck);
 	mainGame->PopupElement(mainGame->wDeckManage);
 }
 
