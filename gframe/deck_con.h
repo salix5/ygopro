@@ -32,6 +32,8 @@ public:
 	void ShowBigCard(int code, float zoom);
 	void ZoomBigCard(irr::s32 centerx = -1, irr::s32 centery = -1);
 	void CloseBigCard();
+	void EnableEditWindow(bool enabled);
+	void EnableManageWindow(bool enabled);
 
 	bool CardNameContains(const wchar_t *haystack, const wchar_t *needle);
 
