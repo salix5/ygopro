@@ -306,8 +306,10 @@ bool DeckManager::LoadCurrentDeck(std::istringstream& deckStream, bool is_packli
 	return true;
 }
 bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
-	char deckBuffer[0x10000]{};
 	current_deck.clear();
+	if (!file[0])
+		return false;
+	char deckBuffer[MAX_YDK_SIZE]{};
 	auto reader = OpenDeckReader(file);
 	if(!reader) {
 		wchar_t localfile[256];
@@ -333,10 +335,6 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 bool DeckManager::LoadCurrentDeck(int category_index, const wchar_t* category_name, const wchar_t* deckname) {
 	wchar_t filepath[256];
 	GetDeckFile(filepath, category_index, category_name, deckname);
-	if (!filepath[0]) {
-		current_deck.clear();
-		return false;
-	}
 	bool is_packlist = (category_index == DECK_CATEGORY_PACK);
 	if(!LoadCurrentDeck(filepath, is_packlist))
 		return false;
