@@ -439,7 +439,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if(catesel > 0) {
 						mainGame->lstCategories->setSelected(catesel);
 						mainGame->cbDBCategory->setSelected(catesel);
-						ChangeCategory(catesel);
+						ChangeCategory();
 					}
 					break;
 				}
@@ -468,7 +468,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if(catesel > 0) {
 						mainGame->lstCategories->setSelected(catesel);
 						mainGame->cbDBCategory->setSelected(catesel);
-						ChangeCategory(catesel);
+						ChangeCategory();
 					}
 					break;
 				}
@@ -482,7 +482,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						mainGame->lstCategories->removeItem(catesel);
 						mainGame->lstCategories->setSelected(DECK_CATEGORY_NONE);
 						mainGame->cbDBCategory->setSelected(DECK_CATEGORY_NONE);
-						ChangeCategory(DECK_CATEGORY_NONE);
+						ChangeCategory();
 					} else {
 						mainGame->stACMessage->setText(dataManager.GetSysString(1476));
 						mainGame->PopupElement(mainGame->wACMessage, 40);
@@ -500,7 +500,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if (!filepath[0])
 						break;
 					if (FileSystem::IsFileExists(filepath)) {
-						ChangeCategory(category_index, deckname);
+						ChangeCategory(deckname);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1475));
 						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
@@ -516,7 +516,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					}
 					if (!DeckManager::SaveDeck(new_deck, filepath))
 						break;
-					ChangeCategory(category_index, deckname);
+					ChangeCategory(deckname);
 					break;
 				}
 				case BUTTON_RENAME_DECK: {
@@ -537,14 +537,14 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if (!newfilepath[0])
 						break;
 					if(FileSystem::IsFileExists(newfilepath)) {
-						ChangeCategory(catesel, newdeckname);
+						ChangeCategory(newdeckname);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1475));
 						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
 					}
 					if (!FileSystem::Rename(oldfilepath, newfilepath))
 						break;
-					ChangeCategory(catesel, newdeckname);
+					ChangeCategory(newdeckname);
 					break;
 				}
 				case BUTTON_DELETE_DECK_DM: {
@@ -561,7 +561,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
 					}
-					ChangeCategory(catesel);
+					ChangeCategory();
 					break;
 				}
 				case BUTTON_MOVE_DECK: {
@@ -588,7 +588,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if (FileSystem::IsFileExists(newfilepath)) {
 						mainGame->lstCategories->setSelected(new_category_index);
 						mainGame->cbDBCategory->setSelected(new_category_index);
-						ChangeCategory(new_category_index, deckname);
+						ChangeCategory(deckname);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1475));
 						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
@@ -597,7 +597,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						break;
 					mainGame->lstCategories->setSelected(new_category_index);
 					mainGame->cbDBCategory->setSelected(new_category_index);
-					ChangeCategory(new_category_index, deckname);
+					ChangeCategory(deckname);
 					break;
 				}
 				case BUTTON_COPY_DECK: {
@@ -624,7 +624,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if (FileSystem::IsFileExists(newfilepath)) {
 						mainGame->lstCategories->setSelected(new_category_index);
 						mainGame->cbDBCategory->setSelected(new_category_index);
-						ChangeCategory(new_category_index, deckname);
+						ChangeCategory(deckname);
 						mainGame->stACMessage->setText(dataManager.GetSysString(1475));
 						mainGame->PopupElement(mainGame->wACMessage, 40);
 						break;
@@ -633,7 +633,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						break;
 					mainGame->lstCategories->setSelected(new_category_index);
 					mainGame->cbDBCategory->setSelected(new_category_index);
-					ChangeCategory(new_category_index, deckname);
+					ChangeCategory(deckname);
 					break;
 				}
 				default:
@@ -718,7 +718,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					int category_index = mainGame->cbDBCategory->getSelected();
 					DeckManager::GetDeckFile(filepath, category_index, mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
 					if(DeckManager::DeleteDeck(filepath)) {
-						ChangeCategory(category_index);
+						ChangeCategory();
 						mainGame->stACMessage->setText(dataManager.GetSysString(1338));
 						mainGame->PopupElement(mainGame->wACMessage, 40);
 					}
@@ -727,7 +727,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					Terminate();
 				} else if(prev_operation == COMBOBOX_DBCATEGORY) {
 					int catesel = mainGame->cbDBCategory->getSelected();
-					ChangeCategory(catesel);
+					ChangeCategory();
 				} else if(prev_operation == COMBOBOX_DBDECKS) {
 					int decksel = mainGame->cbDBDecks->getSelected();
 					load_current_deck(mainGame->cbDBCategory, mainGame->cbDBDecks);
@@ -829,7 +829,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					prev_operation = id;
 					break;
 				}
-				ChangeCategory(catesel);
+				ChangeCategory();
 				break;
 			}
 			case COMBOBOX_DBDECKS: {
@@ -989,7 +989,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						break;
 				}
 				mainGame->cbDBCategory->setSelected(catesel);
-				ChangeCategory(catesel);
+				ChangeCategory();
 				break;
 			}
 			case LISTBOX_DECKS: {
