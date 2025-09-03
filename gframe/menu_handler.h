@@ -9,9 +9,10 @@ namespace ygo {
 class MenuHandler: public irr::IEventReceiver {
 public:
 	bool OnEvent(const irr::SEvent& event) override;
+	void EnableReplayWindow(bool enabled);
+
 	irr::s32 prev_operation{ 0 };
 	irr::s32 save_operation{ 0 };
-	int prev_sel{ -1 };
 	Replay temp_replay;
 };
 
