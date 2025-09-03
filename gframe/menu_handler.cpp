@@ -496,10 +496,12 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				if (save_operation == BUTTON_RENAME_REPLAY) {
 					wchar_t newname[256]{};
 					BufferIO::CopyWideString(mainGame->ebRSName->getText(), newname);
-					if (!IsExtension(newname, L".yrp") && myswprintf(newname, L"%ls.yrp", mainGame->ebRSName->getText()) <= 0) {
-						save_operation = 0;
-						EnableReplayWindow(true);
-						break;
+					if (!IsExtension(newname, L".yrp")) {
+						if (myswprintf(newname, L"%ls.yrp", mainGame->ebRSName->getText()) <= 0) {
+							save_operation = 0;
+							EnableReplayWindow(true);
+							break;
+						}
 					}
 					int sel = mainGame->lstReplayList->getSelected();
 					if(Replay::RenameReplay(mainGame->lstReplayList->getListItem(sel), newname)) {
