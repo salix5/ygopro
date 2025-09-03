@@ -701,4 +701,10 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 	return false;
 }
 
+void MenuHandler::EnableReplayWindow(bool enabled) {
+	mainGame->wReplay->setEnabled(enabled);
+	mainGame->lstReplayList->setEnabled(enabled);
+	mainGame->ebRepStartTurn->setEnabled(enabled);
+}
+
 }
