@@ -1190,7 +1190,9 @@ void Game::DrawDeckBd() {
 	int mainsize = deckManager.current_deck.main.size();
 	irr::video::SColor default_color = 0xffffffff;
 	irr::video::SColor modified_color = 0xffff0000;
-	irr::video::SColor text_color = deckBuilder.is_modified ? modified_color : default_color;
+	irr::video::SColor text_color = default_color;
+	if (!is_siding && deckBuilder.is_modified)
+		text_color = modified_color;
 	driver->draw2DRectangle(Resize(310, 137, 410, 157), 0x400000ff, 0x400000ff, 0x40000000, 0x40000000);
 	driver->draw2DRectangleOutline(Resize(309, 136, 410, 157));
 	DrawShadowText(textFont, dataManager.GetSysString(deckBuilder.showing_pack ? 1477 : 1330), Resize(315, 137, 410, 157), Resize(1, 1, 1, 1), text_color, 0xff000000, false, true);
