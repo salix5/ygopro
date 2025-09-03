@@ -103,7 +103,6 @@ void DeckBuilder::Initialize() {
 	RefreshReadonly(mainGame->cbDBCategory->getSelected());
 	RefreshPackListScroll();
 	prev_operation = 0;
-	prev_sel = -1;
 	is_modified = false;
 	mainGame->device->setEventReceiver(this);
 }
@@ -249,7 +248,6 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->PopupElement(mainGame->wQuery);
 				mainGame->gMutex.unlock();
 				prev_operation = id;
-				prev_sel = sel;
 				break;
 			}
 			case BUTTON_LEAVE_GAME: {
@@ -728,8 +726,6 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					deckManager.current_deck.clear();
 					EnableEditWindow(true);
 				} else if(prev_operation == BUTTON_DELETE_DECK) {
-					int sel = prev_sel;
-					mainGame->cbDBDecks->setSelected(sel);
 					wchar_t filepath[256];
 					get_deck_file(filepath, mainGame->cbDBDecks->getText());
 					if (DeckManager::DeleteDeck(filepath)) {
@@ -737,7 +733,6 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						mainGame->stACMessage->setText(dataManager.GetSysString(1338));
 						mainGame->PopupElement(mainGame->wACMessage, 40);
 					}
-					prev_sel = -1;
 					EnableEditWindow(true);
 				} else if(prev_operation == BUTTON_LEAVE_GAME) {
 					EnableEditWindow(true);
