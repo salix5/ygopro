@@ -45,8 +45,12 @@ static inline bool havePopupWindow() {
 	return mainGame->wQuery->isVisible() || mainGame->wCategories->isVisible() || mainGame->wLinkMarks->isVisible() || mainGame->wDeckManage->isVisible() || mainGame->wDMQuery->isVisible();
 }
 
-static inline void get_deck_file(wchar_t* ret) {
-	DeckManager::GetDeckFile(ret, mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
+static inline void get_deck_file(wchar_t* ret, const wchar_t* deck_name) {
+	DeckManager::GetDeckFile(ret, mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), deck_name);
+}
+
+static inline void get_list_file(wchar_t* ret, const wchar_t* deck_name) {
+	DeckManager::GetDeckFile(ret, mainGame->lstCategories->getSelected(), mainGame->lstCategories->getListItem(mainGame->lstCategories->getSelected()), deck_name);
 }
 
 static inline void load_current_deck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGUIComboBox* cbDeck) {
@@ -187,7 +191,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				if(sel == -1)
 					break;
 				wchar_t filepath[256]{};
-				get_deck_file(filepath);
+				get_deck_file(filepath, mainGame->cbDBDecks->getText());
 				if (!DeckManager::SaveDeck(deckManager.current_deck, filepath))
 					break;
 				mainGame->stACMessage->setText(dataManager.GetSysString(1335));
@@ -201,7 +205,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				if (!dname[0])
 					break;
 				wchar_t filepath[256]{};
-				DeckManager::GetDeckFile(filepath, catesel, mainGame->cbDBCategory->getText(), dname);
+				get_deck_file(filepath, dname);
 				if (!filepath[0])
 					break;
 				bool is_exist = FileSystem::IsFileExists(filepath);
@@ -507,7 +511,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						break;
 					const wchar_t* deckname = mainGame->ebDMName->getText();
 					wchar_t filepath[256]{};
-					DeckManager::GetDeckFile(filepath, category_index, mainGame->lstCategories->getListItem(category_index), deckname);
+					get_list_file(filepath, deckname);
 					if (!filepath[0])
 						break;
 					if (FileSystem::IsFileExists(filepath)) {
@@ -539,12 +543,12 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						break;
 					const wchar_t* catename = mainGame->lstCategories->getListItem(catesel);
 					wchar_t oldfilepath[256]{};
-					DeckManager::GetDeckFile(oldfilepath, catesel, catename, mainGame->lstDecks->getListItem(decksel));
+					get_list_file(oldfilepath, mainGame->lstDecks->getListItem(decksel));
 					if (!oldfilepath[0])
 						break;
 					const wchar_t* newdeckname = mainGame->ebDMName->getText();
 					wchar_t newfilepath[256]{};
-					DeckManager::GetDeckFile(newfilepath, catesel, catename, newdeckname);
+					get_list_file(newfilepath, newdeckname);
 					if (!newfilepath[0])
 						break;
 					if(FileSystem::IsFileExists(newfilepath)) {
@@ -566,7 +570,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					if (decksel == -1)
 						break;
 					wchar_t filepath[256];
-					DeckManager::GetDeckFile(filepath, catesel, mainGame->lstCategories->getListItem(catesel), mainGame->lstDecks->getListItem(decksel));
+					get_list_file(filepath, mainGame->lstDecks->getListItem(decksel));
 					if (!DeckManager::DeleteDeck(filepath)) {
 						mainGame->stACMessage->setText(dataManager.GetSysString(1476));
 						mainGame->PopupElement(mainGame->wACMessage, 40);
@@ -589,7 +593,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					const wchar_t* newcatename = mainGame->cbDMCategory->getText();
 					const wchar_t* deckname = mainGame->lstDecks->getListItem(decksel);
 					wchar_t oldfilepath[256];
-					DeckManager::GetDeckFile(oldfilepath, oldcatesel, mainGame->lstCategories->getListItem(oldcatesel), deckname);
+					get_list_file(oldfilepath, deckname);
 					if (!oldfilepath[0])
 						break;
 					wchar_t newfilepath[256];
@@ -625,7 +629,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					const wchar_t* newcatename = mainGame->cbDMCategory->getText();
 					const wchar_t* deckname = mainGame->lstDecks->getListItem(decksel);
 					wchar_t oldfilepath[256];
-					DeckManager::GetDeckFile(oldfilepath, oldcatesel, mainGame->lstCategories->getListItem(oldcatesel), deckname);
+					get_list_file(oldfilepath, deckname);
 					if (!oldfilepath[0])
 						break;
 					wchar_t newfilepath[256];
@@ -727,8 +731,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					int sel = prev_sel;
 					mainGame->cbDBDecks->setSelected(sel);
 					wchar_t filepath[256];
-					DeckManager::GetDeckFile(filepath, mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
-					if(DeckManager::DeleteDeck(filepath)) {
+					get_deck_file(filepath, mainGame->cbDBDecks->getText());
+					if (DeckManager::DeleteDeck(filepath)) {
 						ChangeCategory();
 						mainGame->stACMessage->setText(dataManager.GetSysString(1338));
 						mainGame->PopupElement(mainGame->wACMessage, 40);
@@ -959,8 +963,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				if(decksel == -1)
 					break;
 				wchar_t filepath[256]{};
-				DeckManager::GetDeckFile(filepath, catesel, mainGame->lstCategories->getListItem(catesel), mainGame->lstDecks->getListItem(decksel));
-				deckManager.LoadCurrentDeck(filepath, showing_pack);
+				deckManager.LoadCurrentDeck(catesel, mainGame->lstCategories->getListItem(catesel), mainGame->lstDecks->getListItem(decksel));
 				RefreshPackListScroll();
 				break;
 			}
