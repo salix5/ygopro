@@ -27,11 +27,13 @@ public:
 	void RefreshDeckList();
 	void RefreshReadonly(int catesel);
 	void RefreshPackListScroll();
-	void ChangeCategory(int catesel);
+	void ChangeCategory(const wchar_t* deck_name = nullptr);
 	void ShowDeckManage();
 	void ShowBigCard(int code, float zoom);
 	void ZoomBigCard(irr::s32 centerx = -1, irr::s32 centery = -1);
 	void CloseBigCard();
+	void EnableEditWindow(bool enabled);
+	void EnableManageWindow(bool enabled);
 
 	bool CardNameContains(const wchar_t *haystack, const wchar_t *needle);
 
@@ -74,11 +76,8 @@ public:
 	size_t pre_extrac{};
 	size_t pre_sidec{};
 	const CardDataC* draging_pointer{};
-	int prev_category{};
-	int prev_deck{};
 	irr::s32 prev_operation{};
 	irr::s32 dmquery_operation{};
-	int prev_sel{ -1 };
 	bool is_modified{};
 	bool readonly{};
 	bool showing_pack{};
