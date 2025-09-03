@@ -35,11 +35,9 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 		irr::gui::IGUIElement* caller = event.GUIEvent.Caller;
 		irr::s32 id = caller->getID();
 		if(mainGame->wQuery->isVisible() && id != BUTTON_YES && id != BUTTON_NO) {
-			mainGame->wQuery->getParent()->bringToFront(mainGame->wQuery);
 			break;
 		}
 		if(mainGame->wReplaySave->isVisible() && id != BUTTON_REPLAY_SAVE && id != BUTTON_REPLAY_CANCEL) {
-			mainGame->wReplaySave->getParent()->bringToFront(mainGame->wReplaySave);
 			break;
 		}
 		switch(event.GUIEvent.EventType) {
@@ -540,11 +538,9 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			}
 			case LISTBOX_REPLAY_LIST: {
 				int sel = mainGame->lstReplayList->getSelected();
-				if(sel < 0)
+				if (sel == -1)
 					break;
 				auto filename = mainGame->lstReplayList->getListItem(sel);
-				if (!filename)
-					break;
 				wchar_t replay_path[256]{};
 				myswprintf(replay_path, L"./replay/%ls", filename);
 				if (!temp_replay.OpenReplay(replay_path)) {
