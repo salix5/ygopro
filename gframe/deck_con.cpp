@@ -396,7 +396,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->cbDMCategory->setVisible(true);
 				mainGame->cbDMCategory->clear();
 				int catesel = mainGame->lstCategories->getSelected();
-				if(catesel != 2)
+				if(catesel != DECK_CATEGORY_NONE)
 					mainGame->cbDMCategory->addItem(dataManager.GetSysString(1452), DECK_CATEGORY_NONE);
 				for(int i = DECK_CATEGORY_CUSTOM; i < (int)mainGame->lstCategories->getItemCount(); i++) {
 					if(i != catesel)
