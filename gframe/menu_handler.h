@@ -13,7 +13,6 @@ public:
 
 	irr::s32 prev_operation{ 0 };
 	irr::s32 save_operation{ 0 };
-	int prev_sel{ -1 };
 	Replay temp_replay;
 };
 

@@ -217,6 +217,7 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_REPLAY_MODE: {
+				EnableReplayWindow(true);
 				mainGame->HideElement(mainGame->wMainMenu);
 				mainGame->ShowElement(mainGame->wReplay);
 				mainGame->ebRepStartTurn->setText(L"1");
@@ -273,13 +274,13 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				if(sel == -1)
 					break;
 				mainGame->gMutex.lock();
+				EnableReplayWindow(false);
 				wchar_t textBuffer[256];
 				myswprintf(textBuffer, L"%ls\n%ls", mainGame->lstReplayList->getListItem(sel), dataManager.GetSysString(1363));
 				mainGame->SetStaticText(mainGame->stQMessage, 310, mainGame->guiFont, textBuffer);
 				mainGame->PopupElement(mainGame->wQuery);
 				mainGame->gMutex.unlock();
 				prev_operation = id;
-				prev_sel = sel;
 				break;
 			}
 			case BUTTON_RENAME_REPLAY: {
@@ -287,12 +288,12 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				if(sel == -1)
 					break;
 				mainGame->gMutex.lock();
+				EnableReplayWindow(false);
 				mainGame->wReplaySave->setText(dataManager.GetSysString(1364));
 				mainGame->ebRSName->setText(mainGame->lstReplayList->getListItem(sel));
 				mainGame->PopupElement(mainGame->wReplaySave);
 				mainGame->gMutex.unlock();
 				save_operation = id;
-				prev_sel = sel;
 				break;
 			}
 			case BUTTON_CANCEL_REPLAY: {
@@ -474,43 +475,47 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			case BUTTON_YES: {
 				mainGame->HideElement(mainGame->wQuery);
 				if(prev_operation == BUTTON_DELETE_REPLAY) {
-					if(Replay::DeleteReplay(mainGame->lstReplayList->getListItem(prev_sel))) {
+					int sel = mainGame->lstReplayList->getSelected();
+					if(Replay::DeleteReplay(mainGame->lstReplayList->getListItem(sel))) {
 						mainGame->stReplayInfo->setText(L"");
-						mainGame->lstReplayList->removeItem(prev_sel);
+						mainGame->lstReplayList->removeItem(sel);
 					}
 				}
 				prev_operation = 0;
-				prev_sel = -1;
+				EnableReplayWindow(true);
 				break;
 			}
 			case BUTTON_NO: {
 				mainGame->HideElement(mainGame->wQuery);
 				prev_operation = 0;
-				prev_sel = -1;
+				EnableReplayWindow(true);
 				break;
 			}
 			case BUTTON_REPLAY_SAVE: {
 				mainGame->HideElement(mainGame->wReplaySave);
 				if (save_operation == BUTTON_RENAME_REPLAY) {
-					wchar_t newname[256];
+					wchar_t newname[256]{};
 					BufferIO::CopyWideString(mainGame->ebRSName->getText(), newname);
-					if (!IsExtension(newname, L".yrp")) {
-						myswprintf(newname, L"%ls.yrp", mainGame->ebRSName->getText());
+					if (!IsExtension(newname, L".yrp") && myswprintf(newname, L"%ls.yrp", mainGame->ebRSName->getText()) <= 0) {
+						save_operation = 0;
+						EnableReplayWindow(true);
+						break;
 					}
-					if(Replay::RenameReplay(mainGame->lstReplayList->getListItem(prev_sel), newname)) {
-						mainGame->lstReplayList->setItem(prev_sel, newname, -1);
+					int sel = mainGame->lstReplayList->getSelected();
+					if(Replay::RenameReplay(mainGame->lstReplayList->getListItem(sel), newname)) {
+						mainGame->lstReplayList->setItem(sel, newname, -1);
 					} else {
 						mainGame->env->addMessageBox(L"", dataManager.GetSysString(1365));
 					}
 				}
 				save_operation = 0;
-				prev_sel = -1;
+				EnableReplayWindow(true);
 				break;
 			}
 			case BUTTON_REPLAY_CANCEL: {
 				mainGame->HideElement(mainGame->wReplaySave);
 				save_operation = 0;
-				prev_sel = -1;
+				EnableReplayWindow(true);
 				break;
 			}
 			}
