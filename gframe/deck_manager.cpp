@@ -307,12 +307,6 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 		return false;
 	char deckBuffer[MAX_YDK_SIZE]{};
 	auto reader = OpenDeckReader(file);
-	if(!reader) {
-		wchar_t localfile[256];
-		if (myswprintf(localfile, L"./deck/%ls.ydk", file) <= 0)
-			return false;
-		reader = OpenDeckReader(localfile);
-	}
 	if(!reader && !mywcsncasecmp(file, L"./pack", 6)) {
 		wchar_t zipfile[256];
 		if (myswprintf(zipfile, L"%ls", file + 2) <= 0)
