@@ -1816,18 +1816,18 @@ int Game::LocalPlayer(int player) const {
 	int pid = player ? 1 : 0;
 	return dInfo.isFirst ? pid : 1 - pid;
 }
-int Game::OppositePlayer(int player) {
+int Game::OppositePlayer(int player) const {
 	auto player_side_bit = dInfo.isTag ? 0x2 : 0x1;
 	return player ^ player_side_bit;
 }
-int Game::ChatLocalPlayer(int player) {
+int Game::ChatLocalPlayer(int player) const {
 	if(player > 3)
 		return player;
 	bool is_self;
 	if(dInfo.isStarted || is_siding) {
 		if(dInfo.isInDuel)
 			// when in duel
-			player = mainGame->dInfo.isFirst ? player : OppositePlayer(player);
+			player = dInfo.isFirst ? player : OppositePlayer(player);
 		else {
 			// when changing side or waiting tp result
 			auto selftype_boundary = dInfo.isTag ? 2 : 1;
@@ -1850,7 +1850,7 @@ int Game::ChatLocalPlayer(int player) {
 	}
 	return player | (is_self ? 0x10 : 0);
 }
-const wchar_t* Game::LocalName(int local_player) {
+const wchar_t* Game::LocalName(int local_player) const {
 	return local_player == 0 ? dInfo.hostname : dInfo.clientname;
 }
 void Game::OnResize() {

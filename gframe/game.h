@@ -207,9 +207,9 @@ public:
 	void CloseDuelWindow();
 
 	int LocalPlayer(int player) const;
-	int OppositePlayer(int player);
-	int ChatLocalPlayer(int player);
-	const wchar_t* LocalName(int local_player);
+	int OppositePlayer(int player) const;
+	int ChatLocalPlayer(int player) const;
+	const wchar_t* LocalName(int local_player) const;
 
 	bool HasFocus(irr::gui::EGUI_ELEMENT_TYPE type) const {
 		irr::gui::IGUIElement* focus = env->getFocus();
