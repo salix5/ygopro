@@ -306,20 +306,27 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 	if (!file[0])
 		return false;
 	char deckBuffer[MAX_YDK_SIZE]{};
-	auto reader = OpenDeckReader(file);
-	if(!reader && !mywcsncasecmp(file, L"./pack", 6)) {
-		wchar_t zipfile[256];
+	FILE* fp = mywfopen(file, "r");
+	if (fp) {
+		size_t size = std::fread(deckBuffer, 1, sizeof deckBuffer, fp);
+		std::fclose(fp);
+		if (size >= sizeof deckBuffer)
+			return false;
+	}
+	else if (mywcsncasecmp(file, L"./pack", 6) == 0) {
+		wchar_t zipfile[256]{};
 		if (myswprintf(zipfile, L"%ls", file + 2) <= 0)
 			return false;
-		reader = OpenDeckReader(zipfile);
+		auto reader = OpenDeckReader(zipfile);
+		if (!reader)
+			return false;
+		int size = reader->read(deckBuffer, sizeof deckBuffer);
+		reader->drop();
+		if (size >= (int)sizeof deckBuffer)
+			return false;
 	}
-	if(!reader)
+	else
 		return false;
-	int size = reader->read(deckBuffer, sizeof deckBuffer);
-	reader->drop();
-	if (size >= (int)sizeof deckBuffer) {
-		return false;
-	}
 	std::istringstream deckStream(deckBuffer);
 	LoadDeckFromStream(current_deck, deckStream, is_packlist);
 	return true;
