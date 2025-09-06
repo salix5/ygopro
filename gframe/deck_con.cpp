@@ -1568,11 +1568,11 @@ void DeckBuilder::RefreshDeckList() {
 void DeckBuilder::RefreshReadonly(int catesel) {
 	bool hasDeck = mainGame->cbDBDecks->getItemCount() != 0;
 	readonly = catesel < DECK_CATEGORY_NONE;
-	showing_pack = catesel == 0;
+	showing_pack = catesel == DECK_CATEGORY_PACK;
 	mainGame->btnSaveDeck->setEnabled(!readonly);
 	mainGame->btnSaveDeckAs->setEnabled(!readonly);
 	mainGame->btnClearDeck->setEnabled(!readonly);
-	mainGame->btnShuffleDeck->setEnabled(!readonly);
+	mainGame->btnShuffleDeck->setEnabled(!showing_pack);
 	mainGame->btnSortDeck->setEnabled(!readonly);
 	mainGame->btnDeleteDeck->setEnabled(hasDeck && !readonly);
 	mainGame->btnRenameCategory->setEnabled(catesel > DECK_CATEGORY_SEPARATOR);
