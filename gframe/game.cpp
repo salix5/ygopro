@@ -11,6 +11,7 @@
 #include "netserver.h"
 #include "single_mode.h"
 #include <thread>
+#include <filesystem>
 
 const unsigned short PRO_VERSION = 0x1362;
 
@@ -1811,6 +1812,27 @@ void Game::CloseDuelWindow() {
 	ClearTextures();
 	ResizeChatInputWindow();
 	closeDoneSignal.Set();
+}
+void Game::OpenDeckBuilder(bool from_arg) {
+	if (from_arg) {
+		if (deckManager.LoadCurrentDeck(open_file_name)) {
+			std::filesystem::path p = open_file_name;
+			ebDeckname->setText(p.filename().c_str());
+		}
+		else {
+			ebDeckname->setText(L"");
+		}
+		btnManageDeck->setEnabled(false);
+		cbDBCategory->setEnabled(false);
+		cbDBDecks->setEnabled(false);
+	}
+	else {
+		RefreshCategoryDeck(cbDBCategory, cbDBDecks);
+		deckManager.LoadCurrentDeck(cbDBCategory->getSelected(), cbDBCategory->getText(), cbDBDecks->getText());
+		ebDeckname->setText(L"");
+	}
+	HideElement(wMainMenu);
+	deckBuilder.Initialize();
 }
 int Game::LocalPlayer(int player) const {
 	int pid = player ? 1 : 0;
