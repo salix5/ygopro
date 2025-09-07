@@ -90,18 +90,18 @@ int main(int argc, char* argv[]) {
 	bool keep_on_return = false;
 	bool deckCategorySpecified = false;
 	for(int i = 1; i < wargc; ++i) {
-		if (wargc == 2 && std::wcslen(wargv[1]) >= 4) {
-			wchar_t* pstrext = wargv[1] + std::wcslen(wargv[1]) - 4;
-			if (!mywcsncasecmp(pstrext, L".ydk", 4)) {
-				open_file = true;
-				BufferIO::CopyWideString(wargv[1], open_file_name);
+		if (std::wcslen(wargv[i]) >= std::size(open_file_name))
+			break;
+		if (i == 1) {
+			if (ygo::IsExtension(wargv[i], L".ydk")) {
+				BufferIO::CopyWideString(wargv[i], open_file_name);
 				exit_on_return = true;
-				ClickButton(ygo::mainGame->btnDeckEdit);
+				ygo::mainGame->OpenDeckBuilder(true);
 				break;
 			}
-			if (!mywcsncasecmp(pstrext, L".yrp", 4)) {
+			else if (ygo::IsExtension(wargv[i], L".yrp")) {
 				open_file = true;
-				BufferIO::CopyWideString(wargv[1], open_file_name);
+				BufferIO::CopyWideString(wargv[i], open_file_name);
 				exit_on_return = true;
 				ClickButton(ygo::mainGame->btnReplayMode);
 				ClickButton(ygo::mainGame->btnLoadReplay);
@@ -151,25 +151,12 @@ int main(int argc, char* argv[]) {
 			++i;
 			if(!deckCategorySpecified)
 				ygo::mainGame->gameConf.lastcategory[0] = 0;
-			if(i + 1 < wargc) { // select deck
+			if (i < wargc) {
 				BufferIO::CopyWideString(wargv[i], ygo::mainGame->gameConf.lastdeck);
-				continue;
-			} else { // open deck
+			}
+			if (i + 1 >= wargc) {
 				exit_on_return = !keep_on_return;
-				if(i < wargc) {
-					open_file = true;
-					if(deckCategorySpecified) {
-#ifdef _WIN32
-						myswprintf(open_file_name, L"%ls\\%ls", ygo::mainGame->gameConf.lastcategory, wargv[i]);
-#else
-						myswprintf(open_file_name, L"%ls/%ls", ygo::mainGame->gameConf.lastcategory, wargv[i]);
-#endif
-					} else {
-						BufferIO::CopyWideString(wargv[i], open_file_name);
-					}
-				}
-				ClickButton(ygo::mainGame->btnDeckEdit);
-				break;
+				ygo::mainGame->OpenDeckBuilder(false);
 			}
 		} else if(!std::wcscmp(wargv[i], L"-c")) { // Create host
 			exit_on_return = !keep_on_return;

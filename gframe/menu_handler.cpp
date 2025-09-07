@@ -424,51 +424,7 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_DECK_EDIT: {
-				mainGame->RefreshCategoryDeck(mainGame->cbDBCategory, mainGame->cbDBDecks);
-				if (open_file) {
-					deckManager.LoadCurrentDeck(open_file_name);
-#ifdef _WIN32
-					wchar_t *dash = std::wcsrchr(open_file_name, L'\\');
-#else
-					wchar_t *dash = std::wcsrchr(open_file_name, L'/');
-#endif
-					wchar_t *dot = std::wcsrchr(open_file_name, L'.');
-					if(dash && dot && !mywcsncasecmp(dot, L".ydk", 4)) { // full path
-						wchar_t deck_name[256];
-						BufferIO::CopyWideString(dash + 1, deck_name, dot - dash - 1);
-						mainGame->ebDeckname->setText(deck_name);
-						mainGame->cbDBCategory->setSelected(-1);
-						mainGame->cbDBDecks->setSelected(-1);
-						mainGame->btnManageDeck->setEnabled(false);
-						mainGame->cbDBCategory->setEnabled(false);
-						mainGame->cbDBDecks->setEnabled(false);
-					} else if(dash) { // has category
-						wchar_t deck_name[256];
-						BufferIO::CopyWideString(dash + 1, deck_name);
-						for(size_t i = 0; i < mainGame->cbDBDecks->getItemCount(); ++i) {
-							if(!std::wcscmp(mainGame->cbDBDecks->getItem(i), deck_name)) {
-								BufferIO::CopyWideString(deck_name, mainGame->gameConf.lastdeck);
-								mainGame->cbDBDecks->setSelected(i);
-								break;
-							}
-						}
-					} else { // only deck name
-						for(size_t i = 0; i < mainGame->cbDBDecks->getItemCount(); ++i) {
-							if(!std::wcscmp(mainGame->cbDBDecks->getItem(i), open_file_name)) {
-								BufferIO::CopyWideString(open_file_name, mainGame->gameConf.lastdeck);
-								mainGame->cbDBDecks->setSelected(i);
-								break;
-							}
-						}
-					}
-					open_file = false;
-				} 
-				else {
-					deckManager.LoadCurrentDeck(mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
-					mainGame->ebDeckname->setText(L"");
-				}
-				mainGame->HideElement(mainGame->wMainMenu);
-				mainGame->deckBuilder.Initialize();
+				mainGame->OpenDeckBuilder(false);
 				break;
 			}
 			case BUTTON_YES: {

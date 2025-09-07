@@ -11,6 +11,7 @@
 #include "netserver.h"
 #include "single_mode.h"
 #include <thread>
+#include <filesystem>
 
 const unsigned short PRO_VERSION = 0x1362;
 
@@ -1214,9 +1215,9 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 			cbCategory->addItem(name);
 		}
 	});
-	cbCategory->setSelected(2);
+	cbCategory->setSelected(DECK_CATEGORY_NONE);
 	if(selectlastused) {
-		for(size_t i = 0; i < cbCategory->getItemCount(); ++i) {
+		for(int i = 0; i < (int)cbCategory->getItemCount(); ++i) {
 			if(!std::wcscmp(cbCategory->getItem(i), gameConf.lastcategory)) {
 				cbCategory->setSelected(i);
 				break;
@@ -1225,7 +1226,7 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 	}
 	RefreshDeck(cbCategory, cbDeck);
 	if(selectlastused) {
-		for(size_t i = 0; i < cbDeck->getItemCount(); ++i) {
+		for(int i = 0; i < (int)cbDeck->getItemCount(); ++i) {
 			if(!std::wcscmp(cbDeck->getItem(i), gameConf.lastdeck)) {
 				cbDeck->setSelected(i);
 				break;
@@ -1811,6 +1812,28 @@ void Game::CloseDuelWindow() {
 	ClearTextures();
 	ResizeChatInputWindow();
 	closeDoneSignal.Set();
+}
+void Game::OpenDeckBuilder(bool from_arg) {
+	if (from_arg) {
+		if (deckManager.LoadCurrentDeck(open_file_name)) {
+			std::filesystem::path p = open_file_name;
+			auto filename = p.filename().wstring();
+			ebDeckname->setText(filename.c_str());
+		}
+		else {
+			ebDeckname->setText(L"");
+		}
+		btnManageDeck->setEnabled(false);
+		cbDBCategory->setEnabled(false);
+		cbDBDecks->setEnabled(false);
+	}
+	else {
+		RefreshCategoryDeck(cbDBCategory, cbDBDecks);
+		deckManager.LoadCurrentDeck(cbDBCategory->getSelected(), cbDBCategory->getText(), cbDBDecks->getText());
+		ebDeckname->setText(L"");
+	}
+	HideElement(wMainMenu);
+	deckBuilder.Initialize();
 }
 int Game::LocalPlayer(int player) const {
 	int pid = player ? 1 : 0;

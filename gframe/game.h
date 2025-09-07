@@ -206,6 +206,8 @@ public:
 	void CloseGameWindow();
 	void CloseDuelWindow();
 
+	void OpenDeckBuilder(bool from_arg);
+
 	int LocalPlayer(int player) const;
 	int OppositePlayer(int player) const;
 	int ChatLocalPlayer(int player) const;
