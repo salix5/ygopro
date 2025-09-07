@@ -1817,7 +1817,8 @@ void Game::OpenDeckBuilder(bool from_arg) {
 	if (from_arg) {
 		if (deckManager.LoadCurrentDeck(open_file_name)) {
 			std::filesystem::path p = open_file_name;
-			ebDeckname->setText(p.filename().wstring().c_str());
+			auto filename = p.filename().wstring();
+			ebDeckname->setText(filename.c_str());
 		}
 		else {
 			ebDeckname->setText(L"");
