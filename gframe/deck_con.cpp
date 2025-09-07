@@ -1573,7 +1573,7 @@ void DeckBuilder::RefreshReadonly(int catesel) {
 	mainGame->btnSaveDeckAs->setEnabled(!readonly);
 	mainGame->btnClearDeck->setEnabled(!readonly);
 	mainGame->btnShuffleDeck->setEnabled(!showing_pack);
-	mainGame->btnSortDeck->setEnabled(!readonly);
+	mainGame->btnSortDeck->setEnabled(!showing_pack);
 	mainGame->btnDeleteDeck->setEnabled(hasDeck && !readonly);
 	mainGame->btnRenameCategory->setEnabled(catesel > DECK_CATEGORY_SEPARATOR);
 	mainGame->btnDeleteCategory->setEnabled(catesel > DECK_CATEGORY_SEPARATOR);

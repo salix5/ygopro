@@ -1215,9 +1215,9 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 			cbCategory->addItem(name);
 		}
 	});
-	cbCategory->setSelected(2);
+	cbCategory->setSelected(DECK_CATEGORY_NONE);
 	if(selectlastused) {
-		for(size_t i = 0; i < cbCategory->getItemCount(); ++i) {
+		for(int i = 0; i < (int)cbCategory->getItemCount(); ++i) {
 			if(!std::wcscmp(cbCategory->getItem(i), gameConf.lastcategory)) {
 				cbCategory->setSelected(i);
 				break;
@@ -1226,7 +1226,7 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 	}
 	RefreshDeck(cbCategory, cbDeck);
 	if(selectlastused) {
-		for(size_t i = 0; i < cbDeck->getItemCount(); ++i) {
+		for(int i = 0; i < (int)cbDeck->getItemCount(); ++i) {
 			if(!std::wcscmp(cbDeck->getItem(i), gameConf.lastdeck)) {
 				cbDeck->setSelected(i);
 				break;
