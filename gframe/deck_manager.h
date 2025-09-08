@@ -42,6 +42,9 @@ struct Deck {
 		extra.clear();
 		side.clear();
 	}
+	size_t size() const {
+		return main.size() + extra.size() + side.size();
+	}
 };
 
 struct DeckArray {
