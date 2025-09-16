@@ -1480,6 +1480,8 @@ void Game::LoadConfig() {
 		}
 	}
 	std::fclose(fp);
+	if (!gameConf.bot_deck_path[0])
+		std::wcsncpy(gameConf.bot_deck_path, L"./deck", 7);
 }
 void Game::SaveConfig() {
 	FILE* fp = std::fopen("system.conf", "w");
