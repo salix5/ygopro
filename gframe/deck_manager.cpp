@@ -273,15 +273,12 @@ void DeckManager::GetDeckFile(wchar_t* ret, int category_index, const wchar_t* c
 	wchar_t filepath[256]{};
 	wchar_t catepath[256]{};
 	GetCategoryPath(catepath, category_index, category_name);
-	if (!catepath[0]) {
-		ret[0] = 0;
-		return;
-	}
 	if (myswprintf(filepath, L"%ls/%ls.ydk", catepath, deckname) <= 0) {
 		ret[0] = 0;
 		return;
 	}
-	BufferIO::CopyWStr(filepath, ret, 256);
+	std::wcsncpy(ret, filepath, 256);
+	ret[255] = 0;
 }
 irr::io::IReadFile* DeckManager::OpenDeckReader(const wchar_t* file) {
 #ifdef _WIN32
@@ -305,7 +302,7 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 		if (size >= sizeof deckBuffer)
 			return false;
 	}
-	else if (mywcsncasecmp(file, L"./pack", 6) == 0) {
+	else if (std::wcsncmp(file, L"./pack", 6) == 0) {
 		wchar_t zipfile[256]{};
 		if (myswprintf(zipfile, L"%ls", file + 2) <= 0)
 			return false;
