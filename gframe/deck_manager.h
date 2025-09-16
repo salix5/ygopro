@@ -81,6 +81,7 @@ public:
 	static bool RenameCategory(const wchar_t* oldname, const wchar_t* newname);
 	static bool DeleteCategory(const wchar_t* name);
 	static bool SaveDeckArray(const DeckArray& deck, const wchar_t* name);
+	static bool GenerateTestScript(const Deck& deck, const wchar_t* base_name);
 };
 
 extern DeckManager deckManager;
