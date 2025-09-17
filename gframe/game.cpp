@@ -342,21 +342,21 @@ bool Game::Initialize() {
 	btnEP = env->addButton(irr::core::rect<irr::s32>(320, 0, 370, 20), wPhase, BUTTON_EP, L"\xff25\xff30");
 	btnEP->setVisible(false);
 	//tab
-	wInfos = env->addTabControl(irr::core::rect<irr::s32>(0, 275, 305, 640), 0, true);
+	wInfos = env->addTabControl(irr::core::rect<irr::s32>(1, 275, 301, 639), 0, true);
 	wInfos->setTabExtraWidth(16);
 	wInfos->setVisible(false);
 	//info
 	irr::gui::IGUITab* tabInfo = wInfos->addTab(dataManager.GetSysString(1270));
-	stName = env->addStaticText(L"", irr::core::rect<irr::s32>(10, 10, 305 - 10, 32), true, false, tabInfo, -1, false);
+	stName = env->addStaticText(L"", irr::core::rect<irr::s32>(10, 10, 287, 32), true, false, tabInfo, -1, false);
 	stName->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
-	stInfo = env->addStaticText(L"", irr::core::rect<irr::s32>(10, 37, 305 - 10, 60), false, true, tabInfo, -1, false);
+	stInfo = env->addStaticText(L"", irr::core::rect<irr::s32>(15, 37, 296, 60), false, true, tabInfo, -1, false);
 	stInfo->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
-	stDataInfo = env->addStaticText(L"", irr::core::rect<irr::s32>(10, 60, 305 - 10, 83), false, true, tabInfo, -1, false);
+	stDataInfo = env->addStaticText(L"", irr::core::rect<irr::s32>(15, 60, 296, 83), false, true, tabInfo, -1, false);
 	stDataInfo->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
-	stSetName = env->addStaticText(L"", irr::core::rect<irr::s32>(10, 83, 300, 106), false, true, tabInfo, -1, false);
+	stSetName = env->addStaticText(L"", irr::core::rect<irr::s32>(15, 83, 296, 106), false, true, tabInfo, -1, false);
 	stSetName->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
-	stText = env->addStaticText(L"", irr::core::rect<irr::s32>(10, 106, 295, 360), false, true, tabInfo, -1, false);
-	scrCardText = env->addScrollBar(false, irr::core::rect<irr::s32>(275, 106, 295, 360), tabInfo, SCROLL_CARDTEXT);
+	stText = env->addStaticText(L"", irr::core::rect<irr::s32>(15, 106, 287, 324), false, true, tabInfo, -1, false);
+	scrCardText = env->addScrollBar(false, irr::core::rect<irr::s32>(267, 106, 287, 324), tabInfo, SCROLL_CARDTEXT);
 	scrCardText->setLargeStep(1);
 	scrCardText->setSmallStep(1);
 	scrCardText->setVisible(false);
@@ -1640,11 +1640,11 @@ void Game::ShowCardInfo(int code, bool resize) {
 		dtxt = guiFont->getDimension(formatBuffer);
 		if(dtxt.Width > (300 * xScale - 13) - 15)
 			offset_arrows += 15;
-		stInfo->setRelativePosition(irr::core::rect<irr::s32>(10, 37, 305 * xScale - 10, (60 + offset_info)));
-		stDataInfo->setRelativePosition(irr::core::rect<irr::s32>(10, (60 + offset_info), 305 * xScale - 10, (83 + offset_arrows)));
-		stSetName->setRelativePosition(irr::core::rect<irr::s32>(10, (83 + offset_arrows), 300 * xScale, (83 + offset_arrows) + offset));
-		stText->setRelativePosition(irr::core::rect<irr::s32>(10, (83 + offset_arrows) + offset, 295 * xScale, 360 * yScale));
-		scrCardText->setRelativePosition(irr::core::rect<irr::s32>(295 * xScale - 20, (83 + offset_arrows) + offset, 295 * xScale, 360 * yScale));
+		stInfo->setRelativePosition(irr::core::rect<irr::s32>(15, 37, 300 * xScale - 13, (60 + offset_info)));
+		stDataInfo->setRelativePosition(irr::core::rect<irr::s32>(15, (60 + offset_info), 300 * xScale - 13, (83 + offset_arrows)));
+		stSetName->setRelativePosition(irr::core::rect<irr::s32>(15, (83 + offset_arrows), 296 * xScale, (83 + offset_arrows) + offset));
+		stText->setRelativePosition(irr::core::rect<irr::s32>(15, (83 + offset_arrows) + offset, 287 * xScale, 324 * yScale));
+		scrCardText->setRelativePosition(irr::core::rect<irr::s32>(287 * xScale - 20, (83 + offset_arrows) + offset, 287 * xScale, 324 * yScale));
 	}
 	else {
 		if (is_valid) {
@@ -1655,9 +1655,9 @@ void Game::ShowCardInfo(int code, bool resize) {
 			myswprintf(formatBuffer, L"[%ls]", dataManager.unknown_string);
 		stInfo->setText(formatBuffer);
 		stDataInfo->setText(L"");
-		stSetName->setRelativePosition(irr::core::rect<irr::s32>(10, 60, 300 * xScale, 60 + offset));
-		stText->setRelativePosition(irr::core::rect<irr::s32>(10, 60 + offset, 295 * xScale, 360 * yScale));
-		scrCardText->setRelativePosition(irr::core::rect<irr::s32>(295 * xScale - 20, 60 + offset, 295 * xScale, 360 * yScale));
+		stSetName->setRelativePosition(irr::core::rect<irr::s32>(15, 60, 296 * xScale, 60 + offset));
+		stText->setRelativePosition(irr::core::rect<irr::s32>(15, 60 + offset, 287 * xScale, 324 * yScale));
+		scrCardText->setRelativePosition(irr::core::rect<irr::s32>(287 * xScale - 20, 60 + offset, 287 * xScale, 324 * yScale));
 	}
 	showingcode = code;
 	showingtext = dataManager.GetText(code);
@@ -2047,8 +2047,8 @@ void Game::OnResize() {
 
 	wCardImg->setRelativePosition(ResizeCardImgWin(1, 1, 20, 18));
 	imgCard->setRelativePosition(ResizeCardImgWin(10, 9, 0, 0));
-	wInfos->setRelativePosition(Resize(0, 275, 305, 640));
-	stName->setRelativePosition(irr::core::recti(10, 10, 305 * xScale - 10, 10 + 22));
+	wInfos->setRelativePosition(Resize(1, 275, 301, 639));
+	stName->setRelativePosition(irr::core::recti(10, 10, 300 * xScale - 13, 10 + 22));
 	lstLog->setRelativePosition(Resize(10, 10, 290, 290));
 	if(showingcode)
 		ShowCardInfo(showingcode, true);
