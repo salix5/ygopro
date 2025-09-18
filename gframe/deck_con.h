@@ -30,7 +30,7 @@ public:
 	void ChangeCategory(const wchar_t* deck_name = nullptr);
 	void ShowDeckManage();
 	void ShowBigCard(int code, float zoom);
-	void ZoomBigCard(irr::s32 centerx = -1, irr::s32 centery = -1);
+	void ZoomBigCard(float delta, irr::s32 centerx = -1, irr::s32 centery = -1);
 	void CloseBigCard();
 	void EnableEditWindow(bool enabled);
 	void EnableManageWindow(bool enabled);

@@ -702,13 +702,11 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_BIG_CARD_ZOOM_IN: {
-				bigcard_zoom += 0.2f;
-				ZoomBigCard();
+				ZoomBigCard(0.2f);
 				break;
 			}
 			case BUTTON_BIG_CARD_ZOOM_OUT: {
-				bigcard_zoom -= 0.2f;
-				ZoomBigCard();
+				ZoomBigCard(-0.2f);
 				break;
 			}
 			case BUTTON_BIG_CARD_CLOSE: {
@@ -1156,8 +1154,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		case irr::EMIE_MOUSE_WHEEL: {
 			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
 			if(root->getElementFromPoint(mouse_pos) == mainGame->imgBigCard) {
-				bigcard_zoom += 0.1f * event.MouseInput.Wheel;
-				ZoomBigCard(mouse_pos.X, mouse_pos.Y);
+				ZoomBigCard(0.1f * event.MouseInput.Wheel, mouse_pos.X, mouse_pos.Y);
 				break;
 			}
 			if(!mainGame->scrFilter->isVisible())
@@ -1663,14 +1660,13 @@ void DeckBuilder::ShowBigCard(int code, float zoom) {
 	mainGame->env->getRootGUIElement()->bringToFront(mainGame->wBigCard);
 	mainGame->gMutex.unlock();
 }
-void DeckBuilder::ZoomBigCard(irr::s32 centerx, irr::s32 centery) {
-	if(bigcard_zoom >= 4)
-		bigcard_zoom = 4;
-	if(bigcard_zoom <= 0.2f)
-		bigcard_zoom = 0.2f;
-	auto img = imageManager.GetBigPicture(bigcard_code, bigcard_zoom);
+void DeckBuilder::ZoomBigCard(float delta, irr::s32 centerx, irr::s32 centery) {
+	if (bigcard_zoom + delta >= 4.0f || bigcard_zoom + delta <= 0.2f)
+		return;
+	auto zoom = bigcard_zoom + delta;
+	auto img = imageManager.GetBigPicture(bigcard_code, zoom);
 	mainGame->imgBigCard->setImage(img);
-	auto size = img->getSize();
+	auto& size = img->getSize();
 	auto pos = mainGame->wBigCard->getRelativePosition();
 	if(centerx == -1) {
 		centerx = pos.UpperLeftCorner.X + pos.getWidth() / 2;
@@ -1682,6 +1678,7 @@ void DeckBuilder::ZoomBigCard(irr::s32 centerx, irr::s32 centery) {
 	irr::s32 top = centery - size.Height * posy;
 	mainGame->imgBigCard->setRelativePosition(irr::core::recti(0, 0, size.Width, size.Height));
 	mainGame->wBigCard->setRelativePosition(irr::core::recti(left, top, left + size.Width, top + size.Height));
+	bigcard_zoom += delta;
 }
 void DeckBuilder::CloseBigCard() {
 	mainGame->HideElement(mainGame->wBigCard);
