@@ -67,7 +67,7 @@ struct Config {
 	wchar_t lastdeck[256]{};
 	wchar_t textfont[256]{};
 	wchar_t numfont[256]{};
-	wchar_t bot_deck_path[256]{};
+	wchar_t bot_deck_path[256]{ L"./deck" };
 	//settings
 	int chkMAutoPos{ 0 };
 	int chkSTAutoPos{ 1 };

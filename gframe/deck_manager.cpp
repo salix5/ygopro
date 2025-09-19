@@ -243,31 +243,23 @@ bool DeckManager::LoadSide(Deck& deck, uint32_t dbuf[], int mainc, int sidec) {
 	return true;
 }
 void DeckManager::GetCategoryPath(wchar_t* ret, int index, const wchar_t* text) {
-	wchar_t catepath[256]{};
 	switch(index) {
 	case DECK_CATEGORY_PACK:
-		myswprintf(catepath, L"./pack");
+		std::wcsncpy(ret, L"./pack", 7);
 		break;
 	case DECK_CATEGORY_BOT:
-		BufferIO::CopyWideString(mainGame->gameConf.bot_deck_path, catepath);
+		std::wcsncpy(ret, mainGame->gameConf.bot_deck_path, 256);
+		ret[255] = 0;
 		break;
 	case -1:
 	case DECK_CATEGORY_NONE:
 	case DECK_CATEGORY_SEPARATOR:
-		myswprintf(catepath, L"./deck");
+		std::wcsncpy(ret, L"./deck", 7);
 		break;
 	default:
-		if (std::wcschr(text, L'/') || std::wcschr(text, L'\\')) {
-			catepath[0] = 0;
-			break;
-		}
-		if (myswprintf(catepath, L"./deck/%ls", text) <= 0) {
-			catepath[0] = 0;
-			break;
-		}
+		std::swprintf(ret, 256, L"./deck/%ls", text);
 		break;
 	}
-	BufferIO::CopyWStr(catepath, ret, 256);
 }
 void DeckManager::GetDeckFile(wchar_t* ret, int category_index, const wchar_t* category_name, const wchar_t* deckname) {
 	if (!deckname) {
@@ -281,15 +273,12 @@ void DeckManager::GetDeckFile(wchar_t* ret, int category_index, const wchar_t* c
 	wchar_t filepath[256]{};
 	wchar_t catepath[256]{};
 	GetCategoryPath(catepath, category_index, category_name);
-	if (!catepath[0]) {
-		ret[0] = 0;
-		return;
-	}
 	if (myswprintf(filepath, L"%ls/%ls.ydk", catepath, deckname) <= 0) {
 		ret[0] = 0;
 		return;
 	}
-	BufferIO::CopyWStr(filepath, ret, 256);
+	std::wcsncpy(ret, filepath, 256);
+	ret[255] = 0;
 }
 irr::io::IReadFile* DeckManager::OpenDeckReader(const wchar_t* file) {
 #ifdef _WIN32
@@ -313,7 +302,7 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 		if (size >= sizeof deckBuffer)
 			return false;
 	}
-	else if (mywcsncasecmp(file, L"./pack", 6) == 0) {
+	else if (std::wcsncmp(file, L"./pack", 6) == 0) {
 		wchar_t zipfile[256]{};
 		if (myswprintf(zipfile, L"%ls", file + 2) <= 0)
 			return false;
