@@ -1663,8 +1663,8 @@ void DeckBuilder::ShowBigCard(int code, float zoom) {
 void DeckBuilder::ZoomBigCard(float delta, irr::s32 centerx, irr::s32 centery) {
 	if (bigcard_zoom + delta > 4.0f || bigcard_zoom + delta < 0.2f)
 		return;
-	auto zoom = bigcard_zoom + delta;
-	auto img = imageManager.GetBigPicture(bigcard_code, zoom);
+	bigcard_zoom += delta;
+	auto img = imageManager.GetBigPicture(bigcard_code, bigcard_zoom);
 	mainGame->imgBigCard->setImage(img);
 	auto& size = img->getSize();
 	auto pos = mainGame->wBigCard->getRelativePosition();
@@ -1678,7 +1678,6 @@ void DeckBuilder::ZoomBigCard(float delta, irr::s32 centerx, irr::s32 centery) {
 	irr::s32 top = centery - size.Height * posy;
 	mainGame->imgBigCard->setRelativePosition(irr::core::recti(0, 0, size.Width, size.Height));
 	mainGame->wBigCard->setRelativePosition(irr::core::recti(left, top, left + size.Width, top + size.Height));
-	bigcard_zoom += delta;
 }
 void DeckBuilder::CloseBigCard() {
 	mainGame->HideElement(mainGame->wBigCard);
