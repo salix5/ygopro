@@ -760,19 +760,19 @@ bool Game::Initialize() {
 	for (int i = 0; i < RACES_COUNT; ++i)
 		cbRace->addItem(dataManager.GetSysString(DataManager::STRING_ID_RACE + i), 0x1U << i);
 	stAttack = env->addStaticText(dataManager.GetSysString(1322), irr::core::rect<irr::s32>(205, 22 + 50 / 6, 280, 42 + 50 / 6), false, false, wFilter);
-	ebAttack = env->addEditBox(L"", irr::core::rect<irr::s32>(260, 20 + 50 / 6, 340, 40 + 50 / 6), true, wFilter, EDITBOX_INPUTS);
+	ebAttack = env->addEditBox(L"", irr::core::rect<irr::s32>(260, 20 + 50 / 6, 340, 40 + 50 / 6), true, wFilter, EDITBOX_ATK);
 	ebAttack->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	editbox_list.push_back(ebAttack);
 	stDefense = env->addStaticText(dataManager.GetSysString(1323), irr::core::rect<irr::s32>(205, 42 + 75 / 6, 280, 62 + 75 / 6), false, false, wFilter);
-	ebDefense = env->addEditBox(L"", irr::core::rect<irr::s32>(260, 40 + 75 / 6, 340, 60 + 75 / 6), true, wFilter, EDITBOX_INPUTS);
+	ebDefense = env->addEditBox(L"", irr::core::rect<irr::s32>(260, 40 + 75 / 6, 340, 60 + 75 / 6), true, wFilter, EDITBOX_DEF);
 	ebDefense->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	editbox_list.push_back(ebDefense);
 	stStar = env->addStaticText(dataManager.GetSysString(1324), irr::core::rect<irr::s32>(10, 62 + 100 / 6, 80, 82 + 100 / 6), false, false, wFilter);
-	ebStar = env->addEditBox(L"", irr::core::rect<irr::s32>(60, 60 + 100 / 6, 100, 80 + 100 / 6), true, wFilter, EDITBOX_INPUTS);
+	ebStar = env->addEditBox(L"", irr::core::rect<irr::s32>(60, 60 + 100 / 6, 100, 80 + 100 / 6), true, wFilter, EDITBOX_LEVEL);
 	ebStar->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	editbox_list.push_back(ebStar);
 	stScale = env->addStaticText(dataManager.GetSysString(1336), irr::core::rect<irr::s32>(101, 62 + 100 / 6, 150, 82 + 100 / 6), false, false, wFilter);
-	ebScale = env->addEditBox(L"", irr::core::rect<irr::s32>(150, 60 + 100 / 6, 195, 80 + 100 / 6), true, wFilter, EDITBOX_INPUTS);
+	ebScale = env->addEditBox(L"", irr::core::rect<irr::s32>(150, 60 + 100 / 6, 195, 80 + 100 / 6), true, wFilter, EDITBOX_SCALE);
 	ebScale->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	editbox_list.push_back(ebScale);
 	stSearch = env->addStaticText(dataManager.GetSysString(1325), irr::core::rect<irr::s32>(205, 62 + 100 / 6, 280, 82 + 100 / 6), false, false, wFilter);

@@ -816,7 +816,10 @@ extern Game* mainGame;
 #define BUTTON_MARKS_FILTER			322
 #define BUTTON_MARKERS_OK			323
 #define COMBOBOX_SORTTYPE			324
-#define EDITBOX_INPUTS				325
+#define EDITBOX_ATK					325
+#define EDITBOX_DEF					326
+#define EDITBOX_LEVEL				327
+#define EDITBOX_SCALE				328
 
 // Deck Manage
 #define WINDOW_DECK_MANAGE			330
