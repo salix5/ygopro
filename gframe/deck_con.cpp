@@ -1661,7 +1661,7 @@ void DeckBuilder::ShowBigCard(int code, float zoom) {
 	mainGame->gMutex.unlock();
 }
 void DeckBuilder::ZoomBigCard(float delta, irr::s32 centerx, irr::s32 centery) {
-	if (bigcard_zoom + delta >= 4.0f || bigcard_zoom + delta <= 0.2f)
+	if (bigcard_zoom + delta > 4.0f || bigcard_zoom + delta < 0.2f)
 		return;
 	auto zoom = bigcard_zoom + delta;
 	auto img = imageManager.GetBigPicture(bigcard_code, zoom);
