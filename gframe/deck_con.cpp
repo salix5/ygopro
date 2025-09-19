@@ -789,7 +789,10 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		}
 		case irr::gui::EGET_EDITBOX_ENTER: {
 			switch(id) {
-			case EDITBOX_INPUTS:
+			case EDITBOX_ATK:
+			case EDITBOX_DEF:
+			case EDITBOX_LEVEL:
+			case EDITBOX_SCALE:
 			case EDITBOX_KEYWORD: {
 				StartFilter();
 				break;
