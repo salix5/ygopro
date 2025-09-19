@@ -235,7 +235,7 @@ irr::video::ITexture* ImageManager::GetTexture(int code, bool fit) {
 }
 irr::video::ITexture* ImageManager::GetBigPicture(int code, float zoom) {
 	if(code == 0)
-		return tUnknown;
+		return tUnknownFit;
 	if(tBigPicture != nullptr) {
 		driver->removeTexture(tBigPicture);
 		tBigPicture = nullptr;
@@ -249,7 +249,7 @@ irr::video::ITexture* ImageManager::GetBigPicture(int code, float zoom) {
 		srcimg = driver->createImageFromFile(file);
 	}
 	if(srcimg == nullptr) {
-		return tUnknown;
+		return tUnknownFit;
 	}
 	if(zoom == 1) {
 		texture = driver->addTexture(file, srcimg);
