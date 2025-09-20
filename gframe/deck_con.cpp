@@ -233,16 +233,16 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 	else if (event.EventType == irr::EET_MOUSE_INPUT_EVENT) {
 		switch (event.MouseInput.Event) {
 		case irr::EMIE_LMOUSE_PRESSED_DOWN: {
-			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
-			if (root->getElementFromPoint({ event.MouseInput.X, event.MouseInput.Y }) != root)
+			if (readonly)
 				break;
 			if (havePopupWindow())
+				break;
+			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
+			if (root->getElementFromPoint({ event.MouseInput.X, event.MouseInput.Y }) != root)
 				break;
 			if (hovered_pos == 0 || hovered_seq == -1)
 				break;
 			click_pos = hovered_pos;
-			if (readonly)
-				break;
 			dragx = event.MouseInput.X;
 			dragy = event.MouseInput.Y;
 			auto dit = _datas.find(hovered_code);
