@@ -143,22 +143,21 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 	if(mainGame->dField.OnCommonEvent(event))
 		return false;
 	auto& _datas = dataManager.GetDataTable();
-	switch(event.EventType) {
-	case irr::EET_GUI_EVENT: {
-		irr::s32 id = event.GUIEvent.Caller->getID();
+	if (event.EventType == irr::EET_GUI_EVENT) {
+		auto id = event.GUIEvent.Caller->getID();
 		if (mainGame->wDMQuery->isVisible() && id != BUTTON_DM_OK && id != BUTTON_DM_CANCEL)
-			break;
+			return false;
 		if (mainGame->wDeckManage->isVisible() && !(id >= WINDOW_DECK_MANAGE && id < COMBOBOX_LFLIST))
-			break;
+			return false;
 		if (mainGame->wQuery->isVisible() && id != BUTTON_YES && id != BUTTON_NO)
-			break;
+			return false;
 		if (mainGame->wCategories->isVisible() && id != BUTTON_CATEGORY_OK)
-			break;
+			return false;
 		if (mainGame->wLinkMarks->isVisible() && id != BUTTON_MARKERS_OK)
-			break;
-		switch(event.GUIEvent.EventType) {
+			return false;
+		switch (event.GUIEvent.EventType) {
 		case irr::gui::EGET_ELEMENT_CLOSED: {
-			if(id == WINDOW_DECK_MANAGE) {
+			if (id == WINDOW_DECK_MANAGE) {
 				mainGame->HideElement(mainGame->wDeckManage);
 				EnableEditWindow(true);
 				return true;
@@ -170,7 +169,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::gui::EGET_SCROLL_BAR_CHANGED: {
-			switch(id) {
+			switch (id) {
 			case SCROLL_FILTER: {
 				GetHoveredCard();
 				break;
@@ -179,7 +178,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::gui::EGET_EDITBOX_ENTER: {
-			switch(id) {
+			switch (id) {
 			case EDITBOX_ATK:
 			case EDITBOX_DEF:
 			case EDITBOX_LEVEL:
@@ -192,7 +191,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::gui::EGET_EDITBOX_CHANGED: {
-			switch(id) {
+			switch (id) {
 			case EDITBOX_KEYWORD: {
 				InstantSearch();
 				break;
@@ -205,7 +204,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::gui::EGET_LISTBOX_CHANGED: {
-			switch(id) {
+			switch (id) {
 			case LISTBOX_CATEGORIES: {
 				int catesel = mainGame->lstCategories->getSelected();
 				mainGame->cbDBCategory->setSelected(catesel);
@@ -216,7 +215,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				int catesel = mainGame->lstCategories->getSelected();
 				int decksel = mainGame->lstDecks->getSelected();
 				mainGame->cbDBDecks->setSelected(decksel);
-				if(decksel == -1)
+				if (decksel == -1)
 					break;
 				wchar_t filepath[256]{};
 				deckManager.LoadCurrentDeck(catesel, mainGame->lstCategories->getListItem(catesel), mainGame->lstDecks->getListItem(decksel));
@@ -229,20 +228,20 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		default:
 			break;
 		}
-		break;
+		return false;
 	}
-	case irr::EET_MOUSE_INPUT_EVENT: {
-		switch(event.MouseInput.Event) {
+	else if (event.EventType == irr::EET_MOUSE_INPUT_EVENT) {
+		switch (event.MouseInput.Event) {
 		case irr::EMIE_LMOUSE_PRESSED_DOWN: {
 			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
-			if(root->getElementFromPoint(mouse_pos) != root)
+			if (root->getElementFromPoint(mouse_pos) != root)
 				break;
-			if(havePopupWindow())
+			if (havePopupWindow())
 				break;
-			if(hovered_pos == 0 || hovered_seq == -1)
+			if (hovered_pos == 0 || hovered_seq == -1)
 				break;
 			click_pos = hovered_pos;
-			if(readonly)
+			if (readonly)
 				break;
 			dragx = event.MouseInput.X;
 			dragy = event.MouseInput.Y;
@@ -252,8 +251,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			draging_pointer = &dit->second;
-			if(hovered_pos == 4) {
-				if(!check_limit(draging_pointer))
+			if (hovered_pos == 4) {
+				if (!check_limit(draging_pointer))
 					break;
 			}
 			is_starting_dragging = true;
@@ -262,28 +261,28 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		case irr::EMIE_LMOUSE_LEFT_UP: {
 			is_starting_dragging = false;
 			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
-			if(!is_draging && !mainGame->is_siding && root->getElementFromPoint(mouse_pos) == mainGame->imgCard) {
+			if (!is_draging && !mainGame->is_siding && root->getElementFromPoint(mouse_pos) == mainGame->imgCard) {
 				ShowBigCard(mainGame->showingcode, 1);
 				break;
 			}
-			if(!is_draging)
+			if (!is_draging)
 				break;
 			soundManager.PlaySoundEffect(SOUND_CARD_DROP);
 			bool pushed = false;
-			if(hovered_pos == 1)
+			if (hovered_pos == 1)
 				pushed = push_main(draging_pointer, hovered_seq);
-			else if(hovered_pos == 2)
+			else if (hovered_pos == 2)
 				pushed = push_extra(draging_pointer, hovered_seq + is_lastcard);
-			else if(hovered_pos == 3)
+			else if (hovered_pos == 3)
 				pushed = push_side(draging_pointer, hovered_seq + is_lastcard);
-			else if(hovered_pos == 4 && !mainGame->is_siding)
+			else if (hovered_pos == 4 && !mainGame->is_siding)
 				pushed = true;
-			if(!pushed) {
-				if(click_pos == 1)
+			if (!pushed) {
+				if (click_pos == 1)
 					push_main(draging_pointer);
-				else if(click_pos == 2)
+				else if (click_pos == 2)
 					push_extra(draging_pointer);
-				else if(click_pos == 3)
+				else if (click_pos == 3)
 					push_side(draging_pointer);
 			}
 			is_draging = false;
@@ -291,73 +290,82 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		}
 		case irr::EMIE_LMOUSE_DOUBLE_CLICK: {
 			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
-			if(!is_draging && !mainGame->is_siding && root->getElementFromPoint(mouse_pos) == root && hovered_code) {
+			if (!is_draging && !mainGame->is_siding && root->getElementFromPoint(mouse_pos) == root && hovered_code) {
 				ShowBigCard(hovered_code, 1);
 				break;
 			}
 			break;
 		}
 		case irr::EMIE_RMOUSE_LEFT_UP: {
-			if(mainGame->is_siding) {
-				if(is_draging)
+			if (mainGame->is_siding) {
+				if (is_draging)
 					break;
-				if(hovered_pos == 0 || hovered_seq == -1)
+				if (hovered_pos == 0 || hovered_seq == -1)
 					break;
 				auto pointer = _datas.find(hovered_code);
 				if (pointer == _datas.end())
 					break;
 				auto cd = &pointer->second;
 				soundManager.PlaySoundEffect(SOUND_CARD_DROP);
-				if(hovered_pos == 1) {
-					if(push_side(cd))
+				if (hovered_pos == 1) {
+					if (push_side(cd))
 						pop_main(hovered_seq);
-				} else if(hovered_pos == 2) {
-					if(push_side(cd))
+				}
+				else if (hovered_pos == 2) {
+					if (push_side(cd))
 						pop_extra(hovered_seq);
-				} else {
-					if(push_extra(cd) || push_main(cd))
+				}
+				else {
+					if (push_extra(cd) || push_main(cd))
 						pop_side(hovered_seq);
 				}
 				break;
 			}
-			if(mainGame->wBigCard->isVisible()) {
+			if (mainGame->wBigCard->isVisible()) {
 				CloseBigCard();
 				break;
 			}
-			if(havePopupWindow())
+			if (havePopupWindow())
 				break;
-			if(!is_draging) {
-				if(hovered_pos == 0 || hovered_seq == -1)
+			if (!is_draging) {
+				if (hovered_pos == 0 || hovered_seq == -1)
 					break;
-				if(readonly)
+				if (readonly)
 					break;
 				soundManager.PlaySoundEffect(SOUND_CARD_DROP);
-				if(hovered_pos == 1) {
+				if (hovered_pos == 1) {
 					pop_main(hovered_seq);
-				} else if(hovered_pos == 2) {
+				}
+				else if (hovered_pos == 2) {
 					pop_extra(hovered_seq);
-				} else if(hovered_pos == 3) {
+				}
+				else if (hovered_pos == 3) {
 					pop_side(hovered_seq);
-				} else {
+				}
+				else {
 					auto pointer = _datas.find(hovered_code);
 					if (pointer == _datas.end())
 						break;
 					auto cd = &pointer->second;
-					if(!check_limit(cd))
+					if (!check_limit(cd))
 						break;
-					if(!push_extra(cd) && !push_main(cd))
+					if (!push_extra(cd) && !push_main(cd))
 						push_side(cd);
 				}
-			} else {
+			}
+			else {
 				soundManager.PlaySoundEffect(SOUND_CARD_PICK);
-				if(click_pos == 1) {
+				if (click_pos == 1) {
 					push_side(draging_pointer);
-				} else if(click_pos == 2) {
+				}
+				else if (click_pos == 2) {
 					push_side(draging_pointer);
-				} else if(click_pos == 3) {
-					if(!push_extra(draging_pointer))
+				}
+				else if (click_pos == 3) {
+					if (!push_extra(draging_pointer))
 						push_main(draging_pointer);
-				} else {
+				}
+				else {
 					push_side(draging_pointer);
 				}
 				is_draging = false;
@@ -379,33 +387,36 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			if (pointer == _datas.end())
 				break;
 			auto cd = &pointer->second;
-			if(!check_limit(cd))
+			if (!check_limit(cd))
 				break;
 			soundManager.PlaySoundEffect(SOUND_CARD_PICK);
 			if (hovered_pos == 1) {
-				if(!push_main(cd))
+				if (!push_main(cd))
 					push_side(cd);
-			} else if (hovered_pos == 2) {
-				if(!push_extra(cd))
+			}
+			else if (hovered_pos == 2) {
+				if (!push_extra(cd))
 					push_side(cd);
-			} else if (hovered_pos == 3) {
-				if(!push_side(cd) && !push_extra(cd))
+			}
+			else if (hovered_pos == 3) {
+				if (!push_side(cd) && !push_extra(cd))
 					push_main(cd);
-			} else {
-				if(!push_extra(cd) && !push_main(cd))
+			}
+			else {
+				if (!push_extra(cd) && !push_main(cd))
 					push_side(cd);
 			}
 			break;
 		}
 		case irr::EMIE_MOUSE_MOVED: {
-			if(is_starting_dragging) {
+			if (is_starting_dragging) {
 				is_draging = true;
 				soundManager.PlaySoundEffect(SOUND_CARD_PICK);
-				if(hovered_pos == 1)
+				if (hovered_pos == 1)
 					pop_main(hovered_seq);
-				else if(hovered_pos == 2)
+				else if (hovered_pos == 2)
 					pop_extra(hovered_seq);
-				else if(hovered_pos == 3)
+				else if (hovered_pos == 3)
 					pop_side(hovered_seq);
 				is_starting_dragging = false;
 			}
@@ -415,32 +426,31 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		}
 		case irr::EMIE_MOUSE_WHEEL: {
 			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
-			if(root->getElementFromPoint(mouse_pos) == mainGame->imgBigCard) {
+			if (root->getElementFromPoint(mouse_pos) == mainGame->imgBigCard) {
 				ZoomBigCard(0.1f * event.MouseInput.Wheel, mouse_pos.X, mouse_pos.Y);
 				break;
 			}
-			if(!mainGame->scrFilter->isVisible())
+			if (!mainGame->scrFilter->isVisible())
 				break;
-			if(mainGame->env->hasFocus(mainGame->scrFilter))
+			if (mainGame->env->hasFocus(mainGame->scrFilter))
 				break;
-			if(root->getElementFromPoint(mouse_pos) != root)
+			if (root->getElementFromPoint(mouse_pos) != root)
 				break;
-			if(event.MouseInput.Wheel < 0) {
-				if(mainGame->scrFilter->getPos() < mainGame->scrFilter->getMax())
+			if (event.MouseInput.Wheel < 0) {
+				if (mainGame->scrFilter->getPos() < mainGame->scrFilter->getMax())
 					mainGame->scrFilter->setPos(mainGame->scrFilter->getPos() + 1);
-			} else {
-				if(mainGame->scrFilter->getPos() > 0)
+			}
+			else {
+				if (mainGame->scrFilter->getPos() > 0)
 					mainGame->scrFilter->setPos(mainGame->scrFilter->getPos() - 1);
 			}
 			GetHoveredCard();
 			break;
 		}
-		default: break;
+		default:
+			break;
 		}
-		break;
-	}
-	default:
-		break;
+		return false;
 	}
 	return false;
 }
