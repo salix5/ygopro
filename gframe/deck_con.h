@@ -14,6 +14,8 @@ class DeckBuilder: public irr::IEventReceiver {
 public:
 	DeckBuilder();
 	bool OnEvent(const irr::SEvent& event) override;
+	void ButtonHandler(const irr::SEvent& event);
+	void ComboBoxHandler(const irr::SEvent& event);
 	void Initialize();
 	void Terminate();
 	void GetHoveredCard();
