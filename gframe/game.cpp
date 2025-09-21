@@ -666,7 +666,6 @@ bool Game::Initialize() {
 	btnImportDeckCode = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_IMPORT_DECK_CODE, dataManager.GetSysString(1478));
 	posY += 35;
 	btnExportDeckCode = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_EXPORT_DECK_CODE, dataManager.GetSysString(1479));
-	wDeckManage->getCloseButton()->setID(BUTTON_CLOSE_DM);
 	//deck manage query
 	wDMQuery = env->addWindow(irr::core::rect<irr::s32>(400, 200, 710, 320), false, dataManager.GetSysString(1460), nullptr, WINDOW_DM_QUERY);
 	wDMQuery->getCloseButton()->setVisible(false);
@@ -799,7 +798,7 @@ bool Game::Initialize() {
 			catewidth = dtxt.Width + 40;
 	}
 	for (int i = 0; i < std::size(chkCategory); ++i)
-		chkCategory[i] = env->addCheckBox(false, irr::core::recti(10 + (i % 4) * catewidth, 5 + (i / 4) * 25, 10 + (i % 4 + 1) * catewidth, 5 + (i / 4 + 1) * 25), wCategories, CHECKBOX_CATEGORY0 + i, dataManager.GetSysString(1100 + i));
+		chkCategory[i] = env->addCheckBox(false, irr::core::recti(10 + (i % 4) * catewidth, 5 + (i / 4) * 25, 10 + (i % 4 + 1) * catewidth, 5 + (i / 4 + 1) * 25), wCategories, -1, dataManager.GetSysString(1100 + i));
 	int wcatewidth = catewidth * 4 + 16;
 	wCategories->setRelativePosition(irr::core::rect<irr::s32>(1000 - wcatewidth, 60, 1000, 305));
 	btnCategoryOK->setRelativePosition(irr::core::recti(wcatewidth / 2 - 50, 210, wcatewidth / 2 + 50, 235));

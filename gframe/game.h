@@ -831,7 +831,6 @@ extern Game* mainGame;
 #define LISTBOX_DECKS				340
 #define BUTTON_IMPORT_DECK_CODE		343
 #define BUTTON_EXPORT_DECK_CODE		344
-#define BUTTON_CLOSE_DM				345
 
 #define COMBOBOX_LFLIST				349
 #define BUTTON_CLEAR_LOG			350
@@ -872,8 +871,6 @@ extern Game* mainGame;
 #define BUTTON_DM_CANCEL			414
 
 #define WINDOW_CATEGORY				420
-#define CHECKBOX_CATEGORY0			421
-#define CHECKBOX_CATEGORY31			452
 #define BUTTON_CATEGORY_OK			453
 
 #define WINDOW_LINK_MARKER			460

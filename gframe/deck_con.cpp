@@ -158,23 +158,24 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 	if (event.EventType == irr::EET_GUI_EVENT) {
 		if (event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_FOCUS_LOST) {
 			auto element = event.GUIEvent.Element;
+			auto element_id = element ? element->getID() : 0;
 			if (mainGame->wDMQuery->isVisible()) {
-				return !element || element->getID() < WINDOW_DM_QUERY || element->getID() > BUTTON_DM_CANCEL;
-			}
-			if (mainGame->wQuery->isVisible()) {
-				return !element || element->getID() < WINDOW_QUERY || element->getID() > BUTTON_NO;
+				return element_id != WINDOW_DM_QUERY && !mainGame->wDMQuery->isMyChild(element);
 			}
 			if (mainGame->wDeckManage->isVisible()) {
-				return !element || element->getID() < WINDOW_DECK_MANAGE || (element->getID() > BUTTON_CLOSE_DM && element->getID() != WINDOW_DM_QUERY);
+				return element_id != WINDOW_DECK_MANAGE && element_id != WINDOW_DM_QUERY && !mainGame->wDeckManage->isMyChild(element);
+			}
+			if (mainGame->wQuery->isVisible()) {
+				return element_id != WINDOW_QUERY && !mainGame->wQuery->isMyChild(element);
 			}
 			if (mainGame->wCategories->isVisible()) {
-				return !element || element->getID() < WINDOW_CATEGORY || element->getID() > BUTTON_CATEGORY_OK;
+				return element_id != WINDOW_CATEGORY && !mainGame->wCategories->isMyChild(element);
 			}
 			if (mainGame->wLinkMarks->isVisible()) {
-				return !element || element->getID() < WINDOW_LINK_MARKER || element->getID() > BUTTON_MARKERS_OK;
+				return element_id != WINDOW_LINK_MARKER && !mainGame->wLinkMarks->isMyChild(element);
 			}
 			if( mainGame->wBigCard->isVisible()) {
-				return !element || element->getID() < WINDOW_BIG_CARD || element->getID() > BUTTON_BIG_CARD_ORIG_SIZE;
+				return (element_id < WINDOW_BIG_CARD || element_id > BUTTON_BIG_CARD_ORIG_SIZE) && !mainGame->wBigCard->isMyChild(element);
 			}
 			return false;
 		}
