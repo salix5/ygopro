@@ -240,14 +240,15 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		return false;
 	}
 	else if (event.EventType == irr::EET_MOUSE_INPUT_EVENT) {
+		irr::core::vector2di current_pos(event.MouseInput.X, event.MouseInput.Y);
+		irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
 		switch (event.MouseInput.Event) {
 		case irr::EMIE_LMOUSE_PRESSED_DOWN: {
 			if (readonly)
 				break;
 			if (havePopupWindow())
 				break;
-			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
-			if (root->getElementFromPoint({ event.MouseInput.X, event.MouseInput.Y }) != root)
+			if (root->getElementFromPoint(current_pos) != root)
 				break;
 			if (hovered_pos == 0 || hovered_seq == -1)
 				break;
@@ -269,8 +270,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		}
 		case irr::EMIE_LMOUSE_LEFT_UP: {
 			is_starting_dragging = false;
-			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
-			if (!is_draging && !mainGame->is_siding && root->getElementFromPoint({ event.MouseInput.X, event.MouseInput.Y }) == mainGame->imgCard) {
+			if (!is_draging && !mainGame->is_siding && root->getElementFromPoint(current_pos) == mainGame->imgCard) {
 				ShowBigCard(mainGame->showingcode, 1);
 				break;
 			}
@@ -298,8 +298,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::EMIE_LMOUSE_DOUBLE_CLICK: {
-			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
-			if (!is_draging && !mainGame->is_siding && root->getElementFromPoint({ event.MouseInput.X, event.MouseInput.Y }) == root && hovered_code) {
+			if (!is_draging && !mainGame->is_siding && hovered_code && root->getElementFromPoint(current_pos) == root) {
 				ShowBigCard(hovered_code, 1);
 				break;
 			}
@@ -429,13 +428,12 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					pop_side(hovered_seq);
 				is_starting_dragging = false;
 			}
-			mouse_pos.set(event.MouseInput.X, event.MouseInput.Y);
+			mouse_pos = current_pos;
 			GetHoveredCard();
 			break;
 		}
 		case irr::EMIE_MOUSE_WHEEL: {
-			irr::gui::IGUIElement* root = mainGame->env->getRootGUIElement();
-			auto element = root->getElementFromPoint({ event.MouseInput.X, event.MouseInput.Y });
+			auto element = root->getElementFromPoint(current_pos);
 			if (element == mainGame->imgBigCard) {
 				ZoomBigCard(0.1f * event.MouseInput.Wheel, event.MouseInput.X, event.MouseInput.Y);
 				break;
