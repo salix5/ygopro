@@ -716,8 +716,6 @@ extern Game* mainGame;
 #define EDITBOX_CHAT				199
 
 #define BUTTON_MSG_OK				200
-#define BUTTON_YES					201
-#define BUTTON_NO					202
 #define BUTTON_HAND1				205
 #define BUTTON_HAND2				206
 #define BUTTON_HAND3				207
@@ -812,9 +810,7 @@ extern Game* mainGame;
 #define COMBOBOX_ATTRIBUTE			318
 #define COMBOBOX_RACE				319
 #define COMBOBOX_LIMIT				320
-#define BUTTON_CATEGORY_OK			321
 #define BUTTON_MARKS_FILTER			322
-#define BUTTON_MARKERS_OK			323
 #define COMBOBOX_SORTTYPE			324
 #define EDITBOX_ATK					325
 #define EDITBOX_DEF					326
@@ -833,12 +829,11 @@ extern Game* mainGame;
 #define BUTTON_COPY_DECK			338
 #define LISTBOX_CATEGORIES			339
 #define LISTBOX_DECKS				340
-#define BUTTON_DM_OK				341
-#define BUTTON_DM_CANCEL			342
 #define BUTTON_IMPORT_DECK_CODE		343
 #define BUTTON_EXPORT_DECK_CODE		344
-#define COMBOBOX_LFLIST				349
+#define BUTTON_CLOSE_DM				345
 
+#define COMBOBOX_LFLIST				349
 #define BUTTON_CLEAR_LOG			350
 #define LISTBOX_LOG					351
 #define SCROLL_CARDTEXT				352
@@ -863,6 +858,26 @@ extern Game* mainGame;
 #define BUTTON_BIG_CARD_ZOOM_IN		381
 #define BUTTON_BIG_CARD_ZOOM_OUT	382
 #define BUTTON_BIG_CARD_ORIG_SIZE	383
+
+#define WINDOW_QUERY				400
+#define BUTTON_YES					401
+#define BUTTON_NO					402
+
+#define WINDOW_DM_QUERY				410
+#define EDITBOX_DM_NAME				411
+#define COMBOBOX_DM_CATEGORY		412
+#define BUTTON_DM_OK				413
+#define BUTTON_DM_CANCEL			414
+
+#define WINDOW_CATEGORY				420
+#define CHECKBOX_CATEGORY0			421
+#define CHECKBOX_CATEGORY31			452
+#define BUTTON_CATEGORY_OK			453
+
+#define WINDOW_LINK_MARKER			460
+#define BUTTON_MARKER0				461
+#define BUTTON_MARKER7				468
+#define BUTTON_MARKERS_OK			469
 
 #define AVAIL_OCG					0x1
 #define AVAIL_TCG					0x2
