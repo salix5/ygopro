@@ -92,6 +92,7 @@ void DeckBuilder::Initialize() {
 	mainGame->btnSideShuffle->setVisible(false);
 	mainGame->btnSideSort->setVisible(false);
 	mainGame->btnSideReload->setVisible(false);
+	mainGame->btnGenerateScript->setVisible(true);
 	if (mainGame->gameConf.use_lflist) {
 		if (mainGame->gameConf.default_lflist >= 0 && mainGame->gameConf.default_lflist < (int)deckManager._lfList.size()) {
 			filterList = &deckManager._lfList[mainGame->gameConf.default_lflist];
@@ -133,6 +134,7 @@ void DeckBuilder::Terminate() {
 	mainGame->btnBigCardZoomIn->setVisible(false);
 	mainGame->btnBigCardZoomOut->setVisible(false);
 	mainGame->btnBigCardClose->setVisible(false);
+	mainGame->btnGenerateScript->setVisible(false);
 	EnableEditWindow(true);
 	EnableManageWindow(true);
 	mainGame->ResizeChatInputWindow();
@@ -1092,6 +1094,15 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 		mainGame->HideElement(mainGame->wLinkMarks);
 		mainGame->btnMarksFilter->setPressed(filter_marks > 0);
 		InstantSearch();
+		break;
+	}
+	case BUTTON_GENERATE_SCRIPT: {
+		if (mainGame->cbDBDecks->getSelected() == -1)
+			break;
+		if (DeckManager::GenerateTestScript(deckManager.current_deck, mainGame->cbDBDecks->getText())) {
+			mainGame->stACMessage->setText(dataManager.GetSysString(1801));
+			mainGame->PopupElement(mainGame->wACMessage, 40);
+		}
 		break;
 	}
 	}
