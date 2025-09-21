@@ -427,8 +427,10 @@ bool DeckManager::GenerateTestScript(const Deck& deck, const wchar_t* base_name)
 	FILE* fp = mywfopen(path, "w");
 	if (!fp)
 		return false;
-	std::fprintf(fp, "Debug.SetAIName('Crescent')\n");
-	std::fprintf(fp, "Debug.ReloadFieldBegin(DUEL_SIMPLE_AI,%d)\n", CURRENT_RULE);
+	const char AI_NAME[] = "Crescent";
+	const char DUEL_FLAG[] = "DUEL_SIMPLE_AI";
+	std::fprintf(fp, "Debug.SetAIName('%s')\n", AI_NAME);
+	std::fprintf(fp, "Debug.ReloadFieldBegin(%s,%d)\n", DUEL_FLAG, CURRENT_RULE);
 	std::fprintf(fp, "Debug.SetPlayerInfo(0,8000,5,1)\n");
 	std::fprintf(fp, "Debug.SetPlayerInfo(1,8000,5,1)\n");
 	for (auto it = deck.main.rbegin(); it != deck.main.rend(); ++it)
