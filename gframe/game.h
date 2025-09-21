@@ -551,6 +551,7 @@ public:
 	irr::gui::IGUIButton* btnSideShuffle;
 	irr::gui::IGUIButton* btnSideSort;
 	irr::gui::IGUIButton* btnSideReload;
+	irr::gui::IGUIButton* btnGenerateScript;
 	irr::gui::IGUIEditBox* ebDeckname;
 	irr::gui::IGUIStaticText* stDBCategory;
 	irr::gui::IGUIStaticText* stDeck;
@@ -877,6 +878,8 @@ extern Game* mainGame;
 #define BUTTON_MARKER0				461
 #define BUTTON_MARKER7				468
 #define BUTTON_MARKERS_OK			469
+
+#define BUTTON_GENERATE_SCRIPT		500
 
 #define AVAIL_OCG					0x1
 #define AVAIL_TCG					0x2

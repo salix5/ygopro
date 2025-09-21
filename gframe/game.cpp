@@ -711,6 +711,8 @@ bool Game::Initialize() {
 	btnSideSort->setVisible(false);
 	btnSideReload = env->addButton(irr::core::rect<irr::s32>(440, 100, 500, 130), 0, BUTTON_SIDE_RELOAD, dataManager.GetSysString(1309));
 	btnSideReload->setVisible(false);
+	btnGenerateScript = env->addButton(irr::core::rect<irr::s32>(205, 100, 295, 135), 0, BUTTON_GENERATE_SCRIPT, dataManager.GetSysString(1800));
+	btnGenerateScript->setVisible(false);
 	//
 	scrFilter = env->addScrollBar(false, irr::core::recti(999, 161, 1019, 629), 0, SCROLL_FILTER);
 	scrFilter->setLargeStep(10);
@@ -2086,6 +2088,7 @@ void Game::OnResize() {
 	btnBigCardZoomIn->setRelativePosition(Resize(205, 140, 295, 175));
 	btnBigCardZoomOut->setRelativePosition(Resize(205, 180, 295, 215));
 	btnBigCardClose->setRelativePosition(Resize(205, 230, 295, 265));
+	btnGenerateScript->setRelativePosition(Resize(205, 100, 295, 135));
 
 	irr::s32 barWidth = (xScale > 1) ? gameConf.textfontsize * xScale : gameConf.textfontsize;
 	env->getSkin()->setSize(irr::gui::EGDS_SCROLLBAR_SIZE, barWidth);
