@@ -525,8 +525,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						if (const wchar_t* txt = mainGame->env->getOSOperator()->getTextFromClipboard()) {
 							char text[0x10000];
 							BufferIO::EncodeUTF8(txt, text);
-							std::istringstream textStream(text);
-							DeckManager::LoadDeckFromStream(new_deck, textStream);
+							DeckManager::LoadDeckFromStream(new_deck, text);
 						}
 					}
 					if (!DeckManager::SaveDeck(new_deck, filepath))
