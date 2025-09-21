@@ -144,26 +144,35 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		return false;
 	auto& _datas = dataManager.GetDataTable();
 	if (event.EventType == irr::EET_GUI_EVENT) {
-		auto id = event.GUIEvent.Caller->getID();
-		if (mainGame->wDMQuery->isVisible() && id != BUTTON_DM_OK && id != BUTTON_DM_CANCEL)
+		if (event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_FOCUS_LOST) {
+			auto element = event.GUIEvent.Element;
+			if (mainGame->wDMQuery->isVisible()) {
+				return !element || element->getID() < WINDOW_DM_QUERY || element->getID() > BUTTON_DM_CANCEL;
+			}
+			if (mainGame->wQuery->isVisible()) {
+				return !element || element->getID() < WINDOW_QUERY || element->getID() > BUTTON_NO;
+			}
+			if (mainGame->wDeckManage->isVisible()) {
+				return !element || element->getID() < WINDOW_DECK_MANAGE || (element->getID() > BUTTON_CLOSE_DM && element->getID() != WINDOW_DM_QUERY);
+			}
+			if (mainGame->wCategories->isVisible()) {
+				return !element || element->getID() < WINDOW_CATEGORY || element->getID() > BUTTON_CATEGORY_OK;
+			}
+			if (mainGame->wLinkMarks->isVisible()) {
+				return !element || element->getID() < WINDOW_LINK_MARKER || element->getID() > BUTTON_MARKERS_OK;
+			}
 			return false;
-		if (mainGame->wDeckManage->isVisible() && !(id >= WINDOW_DECK_MANAGE && id < COMBOBOX_LFLIST))
-			return false;
-		if (mainGame->wQuery->isVisible() && id != BUTTON_YES && id != BUTTON_NO)
-			return false;
-		if (mainGame->wCategories->isVisible() && id != BUTTON_CATEGORY_OK)
-			return false;
-		if (mainGame->wLinkMarks->isVisible() && id != BUTTON_MARKERS_OK)
-			return false;
-		switch (event.GUIEvent.EventType) {
-		case irr::gui::EGET_ELEMENT_CLOSED: {
-			if (id == WINDOW_DECK_MANAGE) {
+		}
+		else if (event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_CLOSED) {
+			if (event.GUIEvent.Caller->getID() == WINDOW_DECK_MANAGE) {
 				mainGame->HideElement(mainGame->wDeckManage);
 				EnableEditWindow(true);
 				return true;
 			}
-			break;
+			return false;
 		}
+		auto id = event.GUIEvent.Caller->getID();
+		switch (event.GUIEvent.EventType) {
 		case irr::gui::EGET_BUTTON_CLICKED: {
 			ButtonHandler(event);
 			break;
