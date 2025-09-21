@@ -508,7 +508,7 @@ bool Game::Initialize() {
 	stACMessage->setBackgroundColor(0xc0c0c0ff);
 	stACMessage->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	//yes/no (310)
-	wQuery = env->addWindow(irr::core::rect<irr::s32>(490, 200, 840, 340), false, dataManager.GetSysString(560));
+	wQuery = env->addWindow(irr::core::rect<irr::s32>(490, 200, 840, 340), false, dataManager.GetSysString(560), nullptr, WINDOW_QUERY);
 	wQuery->getCloseButton()->setVisible(false);
 	wQuery->setVisible(false);
 	stQMessage =  env->addStaticText(L"", irr::core::rect<irr::s32>(20, 20, 350, 100), false, true, wQuery, -1, false);
@@ -641,7 +641,7 @@ bool Game::Initialize() {
 	wDeckEdit->setVisible(false);
 	btnManageDeck = env->addButton(irr::core::rect<irr::s32>(240, 5, 305, 30), wDeckEdit, BUTTON_MANAGE_DECK, dataManager.GetSysString(1328));
 	//deck manage
-	wDeckManage = env->addWindow(irr::core::rect<irr::s32>(310, 135, 950, 515), false, dataManager.GetSysString(1460), 0, WINDOW_DECK_MANAGE);
+	wDeckManage = env->addWindow(irr::core::rect<irr::s32>(310, 135, 950, 515), false, dataManager.GetSysString(1460), nullptr, WINDOW_DECK_MANAGE);
 	wDeckManage->setVisible(false);
 	lstCategories = env->addListBox(irr::core::rect<irr::s32>(10, 30, 140, 370), wDeckManage, LISTBOX_CATEGORIES, true);
 	lstDecks = env->addListBox(irr::core::rect<irr::s32>(150, 30, 490, 370), wDeckManage, LISTBOX_DECKS, true);
@@ -666,17 +666,18 @@ bool Game::Initialize() {
 	btnImportDeckCode = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_IMPORT_DECK_CODE, dataManager.GetSysString(1478));
 	posY += 35;
 	btnExportDeckCode = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_EXPORT_DECK_CODE, dataManager.GetSysString(1479));
+	wDeckManage->getCloseButton()->setID(BUTTON_CLOSE_DM);
 	//deck manage query
-	wDMQuery = env->addWindow(irr::core::rect<irr::s32>(400, 200, 710, 320), false, dataManager.GetSysString(1460));
+	wDMQuery = env->addWindow(irr::core::rect<irr::s32>(400, 200, 710, 320), false, dataManager.GetSysString(1460), nullptr, WINDOW_DM_QUERY);
 	wDMQuery->getCloseButton()->setVisible(false);
 	wDMQuery->setVisible(false);
 	stDMMessage = env->addStaticText(L"", irr::core::rect<irr::s32>(20, 25, 290, 45), false, false, wDMQuery);
 	stDMMessage2 = env->addStaticText(L"", irr::core::rect<irr::s32>(20, 50, 290, 70), false, false, wDMQuery, -1, true);
 	stDMMessage2->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
-	ebDMName = env->addEditBox(L"", irr::core::rect<irr::s32>(20, 50, 290, 70), true, wDMQuery, -1);
+	ebDMName = env->addEditBox(L"", irr::core::rect<irr::s32>(20, 50, 290, 70), true, wDMQuery, EDITBOX_DM_NAME);
 	ebDMName->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	editbox_list.push_back(ebDMName);
-	cbDMCategory = env->addComboBox(irr::core::rect<irr::s32>(20, 50, 290, 70), wDMQuery, -1);
+	cbDMCategory = env->addComboBox(irr::core::rect<irr::s32>(20, 50, 290, 70), wDMQuery, COMBOBOX_DM_CATEGORY);
 	stDMMessage2->setVisible(false);
 	ebDMName->setVisible(false);
 	cbDMCategory->setVisible(false);
@@ -785,7 +786,7 @@ bool Game::Initialize() {
 		btnStartFilter->setRelativePosition(irr::core::rect<irr::s32>(260, 80 + 125 / 6, 390, 100 + 125 / 6));
 		btnClearFilter = env->addButton(irr::core::rect<irr::s32>(205, 80 + 125 / 6, 255, 100 + 125 / 6), wFilter, BUTTON_CLEAR_FILTER, dataManager.GetSysString(1304));
 	}
-	wCategories = env->addWindow(irr::core::rect<irr::s32>(600, 60, 1000, 305), false, L"");
+	wCategories = env->addWindow(irr::core::rect<irr::s32>(600, 60, 1000, 305), false, nullptr, nullptr, WINDOW_CATEGORY);
 	wCategories->getCloseButton()->setVisible(false);
 	wCategories->setDrawTitlebar(false);
 	wCategories->setDraggable(false);
@@ -797,28 +798,28 @@ bool Game::Initialize() {
 		if((int)dtxt.Width + 40 > catewidth)
 			catewidth = dtxt.Width + 40;
 	}
-	for(int i = 0; i < 32; ++i)
-		chkCategory[i] = env->addCheckBox(false, irr::core::recti(10 + (i % 4) * catewidth, 5 + (i / 4) * 25, 10 + (i % 4 + 1) * catewidth, 5 + (i / 4 + 1) * 25), wCategories, -1, dataManager.GetSysString(1100 + i));
+	for (int i = 0; i < std::size(chkCategory); ++i)
+		chkCategory[i] = env->addCheckBox(false, irr::core::recti(10 + (i % 4) * catewidth, 5 + (i / 4) * 25, 10 + (i % 4 + 1) * catewidth, 5 + (i / 4 + 1) * 25), wCategories, CHECKBOX_CATEGORY0 + i, dataManager.GetSysString(1100 + i));
 	int wcatewidth = catewidth * 4 + 16;
 	wCategories->setRelativePosition(irr::core::rect<irr::s32>(1000 - wcatewidth, 60, 1000, 305));
 	btnCategoryOK->setRelativePosition(irr::core::recti(wcatewidth / 2 - 50, 210, wcatewidth / 2 + 50, 235));
 	btnMarksFilter = env->addButton(irr::core::rect<irr::s32>(60, 80 + 125 / 6, 195, 100 + 125 / 6), wFilter, BUTTON_MARKS_FILTER, dataManager.GetSysString(1374));
-	wLinkMarks = env->addWindow(irr::core::rect<irr::s32>(700, 30, 820, 150), false, L"");
+	wLinkMarks = env->addWindow(irr::core::rect<irr::s32>(700, 30, 820, 150), false, nullptr, nullptr, WINDOW_LINK_MARKER);
 	wLinkMarks->getCloseButton()->setVisible(false);
 	wLinkMarks->setDrawTitlebar(false);
 	wLinkMarks->setDraggable(false);
 	wLinkMarks->setVisible(false);
 	btnMarksOK = env->addButton(irr::core::recti(45, 45, 75, 75), wLinkMarks, BUTTON_MARKERS_OK, L"OK");
-	btnMark[0] = env->addButton(irr::core::recti(10, 10, 40, 40), wLinkMarks, -1, L"\u2196");
-	btnMark[1] = env->addButton(irr::core::recti(45, 10, 75, 40), wLinkMarks, -1, L"\u2191");
-	btnMark[2] = env->addButton(irr::core::recti(80, 10, 110, 40), wLinkMarks, -1, L"\u2197");
-	btnMark[3] = env->addButton(irr::core::recti(10, 45, 40, 75), wLinkMarks, -1, L"\u2190");
-	btnMark[4] = env->addButton(irr::core::recti(80, 45, 110, 75), wLinkMarks, -1, L"\u2192");
-	btnMark[5] = env->addButton(irr::core::recti(10, 80, 40, 110), wLinkMarks, -1, L"\u2199");
-	btnMark[6] = env->addButton(irr::core::recti(45, 80, 75, 110), wLinkMarks, -1, L"\u2193");
-	btnMark[7] = env->addButton(irr::core::recti(80, 80, 110, 110), wLinkMarks, -1, L"\u2198");
-	for(int i=0;i<8;i++)
-		btnMark[i]->setIsPushButton(true);
+	btnMark[0] = env->addButton(irr::core::recti(10, 10, 40, 40), wLinkMarks, BUTTON_MARKER0, L"\u2196");
+	btnMark[1] = env->addButton(irr::core::recti(45, 10, 75, 40), wLinkMarks, BUTTON_MARKER0 + 1, L"\u2191");
+	btnMark[2] = env->addButton(irr::core::recti(80, 10, 110, 40), wLinkMarks, BUTTON_MARKER0 + 2, L"\u2197");
+	btnMark[3] = env->addButton(irr::core::recti(10, 45, 40, 75), wLinkMarks, BUTTON_MARKER0 + 3, L"\u2190");
+	btnMark[4] = env->addButton(irr::core::recti(80, 45, 110, 75), wLinkMarks, BUTTON_MARKER0 + 4, L"\u2192");
+	btnMark[5] = env->addButton(irr::core::recti(10, 80, 40, 110), wLinkMarks, BUTTON_MARKER0 + 5, L"\u2199");
+	btnMark[6] = env->addButton(irr::core::recti(45, 80, 75, 110), wLinkMarks, BUTTON_MARKER0 + 6, L"\u2193");
+	btnMark[7] = env->addButton(irr::core::recti(80, 80, 110, 110), wLinkMarks, BUTTON_MARKER0 + 7, L"\u2198");
+	for (auto& btn: btnMark)
+		btn->setIsPushButton(true);
 	//replay window
 	wReplay = env->addWindow(irr::core::rect<irr::s32>(220, 100, 800, 520), false, dataManager.GetSysString(1202));
 	wReplay->getCloseButton()->setVisible(false);
