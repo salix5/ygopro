@@ -511,7 +511,7 @@ bool Game::Initialize() {
 	wQuery = env->addWindow(irr::core::rect<irr::s32>(490, 200, 840, 340), false, dataManager.GetSysString(560), nullptr, WINDOW_QUERY);
 	wQuery->getCloseButton()->setVisible(false);
 	wQuery->setVisible(false);
-	stQMessage =  env->addStaticText(L"", irr::core::rect<irr::s32>(20, 20, 350, 100), false, true, wQuery, -1, false);
+	stQMessage = env->addStaticText(L"", irr::core::rect<irr::s32>(20, 20, 350, 100), false, true, wQuery, -1, false);
 	stQMessage->setTextAlignment(irr::gui::EGUIA_UPPERLEFT, irr::gui::EGUIA_CENTER);
 	btnYes = env->addButton(irr::core::rect<irr::s32>(100, 105, 150, 130), wQuery, BUTTON_YES, dataManager.GetSysString(1213));
 	btnNo = env->addButton(irr::core::rect<irr::s32>(200, 105, 250, 130), wQuery, BUTTON_NO, dataManager.GetSysString(1214));
@@ -925,7 +925,7 @@ bool Game::Initialize() {
 	btnCancelOrFinish = env->addButton(irr::core::rect<irr::s32>(205, 230, 295, 265), 0, BUTTON_CANCEL_OR_FINISH, dataManager.GetSysString(1295));
 	btnCancelOrFinish->setVisible(false);
 	//big picture
-	wBigCard = env->addWindow(irr::core::rect<irr::s32>(0, 0, 0, 0), false, L"");
+	wBigCard = env->addWindow(irr::core::rect<irr::s32>(0, 0, 0, 0), false, nullptr, nullptr, WINDOW_BIG_CARD);
 	wBigCard->getCloseButton()->setVisible(false);
 	wBigCard->setDrawTitlebar(false);
 	wBigCard->setDrawBackground(false);

@@ -42,7 +42,19 @@ static int parse_filter(const wchar_t* pstr, unsigned int* type) {
 
 
 static inline bool havePopupWindow() {
-	return mainGame->wQuery->isVisible() || mainGame->wCategories->isVisible() || mainGame->wLinkMarks->isVisible() || mainGame->wDeckManage->isVisible() || mainGame->wDMQuery->isVisible();
+	irr::gui::IGUIWindow* window_list[] = {
+		mainGame->wQuery,
+		mainGame->wCategories,
+		mainGame->wLinkMarks,
+		mainGame->wDeckManage,
+		mainGame->wDMQuery,
+		mainGame->wBigCard
+	};
+	for (const auto& window : window_list) {
+		if (window->isVisible())
+			return true;
+	}
+	return false;
 }
 
 static inline void get_deck_file(wchar_t* ret, const wchar_t* deck_name) {
@@ -161,6 +173,9 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			if (mainGame->wLinkMarks->isVisible()) {
 				return !element || element->getID() < WINDOW_LINK_MARKER || element->getID() > BUTTON_MARKERS_OK;
 			}
+			if( mainGame->wBigCard->isVisible()) {
+				return !element || element->getID() < WINDOW_BIG_CARD || element->getID() > BUTTON_BIG_CARD_ORIG_SIZE;
+			}
 			return false;
 		}
 		else if (event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_CLOSED) {
@@ -270,7 +285,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		}
 		case irr::EMIE_LMOUSE_LEFT_UP: {
 			is_starting_dragging = false;
-			if (!is_draging && !mainGame->is_siding && root->getElementFromPoint(current_pos) == mainGame->imgCard) {
+			if (!is_draging && !mainGame->is_siding && !havePopupWindow() && root->getElementFromPoint(current_pos) == mainGame->imgCard) {
 				ShowBigCard(mainGame->showingcode, 1);
 				break;
 			}
@@ -298,7 +313,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::EMIE_LMOUSE_DOUBLE_CLICK: {
-			if (!is_draging && !mainGame->is_siding && hovered_code && root->getElementFromPoint(current_pos) == root) {
+			if (!is_draging && !mainGame->is_siding && hovered_code && !havePopupWindow() && root->getElementFromPoint(current_pos) == root) {
 				ShowBigCard(hovered_code, 1);
 				break;
 			}
