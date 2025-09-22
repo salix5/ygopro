@@ -45,6 +45,7 @@
 #define mystrncasecmp strncasecmp
 #endif
 
+#include <cstdio>
 #include "bufferio.h"
 #include "../ocgcore/ocgapi.h"
 
