@@ -14,9 +14,11 @@ namespace ygo {
 
 class SoundManager {
 private:
+#ifdef YGOPRO_USE_AUDIO
 	std::vector<std::wstring> BGMList[8];
 	int bgm_scene{};
 	std::mt19937 rnd;
+#endif
 #ifdef YGOPRO_USE_MINIAUDIO
 	ma_engine_config engineConfig;
 #ifdef YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS
