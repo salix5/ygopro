@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "config.h"
 #include "duelclient.h"
 #include "client_card.h"
