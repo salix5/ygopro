@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <array>
 #include "config.h"
 #include "deck_con.h"
@@ -1103,7 +1104,10 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 	case BUTTON_GENERATE_SCRIPT: {
 		if (mainGame->cbDBDecks->getSelected() == -1)
 			break;
-		if (DeckManager::GenerateTestScript(deckManager.current_deck, mainGame->cbDBDecks->getText())) {
+		wchar_t base_name[256]{};
+		if (myswprintf(base_name, L"%ls.ydk", mainGame->cbDBDecks->getText()) <= 0)
+			break;
+		if (DeckManager::GenerateTestScript(deckManager.current_deck, base_name)) {
 			mainGame->stACMessage->setText(dataManager.GetSysString(1801));
 			mainGame->PopupElement(mainGame->wACMessage, 40);
 		}
