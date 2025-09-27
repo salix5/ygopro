@@ -1,4 +1,5 @@
-#include "config.h"
+#include <filesystem>
+#include <thread>
 #include "game.h"
 #include "myfilesystem.h"
 #include "image_manager.h"
@@ -10,8 +11,8 @@
 #include "duelclient.h"
 #include "netserver.h"
 #include "single_mode.h"
-#include <thread>
-#include <filesystem>
+#include "CGUIImageButton.h"
+#include "CGUITTFont.h"
 
 namespace ygo {
 
