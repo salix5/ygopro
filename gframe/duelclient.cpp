@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <thread>
 #include "config.h"
 #include "duelclient.h"
 #include "client_card.h"
@@ -9,7 +10,8 @@
 #include "game.h"
 #include "deck_manager.h"
 #include "replay.h"
-#include <thread>
+#include "CGUIImageButton.h"
+#include "CGUITTFont.h"
 
 namespace ygo {
 
