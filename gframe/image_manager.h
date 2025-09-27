@@ -1,11 +1,10 @@
 #ifndef IMAGEMANAGER_H
 #define IMAGEMANAGER_H
 
-#include "config.h"
-#include "data_manager.h"
 #include <unordered_map>
 #include <queue>
 #include <mutex>
+#include <irrlicht.h>
 
 namespace ygo {
 

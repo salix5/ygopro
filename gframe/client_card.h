@@ -1,10 +1,11 @@
 #ifndef CLIENT_CARD_H
 #define CLIENT_CARD_H
 
-#include "config.h"
 #include <vector>
 #include <set>
 #include <map>
+#include <irrlicht.h>
+#include "../ocgcore/common.h"
 
 namespace ygo {
 

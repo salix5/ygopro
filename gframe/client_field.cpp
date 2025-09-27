@@ -1,11 +1,11 @@
 #include <algorithm>
 #include <stack>
+#include "game.h"
 #include "client_field.h"
 #include "client_card.h"
 #include "duelclient.h"
 #include "data_manager.h"
 #include "image_manager.h"
-#include "game.h"
 #include "materials.h"
 #include "CGUIImageButton.h"
 #include "CGUITTFont.h"
