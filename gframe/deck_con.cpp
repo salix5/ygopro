@@ -1105,7 +1105,7 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 		if (mainGame->cbDBDecks->getSelected() == -1)
 			break;
 		wchar_t base_name[256]{};
-		if (myswprintf(base_name, L"%ls.ydk", mainGame->cbDBDecks->getText()) <= 0)
+		if (myswprintf(base_name, L"_deck_%ls", mainGame->cbDBDecks->getText()) <= 0)
 			break;
 		if (DeckManager::GenerateTestScript(deckManager.current_deck, base_name)) {
 			mainGame->stACMessage->setText(dataManager.GetSysString(1801));
