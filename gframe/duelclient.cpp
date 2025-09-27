@@ -11,7 +11,6 @@
 #include "deck_manager.h"
 #include "replay.h"
 #include "CGUIImageButton.h"
-#include "CGUITTFont.h"
 
 namespace ygo {
 
