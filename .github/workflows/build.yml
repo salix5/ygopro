@@ -2,9 +2,9 @@ name: Automated Test Build
 
 on:
   push:
-    branches: [ "build" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "build" ]
+    branches: [ "master" ]
 
 jobs:
   build-windows:
@@ -192,7 +192,7 @@ jobs:
 
     - name: Download irrlicht
       run: |
-        git clone --depth=1 https://github.com/salix5/irrlicht
+        git clone --depth=1 https://github.com/mercury233/irrlicht
 
     - name: Check DirectX SDK
       if: matrix.nodxsdk != true
@@ -433,7 +433,7 @@ jobs:
 
     - name: Download irrlicht
       run: |
-        git clone --depth=1 https://github.com/salix5/irrlicht
+        git clone --depth=1 https://github.com/mercury233/irrlicht
 
     - name: Copy premake files
       run: |
@@ -472,28 +472,23 @@ jobs:
       fail-fast: false
       matrix:
         name:
-          - macos-13-intel
-#          - macos-13-arm-cross-compile-static-link
+          - macos-15-intel
+          - macos-15-universal-static-link
           - macos-15-arm
 #          - macos-15-intel-cross-compile-static-link
-#          - macos-15-universal-static-link
         include:
-          - name: macos-13-intel
-            os: macos-13
-#          - name: macos-13-arm-cross-compile-static-link
-#            os: macos-13
-#            cross-build-arm: true
-#            static-link: true
+          - name: macos-15-intel
+            os: macos-15-intel
+          - name: macos-15-universal-static-link
+            os: macos-15
+            cross-build-intel: true
+            cross-build-arm: true
+            static-link: true
           - name: macos-15-arm
             os: macos-15
 #          - name: macos-15-intel-cross-compile-static-link
 #            os: macos-15
 #            cross-build-intel: true
-#            static-link: true
-#          - name: macos-15-universal-static-link
-#            os: macos-15
-#            cross-build-intel: true
-#            cross-build-arm: true
 #            static-link: true
 
     runs-on: ${{ matrix.os }}
@@ -511,6 +506,10 @@ jobs:
         git checkout master
         git pull origin master
         cd ..
+#        cd script
+#        git checkout master
+#        git pull origin master
+#        cd ..
 
     - name: Install dependencies
       if: matrix.static-link != true
@@ -650,7 +649,7 @@ jobs:
 
     - name: Download irrlicht
       run: |
-        git clone --depth=1 https://github.com/salix5/irrlicht
+        git clone --depth=1 https://github.com/mercury233/irrlicht
 
     - name: Copy premake files
       run: |
