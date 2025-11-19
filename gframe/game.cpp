@@ -967,11 +967,22 @@ bool Game::Initialize() {
 		chkMusicMode->setEnabled(false);
 		chkMusicMode->setVisible(false);
 	}
+	std::set<int> excluded_colors{
+		irr::gui::EGDC_ACTIVE_CAPTION,
+		irr::gui::EGDC_BUTTON_TEXT,
+		irr::gui::EGDC_GRAY_TEXT,
+		irr::gui::EGDC_HIGH_LIGHT_TEXT,
+		irr::gui::EGDC_INACTIVE_CAPTION,
+		irr::gui::EGDC_TOOLTIP,
+		irr::gui::EGDC_FOCUSED_EDITABLE,
+	};
 	env->getSkin()->setFont(guiFont);
 	env->setFocus(wMainMenu);
 	for (int i = 0; i < irr::gui::EGDC_COUNT; ++i) {
+		if (excluded_colors.find(i) != excluded_colors.end())
+			continue;
 		auto col = env->getSkin()->getColor((irr::gui::EGUI_DEFAULT_COLOR)i);
-		col.setAlpha(230);
+		col.setAlpha(240);
 		env->getSkin()->setColor((irr::gui::EGUI_DEFAULT_COLOR)i, col);
 	}
 	for (auto& editbox : editbox_list)
