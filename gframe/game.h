@@ -70,7 +70,7 @@ struct Config {
 	wchar_t lastdeck[256]{};
 	wchar_t textfont[256]{};
 	wchar_t numfont[256]{};
-	wchar_t bot_deck_path[256]{ L"./deck" };
+	wchar_t bot_deck_path[256]{ L"./WindBot/Decks" };
 	//settings
 	int chkMAutoPos{ 0 };
 	int chkSTAutoPos{ 1 };
@@ -92,7 +92,7 @@ struct Config {
 	int search_multiple_keywords{ 1 };
 	int chkIgnoreDeckChanges{ 0 };
 	int defaultOT{ 1 };
-	int enable_bot_mode{ 0 };
+	int enable_bot_mode{ 1 };
 	int quick_animation{ 0 };
 	int auto_save_replay{ 0 };
 	int draw_single_chain{ 0 };
@@ -104,8 +104,8 @@ struct Config {
 	double music_volume{ 0.5 };
 	int music_mode{ 1 };
 	bool window_maximized{ false };
-	int window_width{ 1024 };
-	int window_height{ 640 };
+	int window_width{ 1536 };
+	int window_height{ 960 };
 	bool resize_popup_menu{ false };
 };
 
