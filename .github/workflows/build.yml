@@ -67,7 +67,7 @@ jobs:
 
     - name: Download premake
       id: premake
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/premake/premake-core/releases/download/v5.0.0-beta7/premake-5.0.0-beta7-windows.zip
         filename: premake5.zip
@@ -78,7 +78,7 @@ jobs:
 
     - name: Download libevent
       id: libevent
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
         filename: libevent.tar.gz
@@ -90,7 +90,7 @@ jobs:
 
     - name: Download freetype
       id: freetype
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://downloads.sourceforge.net/freetype/freetype-2.13.3.tar.gz
 
@@ -101,7 +101,7 @@ jobs:
 
     - name: Download lua
       id: lua
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://www.lua.org/ftp/lua-5.4.8.tar.gz
 
@@ -112,7 +112,7 @@ jobs:
 
     - name: Download sqlite
       id: sqlite
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://www.sqlite.org/2025/sqlite-amalgamation-3500100.zip
 
@@ -132,7 +132,7 @@ jobs:
     - name: Download ogg
       if: matrix.audiolib == 'miniaudio'
       id: ogg
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/ogg/releases/download/v1.3.5/libogg-1.3.5.tar.gz
 
@@ -145,7 +145,7 @@ jobs:
     - name: Download opus
       if: matrix.audiolib == 'miniaudio'
       id: opus
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/opus/releases/download/v1.5.2/opus-1.5.2.tar.gz
 
@@ -158,7 +158,7 @@ jobs:
     - name: Download opusfile
       if: matrix.audiolib == 'miniaudio'
       id: opusfile
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/opusfile/releases/download/v0.12/opusfile-0.12.tar.gz
 
@@ -171,7 +171,7 @@ jobs:
     - name: Download vorbis
       if: matrix.audiolib == 'miniaudio'
       id: vorbis
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/vorbis/releases/download/v1.3.7/libvorbis-1.3.7.tar.gz
 
@@ -184,7 +184,7 @@ jobs:
     - name: Download irrKlang
       if: matrix.audiolib == 'irrklang'
       id: irrKlang
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://www.ambiera.at/downloads/irrKlang-32bit-1.6.0.zip
 
@@ -209,7 +209,7 @@ jobs:
     - name: Download DirectX SDK
       if: matrix.nodxsdk != true && steps.dxsdk.outputs.cache-hit != 'true'
       id: dxsdk-download
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://download.microsoft.com/download/a/e/7/ae743f1f-632b-4809-87a9-aa1bb3458e31/DXSDK_Jun10.exe
 
@@ -300,7 +300,7 @@ jobs:
 
     - name: Download premake
       id: premake
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/premake/premake-core/releases/download/v${{ matrix.premake-version }}/premake-${{ matrix.premake-version }}-linux.tar.gz
         filename: premake5.tar.gz
@@ -313,7 +313,7 @@ jobs:
     - name: Download libevent
       if: matrix.static-link == true
       id: libevent
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
         filename: libevent.tar.gz
@@ -335,7 +335,7 @@ jobs:
     - name: Download freetype
       if: matrix.static-link == true
       id: freetype
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://downloads.sourceforge.net/freetype/freetype-2.13.3.tar.gz
 
@@ -347,7 +347,7 @@ jobs:
 
     - name: Download lua
       id: lua
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://www.lua.org/ftp/lua-5.4.8.tar.gz
 
@@ -359,7 +359,7 @@ jobs:
     - name: Download sqlite
       if: matrix.static-link == true
       id: sqlite
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://www.sqlite.org/2025/sqlite-amalgamation-3500100.zip
 
@@ -379,7 +379,7 @@ jobs:
     - name: Download ogg
       if: matrix.static-link == true
       id: ogg
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/ogg/releases/download/v1.3.5/libogg-1.3.5.tar.gz
 
@@ -399,7 +399,7 @@ jobs:
     - name: Download opus
       if: matrix.static-link == true
       id: opus
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/opus/releases/download/v1.5.2/opus-1.5.2.tar.gz
 
@@ -412,7 +412,7 @@ jobs:
     - name: Download opusfile
       if: matrix.static-link == true
       id: opusfile
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/opusfile/releases/download/v0.12/opusfile-0.12.tar.gz
 
@@ -425,7 +425,7 @@ jobs:
     - name: Download vorbis
       if: matrix.static-link == true
       id: vorbis
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/vorbis/releases/download/v1.3.7/libvorbis-1.3.7.tar.gz
 
@@ -523,7 +523,7 @@ jobs:
 
     - name: Download premake
       id: premake
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/premake/premake-core/releases/download/v5.0.0-beta7/premake-5.0.0-beta7-macosx.tar.gz
         filename: premake5.tar.gz
@@ -536,7 +536,7 @@ jobs:
     - name: Download libevent
       if: matrix.static-link == true
       id: libevent
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
         filename: libevent.tar.gz
@@ -558,7 +558,7 @@ jobs:
     - name: Download freetype
       if: matrix.static-link == true
       id: freetype
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://downloads.sourceforge.net/freetype/freetype-2.13.3.tar.gz
 
@@ -570,7 +570,7 @@ jobs:
 
     - name: Download lua
       id: lua
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://www.lua.org/ftp/lua-5.4.8.tar.gz
 
@@ -582,7 +582,7 @@ jobs:
     - name: Download sqlite
       if: matrix.static-link == true
       id: sqlite
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://www.sqlite.org/2025/sqlite-amalgamation-3500100.zip
 
@@ -602,7 +602,7 @@ jobs:
     - name: Download ogg
       if: matrix.static-link == true
       id: ogg
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/ogg/releases/download/v1.3.5/libogg-1.3.5.tar.gz
 
@@ -615,7 +615,7 @@ jobs:
     - name: Download opus
       if: matrix.static-link == true
       id: opus
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/opus/releases/download/v1.5.2/opus-1.5.2.tar.gz
 
@@ -628,7 +628,7 @@ jobs:
     - name: Download opusfile
       if: matrix.static-link == true
       id: opusfile
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/opusfile/releases/download/v0.12/opusfile-0.12.tar.gz
 
@@ -641,7 +641,7 @@ jobs:
     - name: Download vorbis
       if: matrix.static-link == true
       id: vorbis
-      uses: mercury233/action-cache-download-file@v1.0.0
+      uses: mercury233/action-cache-download-file@f5fef0ebfbee835266c4a7ae6f173d74a33980da
       with:
         url: https://github.com/xiph/vorbis/releases/download/v1.3.7/libvorbis-1.3.7.tar.gz
 
