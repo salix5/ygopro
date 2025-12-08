@@ -227,7 +227,6 @@ jobs:
     - name: Copy premake files
       run: |
         xcopy /E premake\* .
-        xcopy /E resource\* .
 
     - name: Use premake to generate Visual Studio solution
       run: |
