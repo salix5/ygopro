@@ -227,6 +227,7 @@ jobs:
     - name: Copy premake files
       run: |
         xcopy /E premake\* .
+        copy resource\gframe\*.ico gframe\
 
     - name: Use premake to generate Visual Studio solution
       run: |
