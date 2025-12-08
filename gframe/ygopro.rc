@@ -9,7 +9,7 @@ FILETYPE 0x1
 BEGIN
 BLOCK "StringFileInfo"
 BEGIN
-BLOCK "080404b0"
+BLOCK "040404b0"
 BEGIN
 VALUE "FileDescription", "YGOPro ver.salix5"
 VALUE "FileVersion", "1.2.0"
