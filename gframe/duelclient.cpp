@@ -1521,11 +1521,11 @@ bool DuelClient::ClientAnalyze(unsigned char* msg, int len) {
 		int desc = BufferIO::Read<int32_t>(pbuf);
 		if(desc == 0) {
 			wchar_t ynbuf[256];
-			myswprintf(ynbuf, dataManager.GetSysString(200), dataManager.FormatLocation(l, s), dataManager.GetName(code));
+			myswprintf(ynbuf, dataManager.GetSysString(200), dataManager.FormatLocation(l, s).c_str(), dataManager.GetName(code));
 			myswprintf(textBuffer, L"%ls\n%ls", event_string, ynbuf);
 		} else if(desc == 221) {
 			wchar_t ynbuf[256];
-			myswprintf(ynbuf, dataManager.GetSysString(221), dataManager.FormatLocation(l, s), dataManager.GetName(code));
+			myswprintf(ynbuf, dataManager.GetSysString(221), dataManager.FormatLocation(l, s).c_str(), dataManager.GetName(code));
 			myswprintf(textBuffer, L"%ls\n%ls\n%ls", event_string, ynbuf, dataManager.GetSysString(223));
 		} else if(desc <= MAX_STRING_ID) {
 			myswprintf(textBuffer, dataManager.GetSysString(desc), dataManager.GetName(code));
@@ -3139,7 +3139,7 @@ bool DuelClient::ClientAnalyze(unsigned char* msg, int len) {
 				mainGame->dField.MoveCard(pcard, 5);
 			} else
 				mainGame->WaitFrameSignal(30);
-			myswprintf(textBuffer, dataManager.GetSysString(1610), dataManager.GetName(pcard->code), dataManager.FormatLocation(l, s), s + 1);
+			myswprintf(textBuffer, dataManager.GetSysString(1610), dataManager.GetName(pcard->code), dataManager.FormatLocation(l, s).c_str(), s + 1);
 			mainGame->AddLog(textBuffer, pcard->code);
 			pcard->is_highlighting = false;
 		}

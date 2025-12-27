@@ -89,7 +89,8 @@ public:
 	const wchar_t* GetSetName(int code) const;
 	std::vector<unsigned int> GetSetCodes(std::wstring setname) const;
 	std::wstring GetNumString(int num, bool bracket = false) const;
-	const wchar_t* FormatLocation(int location, int sequence) const;
+	const std::wstring& GetSystemString(int code) const;
+	const std::wstring& FormatLocation(int location, int sequence) const;
 	std::wstring FormatAttribute(unsigned int attribute) const;
 	std::wstring FormatRace(unsigned int race) const;
 	std::wstring FormatType(unsigned int type) const;
@@ -102,6 +103,7 @@ public:
 	std::unordered_map<unsigned int, std::wstring> _sysStrings;
 	char errmsg[512]{};
 	const wchar_t* unknown_string{ L"???" };
+	const std::wstring unknown_wstring{ L"???" };
 	irr::io::IFileSystem* FileSystem{};
 
 	static constexpr int STRING_ID_ATTRIBUTE = 1010;

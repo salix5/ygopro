@@ -64,7 +64,7 @@ const wchar_t* DeckManager::GetLFListName(unsigned int lfhash) {
 	});
 	if(lit != _lfList.end())
 		return lit->listName.c_str();
-	return dataManager.unknown_string;
+	return dataManager.unknown_wstring.c_str();
 }
 const LFList* DeckManager::GetLFList(unsigned int lfhash) {
 	auto lit = std::find_if(_lfList.begin(), _lfList.end(), [lfhash](const ygo::LFList& list) {

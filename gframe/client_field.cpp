@@ -459,17 +459,16 @@ void ClientField::ShowSelectCard(bool buttonok, bool is_continuous) {
 		if(mainGame->dInfo.curMsg != MSG_SORT_CARD) {
 			// text
 			wchar_t formatBuffer[2048];
-			if(select_continuous)
-				myswprintf(formatBuffer, L"%ls", dataManager.unknown_string);
-			else if(cant_check_grave && selectable_cards[i]->location == LOCATION_GRAVE)
-				myswprintf(formatBuffer, L"%ls", dataManager.FormatLocation(selectable_cards[i]->location, 0));
-			else if(selectable_cards[i]->location == LOCATION_OVERLAY)
-				myswprintf(formatBuffer, L"%ls[%d](%d)", 
-					dataManager.FormatLocation(selectable_cards[i]->overlayTarget->location, selectable_cards[i]->overlayTarget->sequence),
+			if (select_continuous)
+				myswprintf(formatBuffer, L"%ls", dataManager.unknown_wstring.c_str());
+			else if (cant_check_grave && selectable_cards[i]->location == LOCATION_GRAVE)
+				myswprintf(formatBuffer, L"%ls", dataManager.FormatLocation(selectable_cards[i]->location, 0).c_str());
+			else if (selectable_cards[i]->location == LOCATION_OVERLAY)
+				myswprintf(formatBuffer, L"%ls[%d](%d)",
+					FormatCardLocation(selectable_cards[i]->overlayTarget),
 					selectable_cards[i]->overlayTarget->sequence + 1, selectable_cards[i]->sequence + 1);
 			else
-				myswprintf(formatBuffer, L"%ls[%d]", dataManager.FormatLocation(selectable_cards[i]->location, selectable_cards[i]->sequence),
-					selectable_cards[i]->sequence + 1);
+				myswprintf(formatBuffer, L"%ls[%d]", FormatCardLocation(selectable_cards[i]), selectable_cards[i]->sequence + 1);
 			mainGame->stCardPos[i]->setText(formatBuffer);
 			// color
 			if (selectable_cards[i]->is_selected)
@@ -545,8 +544,7 @@ void ClientField::ShowChainCard() {
 		mainGame->btnCardSelect[i]->setPressed(false);
 		mainGame->btnCardSelect[i]->setVisible(true);
 		wchar_t formatBuffer[2048];
-		myswprintf(formatBuffer, L"%ls[%d]", dataManager.FormatLocation(selectable_cards[i]->location, selectable_cards[i]->sequence),
-			selectable_cards[i]->sequence + 1);
+		myswprintf(formatBuffer, L"%ls[%d]", FormatCardLocation(selectable_cards[i]), selectable_cards[i]->sequence + 1);
 		mainGame->stCardPos[i]->setText(formatBuffer);
 		if(selectable_cards[i]->location == LOCATION_OVERLAY) {
 			if(selectable_cards[i]->owner != selectable_cards[i]->overlayTarget->controler)
@@ -600,13 +598,12 @@ void ClientField::ShowLocationCard() {
 		mainGame->btnCardDisplay[i]->setPressed(false);
 		mainGame->btnCardDisplay[i]->setVisible(true);
 		wchar_t formatBuffer[2048];
-		if(display_cards[i]->location == LOCATION_OVERLAY)
-			myswprintf(formatBuffer, L"%ls[%d](%d)", 
-				dataManager.FormatLocation(display_cards[i]->overlayTarget->location, display_cards[i]->overlayTarget->sequence),
+		if (display_cards[i]->location == LOCATION_OVERLAY)
+			myswprintf(formatBuffer, L"%ls[%d](%d)",
+				FormatCardLocation(display_cards[i]->overlayTarget),
 				display_cards[i]->overlayTarget->sequence + 1, display_cards[i]->sequence + 1);
 		else
-			myswprintf(formatBuffer, L"%ls[%d]", dataManager.FormatLocation(display_cards[i]->location, display_cards[i]->sequence),
-				display_cards[i]->sequence + 1);
+			myswprintf(formatBuffer, L"%ls[%d]", FormatCardLocation(display_cards[i]), display_cards[i]->sequence + 1);
 		mainGame->stDisplayPos[i]->setText(formatBuffer);
 		if(display_cards[i]->location == LOCATION_OVERLAY) {
 			if(display_cards[i]->owner != display_cards[i]->overlayTarget->controler)
@@ -807,6 +804,9 @@ void ClientField::RefreshAllCards() {
 		GetCardLocation(*cit, &(*cit)->curPos, &(*cit)->curRot, true);
 		(*cit)->is_moving = false;
 	}
+}
+const wchar_t* ClientField::FormatCardLocation(ClientCard* pcard) const {
+	return dataManager.FormatLocation(pcard->location, pcard->sequence).c_str();
 }
 void ClientField::GetChainLocation(int controler, int location, int sequence, irr::core::vector3df* t) {
 	t->X = 0;

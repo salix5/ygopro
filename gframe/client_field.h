@@ -111,6 +111,7 @@ public:
 	void ShowSelectOption(int select_hint = 0);
 	void ReplaySwap();
 	void RefreshAllCards();
+	const wchar_t* FormatCardLocation(ClientCard* pcard) const;
 
 	void GetChainLocation(int controler, int location, int sequence, irr::core::vector3df* t);
 	void GetCardLocation(ClientCard* pcard, irr::core::vector3df* t, irr::core::vector3df* r, bool setTrans = false);

@@ -1666,7 +1666,7 @@ void Game::ShowCardInfo(int code, bool resize) {
 			myswprintf(formatBuffer, L"[%ls]", type.c_str());
 		}
 		else
-			myswprintf(formatBuffer, L"[%ls]", dataManager.unknown_string);
+			myswprintf(formatBuffer, L"[%ls]", dataManager.unknown_wstring.c_str());
 		stInfo->setText(formatBuffer);
 		stDataInfo->setText(L"");
 		stSetName->setRelativePosition(irr::core::rect<irr::s32>(15, 60, 296 * xScale, 60 + offset));

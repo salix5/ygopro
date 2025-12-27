@@ -277,14 +277,20 @@ std::wstring DataManager::GetNumString(int num, bool bracket) const {
 	numBuffer.push_back(L')');
 	return numBuffer;
 }
-const wchar_t* DataManager::FormatLocation(int location, int sequence) const {
+const std::wstring& DataManager::GetSystemString(int code) const {
+	auto csit = _sysStrings.find(code);
+	if (csit == _sysStrings.end())
+		return unknown_wstring;
+	return csit->second;
+}
+const std::wstring& DataManager::FormatLocation(int location, int sequence) const {
 	if(location == LOCATION_SZONE) {
 		if(sequence < 5)
-			return GetSysString(1003);
+			return GetSystemString(1003);
 		else if(sequence == 5)
-			return GetSysString(1008);
+			return GetSystemString(1008);
 		else
-			return GetSysString(1009);
+			return GetSystemString(1009);
 	}
 	int i = 1000;
 	int string_id = 0;
@@ -295,9 +301,9 @@ const wchar_t* DataManager::FormatLocation(int location, int sequence) const {
 		}
 	}
 	if (string_id)
-		return GetSysString(string_id);
+		return GetSystemString(string_id);
 	else
-		return unknown_string;
+		return unknown_wstring;
 }
 std::wstring DataManager::FormatAttribute(unsigned int attribute) const {
 	std::wstring buffer;
