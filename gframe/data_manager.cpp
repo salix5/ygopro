@@ -246,11 +246,11 @@ const wchar_t* DataManager::GetCounterName(int code) const {
 		return unknown_string;
 	return csit->second.c_str();
 }
-const wchar_t* DataManager::GetSetName(int code) const {
+const std::wstring& DataManager::GetSetName(int code) const {
 	auto csit = _setnameStrings.find(code);
 	if(csit == _setnameStrings.end())
-		return unknown_string;
-	return csit->second.c_str();
+		return unknown_wstring;
+	return csit->second;
 }
 std::vector<unsigned int> DataManager::GetSetCodes(std::wstring setname) const {
 	std::vector<unsigned int> matchingCodes;
@@ -349,10 +349,9 @@ std::wstring DataManager::FormatSetName(const uint16_t setcode[]) const {
 	for(int i = 0; i < 10; ++i) {
 		if (!setcode[i])
 			break;
-		const wchar_t* setname = GetSetName(setcode[i]);
 		if (!buffer.empty())
 			buffer.push_back(L'|');
-		buffer.append(setname);
+		buffer.append(GetSetName(setcode[i]));
 	}
 	if (buffer.empty())
 		return std::wstring(unknown_string);

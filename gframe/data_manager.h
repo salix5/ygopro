@@ -86,7 +86,7 @@ public:
 	const wchar_t* GetSysString(int code) const;
 	const wchar_t* GetVictoryString(int code) const;
 	const wchar_t* GetCounterName(int code) const;
-	const wchar_t* GetSetName(int code) const;
+	const std::wstring& GetSetName(int code) const;
 	std::vector<unsigned int> GetSetCodes(std::wstring setname) const;
 	std::wstring GetNumString(int num, bool bracket = false) const;
 	const std::wstring& GetSystemString(int code) const;
