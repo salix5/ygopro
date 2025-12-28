@@ -36,6 +36,7 @@
 /miniaudio
 /sqlite3
 /gframe/*.ico
+/gframe/ygopro.rc
 /gframe/ygopro.aps
 /premake5
 /premake5.exe
