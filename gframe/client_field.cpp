@@ -1084,33 +1084,30 @@ void ClientField::GetCardLocation(ClientCard* pcard, irr::core::vector3df* t, ir
 		pcard->mTransform.setRotationRadians(*r);
 	}
 }
-void ClientField::MoveCard(ClientCard * pcard, int frame) {
+void ClientField::MoveCard(ClientCard* pcard, int frame) {
+	if (frame <= 0)
+		return;
+	float invFrame = 1.0f / static_cast<float>(frame);
 	irr::core::vector3df trans = pcard->curPos;
 	irr::core::vector3df rot = pcard->curRot;
 	GetCardLocation(pcard, &trans, &rot);
-	pcard->dPos = (trans - pcard->curPos) / frame;
-	float diff = rot.X - pcard->curRot.X;
-	while (diff < 0) diff += 3.1415926f * 2;
-	while (diff > 3.1415926f * 2)
-		diff -= 3.1415926f * 2;
-	if (diff < 3.1415926f)
-		pcard->dRot.X = diff / frame;
-	else
-		pcard->dRot.X = -(3.1415926f * 2 - diff) / frame;
-	diff = rot.Y - pcard->curRot.Y;
-	while (diff < 0) diff += 3.1415926f * 2;
-	while (diff > 3.1415926f * 2) diff -= 3.1415926f * 2;
-	if (diff < 3.1415926f)
-		pcard->dRot.Y = diff / frame;
-	else
-		pcard->dRot.Y = -(3.1415926f * 2 - diff) / frame;
-	diff = rot.Z - pcard->curRot.Z;
-	while (diff < 0) diff += 3.1415926f * 2;
-	while (diff > 3.1415926f * 2) diff -= 3.1415926f * 2;
-	if (diff < 3.1415926f)
-		pcard->dRot.Z = diff / frame;
-	else
-		pcard->dRot.Z = -(3.1415926f * 2 - diff) / frame;
+	pcard->dPos = (trans - pcard->curPos) * invFrame;
+	auto calculateDelta = [invFrame](float current, float target) -> float {
+		float diff = target - current;
+		const float PI = 3.1415926f;
+		const float TWO_PI = PI * 2;
+		while (diff < 0)
+			diff += TWO_PI;
+		while (diff > TWO_PI)
+			diff -= TWO_PI;
+		if (diff < PI)
+			return diff * invFrame;
+		else
+			return -(TWO_PI - diff) * invFrame;
+	};
+	pcard->dRot.X = calculateDelta(pcard->curRot.X, rot.X);
+	pcard->dRot.Y = calculateDelta(pcard->curRot.Y, rot.Y);
+	pcard->dRot.Z = calculateDelta(pcard->curRot.Z, rot.Z);
 	pcard->is_moving = true;
 	pcard->aniFrame = frame;
 }
