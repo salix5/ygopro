@@ -324,7 +324,7 @@ irr::video::ITexture* ImageManager::GetTextureThumb(int code) {
 		int width = CARD_THUMB_WIDTH * mainGame->xScale;
 		int height = CARD_THUMB_HEIGHT * mainGame->yScale;
 		char file[256];
-		mysnprintf(file, "expansions/pics/%d.jpg", code);
+		std::snprintf(file, sizeof file, "expansions/pics/%d.jpg", code);
 		irr::video::ITexture* img = GetTextureFromFile(file, width, height);
 		if(img == NULL) {
 			std::snprintf(file, sizeof file, "pics/%d.jpg", code);
@@ -339,7 +339,7 @@ irr::video::ITexture* ImageManager::GetTextureThumb(int code) {
 		if(lit != tThumbLoading.end()) {
 			if(lit->second != nullptr) {
 				char textureName[256];
-				mysnprintf(textureName, "pics/%d.jpg_thumbnail", code); // not an actual file
+				std::snprintf(textureName, sizeof textureName, "pics/%d.jpg_thumbnail", code); // not an actual file
 				irr::video::ITexture* texture = driver->addTexture(textureName, lit->second); // textures must be added in the main thread due to OpenGL
 				lit->second->drop();
 				tThumb[code] = texture;
@@ -375,18 +375,18 @@ irr::video::ITexture* ImageManager::GetTextureField(int code) {
 		irr::s32 width = 512 * mainGame->xScale;
 		irr::s32 height = 512 * mainGame->yScale;
 		char file[256];
-		mysnprintf(file, "expansions/pics/field/%d.png", code);
+		std::snprintf(file, sizeof file, "expansions/pics/field/%d.png", code);
 		irr::video::ITexture* img = GetTextureFromFile(file, width, height);
 		if(img == nullptr) {
-			mysnprintf(file, "expansions/pics/field/%d.jpg", code);
+			std::snprintf(file, sizeof file, "expansions/pics/field/%d.jpg", code);
 			img = GetTextureFromFile(file, width, height);
 		}
 		if(img == nullptr) {
-			mysnprintf(file, "pics/field/%d.png", code);
+			std::snprintf(file, sizeof file, "pics/field/%d.png", code);
 			img = GetTextureFromFile(file, width, height);
 		}
 		if(img == nullptr) {
-			mysnprintf(file, "pics/field/%d.jpg", code);
+			std::snprintf(file, sizeof file, "pics/field/%d.jpg", code);
 			img = GetTextureFromFile(file, width, height);
 			if(img == nullptr) {
 				tFields[code] = nullptr;
