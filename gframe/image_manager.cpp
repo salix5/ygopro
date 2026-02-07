@@ -1,9 +1,9 @@
+#include "image_manager.h"
+#include "game.h"
 #include <thread>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
-#include "image_manager.h"
-#include "game.h"
 
 namespace ygo {
 
