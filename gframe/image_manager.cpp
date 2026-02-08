@@ -225,7 +225,7 @@ irr::video::ITexture* ImageManager::GetTextureFromFile(const char* file, irr::s3
 		return nullptr;
 	}
 	char name[256];
-	mysnprintf(name, "%s/%d_%d", file, width, height);
+	std::snprintf(name, sizeof name, "%s/%d_%d", file, width, height);
 	return addTexture(name, img, width, height);
 }
 /** Load card picture from `expansions` or `pics` folder.
@@ -233,10 +233,10 @@ irr::video::ITexture* ImageManager::GetTextureFromFile(const char* file, irr::s3
  * @return Image pointer. Must be dropped after use. */
 irr::video::IImage* ImageManager::GetImage(int code) {
 	char file[256];
-	mysnprintf(file, "expansions/pics/%d.jpg", code);
+	std::snprintf(file, sizeof file, "expansions/pics/%d.jpg", code);
 	irr::video::IImage* img = driver->createImageFromFile(file);
 	if(img == nullptr) {
-		mysnprintf(file, "pics/%d.jpg", code);
+		std::snprintf(file, sizeof file, "pics/%d.jpg", code);
 		img = driver->createImageFromFile(file);
 	}
 	return img;
@@ -249,7 +249,7 @@ irr::video::ITexture* ImageManager::GetTexture(int code, irr::s32 width, irr::s3
 		return nullptr;
 	}
 	char name[256];
-	mysnprintf(name, "pics/%d/%d_%d", code, width, height);
+	std::snprintf(name, sizeof name, "pics/%d/%d_%d", code, width, height);
 	return addTexture(name, img, width, height);
 }
 /** Load managed card picture texture.
@@ -292,7 +292,7 @@ irr::video::ITexture* ImageManager::GetBigPicture(int code, float zoom) {
 		return tUnknown;
 	}
 	char name[256];
-	mysnprintf(name, "pics/%d/big", code);
+	std::snprintf(name, sizeof name, "pics/%d/big", code);
 	auto origsize = img->getDimension();
 	tBigPicture = addTexture(name, img, origsize.Width * zoom, origsize.Height * zoom);
 	return tBigPicture;
@@ -358,7 +358,7 @@ irr::video::ITexture* ImageManager::GetTextureThumb(int code) {
 		if(lit != tThumbLoading.end()) {
 			if(lit->second != nullptr) {
 				char textureName[256];
-				mysnprintf(textureName, "pics/%d/thumbnail", code);
+				std::snprintf(textureName, sizeof textureName, "pics/%d/thumbnail", code);
 				irr::video::ITexture* texture = driver->addTexture(textureName, lit->second); // textures must be added in the main thread due to OpenGL
 				lit->second->drop();
 				tThumb[code] = texture;
@@ -396,18 +396,18 @@ irr::video::ITexture* ImageManager::GetTextureField(int code) {
 		irr::s32 width = 512 * mainGame->xScale;
 		irr::s32 height = 512 * mainGame->yScale;
 		char file[256];
-		mysnprintf(file, "expansions/pics/field/%d.png", code);
+		std::snprintf(file, sizeof file, "expansions/pics/field/%d.png", code);
 		irr::video::ITexture* img = GetTextureFromFile(file, width, height);
 		if(img == nullptr) {
-			mysnprintf(file, "expansions/pics/field/%d.jpg", code);
+			std::snprintf(file, sizeof file, "expansions/pics/field/%d.jpg", code);
 			img = GetTextureFromFile(file, width, height);
 		}
 		if(img == nullptr) {
-			mysnprintf(file, "pics/field/%d.png", code);
+			std::snprintf(file, sizeof file, "pics/field/%d.png", code);
 			img = GetTextureFromFile(file, width, height);
 		}
 		if(img == nullptr) {
-			mysnprintf(file, "pics/field/%d.jpg", code);
+			std::snprintf(file, sizeof file, "pics/field/%d.jpg", code);
 			img = GetTextureFromFile(file, width, height);
 			if(img == nullptr) {
 				tFields[code] = nullptr;
