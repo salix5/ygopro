@@ -8,8 +8,10 @@
 #ifndef _WIN32
 #include <dirent.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include <vector>
 #include <algorithm>
+#include <string>
 #endif
 
 #ifdef _WIN32
