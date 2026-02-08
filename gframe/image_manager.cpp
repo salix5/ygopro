@@ -223,37 +223,37 @@ irr::video::ITexture* ImageManager::GetTexture(int code, bool fit) {
 	auto tit = tMap[fit ? 1 : 0].find(code);
 	if(tit == tMap[fit ? 1 : 0].end()) {
 		char file[256];
-		std::snprintf(file, sizeof file, "expansions/pics/%d.jpg", code);
+		mysnprintf(file, "expansions/pics/%d.jpg", code);
 		irr::video::ITexture* img = GetTextureFromFile(file, width, height);
 		if(img == nullptr) {
-			std::snprintf(file, sizeof file, "pics/%d.jpg", code);
+			mysnprintf(file, "pics/%d.jpg", code);
 			img = GetTextureFromFile(file, width, height);
 		}
 		tMap[fit ? 1 : 0][code] = img;
 		return (img == nullptr) ? (fit ? tUnknownFit : tUnknown) : img;
 	}
-	if (tit->second)
+	if(tit->second)
 		return tit->second;
 	else
 		return fit ? tUnknownFit : tUnknown;
 }
 irr::video::ITexture* ImageManager::GetBigPicture(int code, float zoom) {
 	if(code == 0)
-		return tUnknownFit;
+		return tUnknown;
 	if(tBigPicture != nullptr) {
 		driver->removeTexture(tBigPicture);
 		tBigPicture = nullptr;
 	}
 	irr::video::ITexture* texture;
 	char file[256];
-	std::snprintf(file, sizeof file, "expansions/pics/%d.jpg", code);
+	mysnprintf(file, "expansions/pics/%d.jpg", code);
 	irr::video::IImage* srcimg = driver->createImageFromFile(file);
 	if(srcimg == nullptr) {
-		std::snprintf(file, sizeof file, "pics/%d.jpg", code);
+		mysnprintf(file, "pics/%d.jpg", code);
 		srcimg = driver->createImageFromFile(file);
 	}
 	if(srcimg == nullptr) {
-		return tUnknownFit;
+		return tUnknown;
 	}
 	if(zoom == 1) {
 		texture = driver->addTexture(file, srcimg);
@@ -280,10 +280,10 @@ int ImageManager::LoadThumbThread() {
 		imageManager.tThumbLoadingCodes.pop();
 		imageManager.tThumbLoadingMutex.unlock();
 		char file[256];
-		std::snprintf(file, sizeof file, "expansions/pics/%d.jpg", code);
+		mysnprintf(file, "expansions/pics/%d.jpg", code);
 		irr::video::IImage* img = imageManager.driver->createImageFromFile(file);
 		if(img == nullptr) {
-			std::snprintf(file, sizeof file, "pics/%d.jpg", code);
+			mysnprintf(file, "pics/%d.jpg", code);
 			img = imageManager.driver->createImageFromFile(file);
 		}
 		if(img != nullptr) {
@@ -324,10 +324,10 @@ irr::video::ITexture* ImageManager::GetTextureThumb(int code) {
 		int width = CARD_THUMB_WIDTH * mainGame->xScale;
 		int height = CARD_THUMB_HEIGHT * mainGame->yScale;
 		char file[256];
-		std::snprintf(file, sizeof file, "expansions/pics/%d.jpg", code);
+		mysnprintf(file, "expansions/pics/%d.jpg", code);
 		irr::video::ITexture* img = GetTextureFromFile(file, width, height);
 		if(img == NULL) {
-			std::snprintf(file, sizeof file, "pics/%d.jpg", code);
+			mysnprintf(file, "pics/%d.jpg", code);
 			img = GetTextureFromFile(file, width, height);
 		}
 		tThumb[code] = img;
@@ -339,7 +339,7 @@ irr::video::ITexture* ImageManager::GetTextureThumb(int code) {
 		if(lit != tThumbLoading.end()) {
 			if(lit->second != nullptr) {
 				char textureName[256];
-				std::snprintf(textureName, sizeof textureName, "pics/%d.jpg_thumbnail", code); // not an actual file
+				mysnprintf(textureName, "pics/%d.jpg_thumbnail", code); // not an actual file
 				irr::video::ITexture* texture = driver->addTexture(textureName, lit->second); // textures must be added in the main thread due to OpenGL
 				lit->second->drop();
 				tThumb[code] = texture;
@@ -375,18 +375,18 @@ irr::video::ITexture* ImageManager::GetTextureField(int code) {
 		irr::s32 width = 512 * mainGame->xScale;
 		irr::s32 height = 512 * mainGame->yScale;
 		char file[256];
-		std::snprintf(file, sizeof file, "expansions/pics/field/%d.png", code);
+		mysnprintf(file, "expansions/pics/field/%d.png", code);
 		irr::video::ITexture* img = GetTextureFromFile(file, width, height);
 		if(img == nullptr) {
-			std::snprintf(file, sizeof file, "expansions/pics/field/%d.jpg", code);
+			mysnprintf(file, "expansions/pics/field/%d.jpg", code);
 			img = GetTextureFromFile(file, width, height);
 		}
 		if(img == nullptr) {
-			std::snprintf(file, sizeof file, "pics/field/%d.png", code);
+			mysnprintf(file, "pics/field/%d.png", code);
 			img = GetTextureFromFile(file, width, height);
 		}
 		if(img == nullptr) {
-			std::snprintf(file, sizeof file, "pics/field/%d.jpg", code);
+			mysnprintf(file, "pics/field/%d.jpg", code);
 			img = GetTextureFromFile(file, width, height);
 			if(img == nullptr) {
 				tFields[code] = nullptr;
