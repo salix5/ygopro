@@ -1369,7 +1369,7 @@ void DeckBuilder::FilterCards() {
 	results.clear();
 	struct element_t {
 		std::wstring keyword;
-		std::vector<unsigned int> setcodes;
+		std::vector<uint32_t> setcodes;
 		enum class type_t {
 			all,
 			name,
