@@ -4,7 +4,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <vector>
-#include "data_manager.h"
+#include "deck.h"
 
 namespace ygo {
 
@@ -27,31 +27,6 @@ struct LFList {
 	unsigned int hash{};
 	std::wstring listName;
 	std::unordered_map<uint32_t, int> content;
-};
-struct Deck {
-	std::vector<const CardDataC*> main;
-	std::vector<const CardDataC*> extra;
-	std::vector<const CardDataC*> side;
-	Deck() = default;
-	Deck(const Deck& ndeck) {
-		main = ndeck.main;
-		extra = ndeck.extra;
-		side = ndeck.side;
-	}
-	void clear() noexcept {
-		main.clear();
-		extra.clear();
-		side.clear();
-	}
-	size_t size() const noexcept {
-		return main.size() + extra.size() + side.size();
-	}
-};
-
-struct DeckArray {
-	std::vector<uint32_t> main;
-	std::vector<uint32_t> extra;
-	std::vector<uint32_t> side;
 };
 
 class DeckManager {
