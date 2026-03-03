@@ -121,7 +121,7 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 			return (gameruleDeckError << 28) | cit->code;
 		if (!(cit->type & TYPES_EXTRA_DECK) || cit->type & TYPE_TOKEN)
 			return (DECKERROR_EXTRACOUNT << 28);
-		int code = cit->alias ? cit->alias : cit->code;
+		auto code = cit->alias ? cit->alias : cit->code;
 		ccount[code]++;
 		int dc = ccount[code];
 		if(dc > 3)
@@ -136,7 +136,7 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 			return (gameruleDeckError << 28) | cit->code;
 		if (cit->type & TYPE_TOKEN)
 			return (DECKERROR_SIDECOUNT << 28);
-		int code = cit->alias ? cit->alias : cit->code;
+		auto code = cit->alias ? cit->alias : cit->code;
 		ccount[code]++;
 		int dc = ccount[code];
 		if(dc > 3)
