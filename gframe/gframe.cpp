@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
 				ygo::mainGame->OpenDeckBuilder(true);
 				break;
 			}
-			else if (ygo::IsExtension(wargv[i], L".yrp")) {
+			if (ygo::IsExtension(wargv[i], L".yrp")) {
 				open_file = true;
 				BufferIO::CopyWideString(wargv[i], open_file_name);
 				exit_on_return = true;
