@@ -71,7 +71,7 @@ void DeckManager::LoadLFListSingle(const char* path) {
 			int count = std::strtol(pos, &end, 10);
 			if (errno || end == pos)
 				continue;
-			if(count < 0 || count > 2)
+			if (count < 0 || count > 2)
 				continue;
 			cur->content[code] = count;
 			cur->hash = cur->hash ^ ((code << 18) | (code >> 14)) ^ ((code << (27 + count)) | (code >> (5 - count)));
@@ -113,7 +113,7 @@ static unsigned int checkAvail(unsigned int ot, unsigned int avail) {
 	return DECKERROR_NOTAVAIL;
 }
 unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int rule) {
-	std::unordered_map<int, int> ccount;
+	std::unordered_map<uint32_t, int> ccount;
 	// rule
 	if(deck.main.size() < DECK_MIN_SIZE || deck.main.size() > DECK_MAX_SIZE)
 		return (DECKERROR_MAINCOUNT << 28) | (unsigned)deck.main.size();
@@ -125,28 +125,9 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 	if (!lflist)
 		return 0;
 	auto& list = lflist->content;
-	std::unordered_map<std::wstring, int> credit_used;
-	auto spend_credit = [&](uint32_t code) {
-		auto code_credit_it = lflist->credits.find(code);
-		if(code_credit_it == lflist->credits.end())
-			return 0U;
-		auto& credit_table = code_credit_it->second;
-		for(auto& credit_it : credit_table) {
-			auto& key = credit_it.first;
-			auto credit_limit_it = lflist->credit_limits.find(key);
-			if(credit_limit_it == lflist->credit_limits.end())
-				continue;
-			auto credit_limit = credit_limit_it->second;
-			auto credit_after = credit_used[key] + credit_it.second;
-			if(credit_after > credit_limit)
-				return (DECKERROR_LFLIST << 28) | code;
-			credit_used[key] = credit_after;
-		}
-		return 0U;
-	};
 	const unsigned int rule_map[6] = { AVAIL_OCG, AVAIL_TCG, AVAIL_SC, AVAIL_CUSTOM, AVAIL_OCGTCG, 0 };
 	unsigned int avail = 0;
-	if (rule >= 0 && rule < (int)(sizeof rule_map / sizeof rule_map[0]))
+	if ((size_t)rule < sizeof rule_map / sizeof rule_map[0])
 		avail = rule_map[rule];
 	for (auto& cit : deck.main) {
 		auto gameruleDeckError = checkAvail(cit->second.ot, avail);
@@ -154,7 +135,7 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 			return (gameruleDeckError << 28) | cit->first;
 		if (cit->second.type & (TYPES_EXTRA_DECK | TYPE_TOKEN))
 			return (DECKERROR_MAINCOUNT << 28);
-		int code = cit->second.alias ? cit->second.alias : cit->first;
+		auto code = cit->second.alias ? cit->second.alias : cit->first;
 		ccount[code]++;
 		int dc = ccount[code];
 		if(dc > 3)
@@ -162,9 +143,6 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 		auto it = list.find(code);
 		if(it != list.end() && dc > it->second)
 			return (DECKERROR_LFLIST << 28) | cit->first;
-		auto spend_credit_error = spend_credit(code);
-		if(spend_credit_error)
-			return spend_credit_error;
 	}
 	for (auto& cit : deck.extra) {
 		auto gameruleDeckError = checkAvail(cit->second.ot, avail);
@@ -172,7 +150,7 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 			return (gameruleDeckError << 28) | cit->first;
 		if (!(cit->second.type & TYPES_EXTRA_DECK) || cit->second.type & TYPE_TOKEN)
 			return (DECKERROR_EXTRACOUNT << 28);
-		int code = cit->second.alias ? cit->second.alias : cit->first;
+		auto code = cit->second.alias ? cit->second.alias : cit->first;
 		ccount[code]++;
 		int dc = ccount[code];
 		if(dc > 3)
@@ -180,9 +158,6 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 		auto it = list.find(code);
 		if(it != list.end() && dc > it->second)
 			return (DECKERROR_LFLIST << 28) | cit->first;
-		auto spend_credit_error = spend_credit(code);
-		if(spend_credit_error)
-			return spend_credit_error;
 	}
 	for (auto& cit : deck.side) {
 		auto gameruleDeckError = checkAvail(cit->second.ot, avail);
@@ -190,7 +165,7 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 			return (gameruleDeckError << 28) | cit->first;
 		if (cit->second.type & TYPE_TOKEN)
 			return (DECKERROR_SIDECOUNT << 28);
-		int code = cit->second.alias ? cit->second.alias : cit->first;
+		auto code = cit->second.alias ? cit->second.alias : cit->first;
 		ccount[code]++;
 		int dc = ccount[code];
 		if(dc > 3)
@@ -198,10 +173,11 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 		auto it = list.find(code);
 		if(it != list.end() && dc > it->second)
 			return (DECKERROR_LFLIST << 28) | cit->first;
-		auto spend_credit_error = spend_credit(code);
-		if(spend_credit_error)
-			return spend_credit_error;
 	}
+	std::vector<int> sum;
+	uint32_t result = CheckDeckPoint(deck, lflist, sum);
+	if (result)
+		return (DECKERROR_LFLIST << 28) | result;
 	return 0;
 }
 uint32_t DeckManager::LoadDeck(Deck& deck, uint32_t dbuf[], int mainc, int sidec, bool is_packlist) {
