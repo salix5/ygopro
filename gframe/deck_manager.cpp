@@ -18,7 +18,7 @@ void DeckManager::LoadLFListSingle(const char* path) {
 			if(linebuf[0] == '#')
 				continue;
 			if(linebuf[0] == '!') {
-				auto len = std::strcspn(linebuf, "\n");
+				auto len = std::strcspn(linebuf, "\r\n");
 				linebuf[len] = 0;
 				BufferIO::DecodeUTF8(&linebuf[1], strBuffer);
 				LFList newlist;
