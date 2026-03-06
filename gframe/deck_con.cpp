@@ -1876,56 +1876,52 @@ void DeckBuilder::pop_side(int seq) {
 }
 bool DeckBuilder::check_limit(code_pointer pointer) {
 	auto limitcode = pointer->second.alias ? pointer->second.alias : pointer->first;
-	int limit = 3;
+	int available = 3;
 	auto flit = filterList->content.find(limitcode);
 	if(flit != filterList->content.end())
-		limit = flit->second;
-	std::unordered_map<std::wstring, uint32_t> credit_used;
-	auto spend_credit = [&](uint32_t code) {
-		auto code_credit_it = filterList->credits.find(code);
-		if(code_credit_it == filterList->credits.end())
-			return true;
-		auto code_credit = code_credit_it->second;
-		auto valid = true;
-		for(auto& credit_it : code_credit) {
-			auto key = credit_it.first;
-			auto credit_limit_it = filterList->credit_limits.find(key);
-			if(credit_limit_it == filterList->credit_limits.end())
-				continue;
-			auto credit_limit = credit_limit_it->second;
-			if(credit_used.find(key) == credit_used.end())
-				credit_used[key] = 0;
-			auto credit_after = credit_used[key] + credit_it.second;
-			if(credit_after > credit_limit)
-				valid = false;
-			credit_used[key] = credit_after;
+		available = flit->second;
+	auto check_card = [&](code_pointer& cit) {
+		auto card = &(cit->second);
+		if (card->code == limitcode || card->alias == limitcode) {
+			available--;
 		}
-		return valid;
-	};
-	auto limitcode_has_credit = filterList->credits.find(limitcode) != filterList->credits.end();
-	auto handle_card = [&](ygo::code_pointer& card) {
-		if (card->first == limitcode || card->second.alias == limitcode) {
-			limit--;
-			if(limit < 0)
-				return false;
-		}
-		if(!limitcode_has_credit)
-			return true;
-		auto code = card->second.alias ? card->second.alias : card->first;
-		return spend_credit(code);
+		return available > 0;
 	};
 	for (auto& card : deckManager.current_deck.main) {
-		if(!handle_card(card))
+		if(!check_card(card))
 			return false;
 	}
 	for (auto& card : deckManager.current_deck.extra) {
-		if(!handle_card(card))
+		if(!check_card(card))
 			return false;
 	}
 	for (auto& card : deckManager.current_deck.side) {
-		if(!handle_card(card))
+		if(!check_card(card))
 			return false;
 	}
-	return handle_card(pointer);
+	bool has_point = false;
+	for (auto& point : filterList->point_list) {
+		if (point.table.find(pointer->second.code) != point.table.end()) {
+			has_point = true;
+			break;
+		}
+	}
+	if (!has_point)
+		return true;
+	
+	std::vector<int> sum;
+	if (DeckManager::CheckDeckPoint(deckManager.current_deck, filterList, sum) != 0U)
+		return false;
+	auto code = pointer->second.code;
+	for (size_t i = 0; i < filterList->point_list.size(); ++i) {
+		auto& point = filterList->point_list[i];
+		auto it = point.table.find(code);
+		if (it == point.table.end())
+			continue;
+		sum[i] = sum[i] + it->second;
+		if (sum[i] > point.limit)
+			return false;
+	}
+	return true;
 }
 }
