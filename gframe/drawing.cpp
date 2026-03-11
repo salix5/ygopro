@@ -1326,8 +1326,7 @@ void Game::DrawDeckBd() {
 		} else {
 			myswprintf(textBuffer, L"%ls", dataManager.GetName(ptr->code));
 			DrawShadowText(textFont, textBuffer, Resize(860, 165 + i * 66, 955, 185 + i * 66), Resize(1, 1, 0, 0));
-			const auto& type = dataManager.FormatType(ptr->type);
-			myswprintf(textBuffer, L"%ls", type.c_str());
+			myswprintf(textBuffer, L"%ls", dataManager.FormatType(ptr->type).c_str());
 			DrawShadowText(textFont, textBuffer, Resize(860, 187 + i * 66, 955, 207 + i * 66), Resize(1, 1, 0, 0));
 			myswprintf(textBuffer, L"%ls", availBuffer);
 			DrawShadowText(textFont, textBuffer, Resize(860, 209 + i * 66, 955, 229 + i * 66), Resize(1, 1, 0, 0));
