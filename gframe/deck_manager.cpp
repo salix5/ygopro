@@ -354,6 +354,44 @@ bool DeckManager::SaveDeck(const Deck& deck, const wchar_t* file) {
 bool DeckManager::DeleteDeck(const wchar_t* file) {
 	return FileSystem::RemoveFile(file);
 }
+bool DeckManager::GenerateTestScript(const Deck& deck, const wchar_t* base_name) {
+	if (!FileSystem::IsDirExists(L"./single") && !FileSystem::MakeDir(L"./single"))
+		return false;
+	if (std::wcschr(base_name, L'/') || std::wcschr(base_name, L'\\'))
+		return false;
+	if (deck.main.empty())
+		return false;
+	wchar_t path[256]{};
+	if (myswprintf(path, L"./single/%ls.lua", base_name) <= 0)
+		return false;
+	FILE* fp = mywfopen(path, "w");
+	if (!fp)
+		return false;
+	const char AI_NAME[] = "Crescent";
+	const char DUEL_FLAG[] = "DUEL_SIMPLE_AI";
+	std::fprintf(fp, "Debug.SetAIName('%s')\n", AI_NAME);
+	std::fprintf(fp, "Debug.ReloadFieldBegin(%s,%d)\n", DUEL_FLAG, CURRENT_RULE);
+	std::fprintf(fp, "Debug.SetPlayerInfo(0,8000,5,1)\n");
+	std::fprintf(fp, "Debug.SetPlayerInfo(1,8000,5,1)\n");
+	for (auto it = deck.main.rbegin(); it != deck.main.rend(); ++it)
+		std::fprintf(fp, "Debug.AddCard(%u,0,0,LOCATION_DECK,0,POS_FACEDOWN_DEFENSE)\n", (*it)->code);
+	for (auto it = deck.extra.rbegin(); it != deck.extra.rend(); ++it)
+		std::fprintf(fp, "Debug.AddCard(%u,0,0,LOCATION_EXTRA,0,POS_FACEDOWN_DEFENSE)\n", (*it)->code);
+
+	// opponent deck
+	constexpr uint32_t DECK_MONSTER = 89631139; // Blue-Eyes White Dragon
+	constexpr uint32_t EXTRA_MONSTER[5] = { 43227, 284224, 324483, 1546123, 23995346 };
+	std::fprintf(fp, "\n");
+	for (int i = 0; i < DECK_MIN_SIZE; ++i)
+		std::fprintf(fp, "Debug.AddCard(%u,1,1,LOCATION_DECK,0,POS_FACEDOWN_DEFENSE)\n", DECK_MONSTER + i % 5);
+	for (auto id : EXTRA_MONSTER) {
+		for (int i = 0; i < 3; ++i)
+			std::fprintf(fp, "Debug.AddCard(%u,1,1,LOCATION_EXTRA,0,POS_FACEDOWN_DEFENSE)\n", id);
+	}
+	std::fprintf(fp, "Debug.ReloadFieldEnd()\n");
+	std::fclose(fp);
+	return true;
+}
 bool DeckManager::CreateCategory(const wchar_t* name) {
 	if(!FileSystem::IsDirExists(L"./deck") && !FileSystem::MakeDir(L"./deck"))
 		return false;
@@ -408,44 +446,6 @@ bool DeckManager::SaveDeckArray(const DeckArray& deck, const wchar_t* name) {
 	std::fprintf(fp, "!side\n");
 	for (const auto& code : deck.side)
 		std::fprintf(fp, "%u\n", code);
-	std::fclose(fp);
-	return true;
-}
-bool DeckManager::GenerateTestScript(const Deck& deck, const wchar_t* base_name){
-	if (!FileSystem::IsDirExists(L"./single") && !FileSystem::MakeDir(L"./single"))
-		return false;
-	if (std::wcschr(base_name, L'/') || std::wcschr(base_name, L'\\'))
-		return false;
-	if (deck.main.empty())
-		return false;
-	wchar_t path[256]{};
-	if (myswprintf(path, L"./single/%ls.lua", base_name) <= 0)
-		return false;
-	FILE* fp = mywfopen(path, "w");
-	if (!fp)
-		return false;
-	const char AI_NAME[] = "Crescent";
-	const char DUEL_FLAG[] = "DUEL_SIMPLE_AI";
-	std::fprintf(fp, "Debug.SetAIName('%s')\n", AI_NAME);
-	std::fprintf(fp, "Debug.ReloadFieldBegin(%s,%d)\n", DUEL_FLAG, CURRENT_RULE);
-	std::fprintf(fp, "Debug.SetPlayerInfo(0,8000,5,1)\n");
-	std::fprintf(fp, "Debug.SetPlayerInfo(1,8000,5,1)\n");
-	for (auto it = deck.main.rbegin(); it != deck.main.rend(); ++it)
-		std::fprintf(fp, "Debug.AddCard(%u,0,0,LOCATION_DECK,0,POS_FACEDOWN_DEFENSE)\n", (*it)->code);
-	for (auto it = deck.extra.rbegin(); it != deck.extra.rend(); ++it)
-		std::fprintf(fp, "Debug.AddCard(%u,0,0,LOCATION_EXTRA,0,POS_FACEDOWN_DEFENSE)\n", (*it)->code);
-
-	// opponent deck
-	constexpr uint32_t DECK_MONSTER = 89631139; // Blue-Eyes White Dragon
-	constexpr uint32_t EXTRA_MONSTER[5] = { 43227, 284224, 324483, 1546123, 23995346 };
-	std::fprintf(fp, "\n");
-	for (int i = 0; i < DECK_MIN_SIZE; ++i)
-		std::fprintf(fp, "Debug.AddCard(%u,1,1,LOCATION_DECK,0,POS_FACEDOWN_DEFENSE)\n", DECK_MONSTER + i % 5);
-	for (auto id : EXTRA_MONSTER) {
-		for (int i = 0; i < 3; ++i)
-			std::fprintf(fp, "Debug.AddCard(%u,1,1,LOCATION_EXTRA,0,POS_FACEDOWN_DEFENSE)\n", id);
-	}
-	std::fprintf(fp, "Debug.ReloadFieldEnd()\n");
 	std::fclose(fp);
 	return true;
 }

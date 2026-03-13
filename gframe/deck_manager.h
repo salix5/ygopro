@@ -53,11 +53,11 @@ public:
 	static bool SaveDeck(const Deck& deck, const wchar_t* file);
 	static void SaveDeck(const Deck& deck, std::stringstream& deckStream);
 	static bool DeleteDeck(const wchar_t* file);
+	static bool GenerateTestScript(const Deck& deck, const wchar_t* base_name);
 	static bool CreateCategory(const wchar_t* name);
 	static bool RenameCategory(const wchar_t* oldname, const wchar_t* newname);
 	static bool DeleteCategory(const wchar_t* name);
 	static bool SaveDeckArray(const DeckArray& deck, const wchar_t* name);
-	static bool GenerateTestScript(const Deck& deck, const wchar_t* base_name);
 };
 
 extern DeckManager deckManager;
