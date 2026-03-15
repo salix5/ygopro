@@ -193,7 +193,7 @@ uint32_t DeckManager::LoadDeck(Deck& deck, uint32_t dbuf[], int mainc, int sidec
 	}
 	return errorcode;
 }
-uint32_t DeckManager::LoadDeckFromStream(Deck& deck, char* deck_buffer, bool is_packlist) {
+uint32_t DeckManager::LoadDeckFromStream(Deck& deck, const char* deck_buffer, bool is_packlist) {
 	int ct = 0;
 	int mainc = 0, sidec = 0;
 	uint32_t cardlist[PACK_MAX_SIZE]{};
