@@ -1526,7 +1526,7 @@ void DeckBuilder::FilterCards() {
 				match = CardNameContains(strings.name.c_str(), elements_iterator->keyword.c_str());
 			} else if (elements_iterator->type == element_t::type_t::setcode) {
 				match = data.is_setcodes(elements_iterator->setcodes);
-			} else if (trycode && (data.code == trycode || data.alias == trycode && is_alternative(data.code, data.alias))){
+			} else if (trycode && data.get_original_code() == trycode) {
 				match = true;
 			} else {
 				match = CardNameContains(strings.name.c_str(), elements_iterator->keyword.c_str())
@@ -1866,21 +1866,21 @@ void DeckBuilder::pop_side(int seq) {
 	GetHoveredCard();
 }
 bool DeckBuilder::check_limit(const CardDataC* pointer) {
-	auto limitcode = pointer->alias ? pointer->alias : pointer->code;
+	auto limitcode = pointer->get_duel_code();
 	int limit = 3;
 	auto flit = filterList->content.find(limitcode);
 	if(flit != filterList->content.end())
 		limit = flit->second;
 	for (auto& card : deckManager.current_deck.main) {
-		if (card->code == limitcode || card->alias == limitcode)
+		if (card->get_duel_code() == limitcode)
 			limit--;
 	}
 	for (auto& card : deckManager.current_deck.extra) {
-		if (card->code == limitcode || card->alias == limitcode)
+		if (card->get_duel_code() == limitcode)
 			limit--;
 	}
 	for (auto& card : deckManager.current_deck.side) {
-		if (card->code == limitcode || card->alias == limitcode)
+		if (card->get_duel_code() == limitcode)
 			limit--;
 	}
 	return limit > 0;

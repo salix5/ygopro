@@ -1129,9 +1129,7 @@ void Game::DrawThumb(const CardDataC* cp, irr::core::vector2di pos, const LFList
 	if(!cp)
 		return;
 	auto code = cp->code;
-	auto lcode = cp->alias;
-	if(lcode == 0)
-		lcode = code;
+	auto lcode = cp->get_duel_code();
 	irr::video::ITexture* img = imageManager.GetTextureThumb(code);
 	if(img == nullptr)
 		return; //nullptr->getSize() will cause a crash
