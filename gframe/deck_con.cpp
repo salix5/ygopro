@@ -749,9 +749,7 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 	case BUTTON_EXPORT_DECK_CODE: {
 		std::stringstream textStream;
 		deckManager.SaveDeck(deckManager.current_deck, textStream);
-		wchar_t text[0x10000];
-		BufferIO::DecodeUTF8(textStream.str().c_str(), text);
-		mainGame->env->getOSOperator()->copyToClipboard(text);
+		mainGame->env->getOSOperator()->copyToClipboard(textStream.str().c_str());
 		mainGame->stACMessage->setText(dataManager.GetSysString(1480));
 		mainGame->PopupElement(mainGame->wACMessage, 40);
 		break;
@@ -848,10 +846,8 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 			}
 			Deck new_deck;
 			if (dmquery_operation == BUTTON_IMPORT_DECK_CODE) {
-				if (const wchar_t* txt = mainGame->env->getOSOperator()->getTextFromClipboard()) {
-					char text[0x10000]{};
-					BufferIO::EncodeUTF8(txt, text);
-					DeckManager::LoadDeckFromStream(new_deck, text);
+				if (const char* txt = mainGame->env->getOSOperator()->getTextFromClipboard()) {
+					DeckManager::LoadDeckFromStream(new_deck, txt);
 				}
 			}
 			if (!DeckManager::SaveDeck(new_deck, filepath))
