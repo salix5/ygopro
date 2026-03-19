@@ -58,7 +58,7 @@ jobs:
     - name: Fetch Irrlicht
       uses: actions/checkout@v4
       with:
-        repository: mercury233/irrlicht
+        repository: salix5/irrlicht
         path: irrlicht
         ref: ${{ steps.parse-pr-override.outputs.irrlicht-ref }}
 
