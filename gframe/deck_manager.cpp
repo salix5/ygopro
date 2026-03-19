@@ -13,6 +13,17 @@ void DeckManager::LoadLFListSingle(const char* path) {
 	FILE* fp = std::fopen(path, "r");
 	char linebuf[256]{};
 	wchar_t strBuffer[256]{};
+	auto credit_hash = [](const char* s) -> uint32_t {
+		uint32_t h = 2166136261u;
+		for(auto p = s; *p; ++p) {
+			h ^= static_cast<unsigned char>(*p);
+			h *= 16777619u;
+		}
+		return h;
+	};
+	auto credit_update_hash = [](uint32_t h, uint32_t a, uint32_t b, uint32_t c) -> uint32_t {
+		return h ^ ((a << 18) | (a >> 14)) ^ ((b << 9) | (b >> 23)) ^ ((c << 27) | (c >> 5));
+	};
 	if(fp) {
 		while(std::fgets(linebuf, sizeof linebuf, fp)) {
 			if(linebuf[0] == '#')
@@ -30,17 +41,36 @@ void DeckManager::LoadLFListSingle(const char* path) {
 			}
 			if (cur == _lfList.rend())
 				continue;
-			char* pos = linebuf;
-			errno = 0;
-			auto result = std::strtoul(pos, &pos, 10);
-			if (errno || result > UINT32_MAX)
+			if(linebuf[0] == '$') {
+				int limitValue = 0;
+				char keybuf[256];
+				if (std::sscanf(linebuf, "$%255s %d", keybuf, &limitValue) != 2)
+					continue;
+				cur->point_list.push_back({ keybuf, limitValue });
+				cur->hash = credit_update_hash(cur->hash, credit_hash(keybuf), static_cast<uint32_t>(limitValue), 0x43524544u);
 				continue;
-			if (pos == linebuf || *pos != ' ')
+			}
+			char* pos = linebuf;
+			char* end = nullptr;
+			errno = 0;
+			auto result = std::strtoul(pos, &end, 10);
+			if (errno || result > UINT32_MAX || end == pos)
 				continue;
 			uint32_t code = static_cast<uint32_t>(result);
+			int creditValue = 0;
+			if (std::sscanf(end, " $%*s %d", &creditValue) == 1) {
+				if (cur->point_list.empty())
+					continue;
+				auto& point = cur->point_list.back();
+				point.table[code] = creditValue;
+				cur->hash = credit_update_hash(cur->hash, code, credit_hash(point.name.c_str()), static_cast<uint32_t>(creditValue));
+				continue;
+			}
+			pos = end;
+			end = nullptr;
 			errno = 0;
-			int count = std::strtol(pos, &pos, 10);
-			if (errno)
+			int count = std::strtol(pos, &end, 10);
+			if (errno || end == pos)
 				continue;
 			if (count < 0 || count > 2)
 				continue;
@@ -98,7 +128,7 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 	auto& list = lflist->content;
 	const unsigned int rule_map[6] = { AVAIL_OCG, AVAIL_TCG, AVAIL_SC, AVAIL_CUSTOM, AVAIL_OCGTCG, 0 };
 	unsigned int avail = 0;
-	if (rule >= 0 && rule < (int)(sizeof rule_map / sizeof rule_map[0]))
+	if ((size_t)rule < sizeof rule_map / sizeof rule_map[0])
 		avail = rule_map[rule];
 	for (auto& cit : deck.main) {
 		auto gameruleDeckError = checkAvail(cit->ot, avail);
@@ -145,6 +175,10 @@ unsigned int DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, int r
 		if(it != list.end() && dc > it->second)
 			return (DECKERROR_LFLIST << 28) | cit->code;
 	}
+	std::vector<int> sum;
+	uint32_t result = CheckDeckPoint(deck, lflist, sum);
+	if (result)
+		return (DECKERROR_LFLIST << 28) | result;
 	return 0;
 }
 uint32_t DeckManager::LoadDeck(Deck& deck, uint32_t dbuf[], int mainc, int sidec, bool is_packlist) {
@@ -448,5 +482,36 @@ bool DeckManager::SaveDeckArray(const DeckArray& deck, const wchar_t* name) {
 		std::fprintf(fp, "%u\n", code);
 	std::fclose(fp);
 	return true;
+}
+uint32_t DeckManager::CheckDeckPoint(const Deck& deck, const LFList* lflist, std::vector<int>& sum) {
+	if (!lflist || lflist->point_list.empty())
+		return 0U;
+	sum.clear();
+	sum.resize(lflist->point_list.size());
+	auto add_card = [&sum](uint32_t code, const LFList* lflist){
+		for (size_t i = 0; i < lflist->point_list.size(); ++i) {
+			auto& point = lflist->point_list[i];
+			auto it = point.table.find(code);
+			if (it == point.table.end())
+				continue;
+			sum[i] = sum[i] + it->second;
+			if (sum[i] > point.limit)
+				return false;
+		}
+		return true;
+	};
+	for (auto& card: deck.main){
+		if (!add_card(card->second.code, lflist))
+			return card->second.code;
+	}
+	for (auto& card: deck.extra){
+		if (!add_card(card->second.code, lflist))
+			return card->second.code;
+	}
+	for (auto& card: deck.side){
+		if (!add_card(card->second.code, lflist))
+			return card->second.code;
+	}
+	return 0U;
 }
 }

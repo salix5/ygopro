@@ -1863,22 +1863,52 @@ void DeckBuilder::pop_side(int seq) {
 }
 bool DeckBuilder::check_limit(const CardDataC* pointer) {
 	auto limitcode = pointer->get_duel_code();
-	int limit = 3;
+	int available = 3;
 	auto flit = filterList->content.find(limitcode);
 	if(flit != filterList->content.end())
-		limit = flit->second;
+		available = flit->second;
+	auto check_card = [&](code_pointer& cit) {
+		auto card = &(cit->second);
+		if (card->get_duel_code() == limitcode) {
+			available--;
+		}
+		return available > 0;
+	};
 	for (auto& card : deckManager.current_deck.main) {
-		if (card->get_duel_code() == limitcode)
-			limit--;
+		if(!check_card(card))
+			return false;
 	}
 	for (auto& card : deckManager.current_deck.extra) {
-		if (card->get_duel_code() == limitcode)
-			limit--;
+		if(!check_card(card))
+			return false;
 	}
 	for (auto& card : deckManager.current_deck.side) {
-		if (card->get_duel_code() == limitcode)
-			limit--;
+		if(!check_card(card))
+			return false;
 	}
-	return limit > 0;
+	bool has_point = false;
+	auto genesys_code = pointer->second.get_original_code();
+	for (auto& point : filterList->point_list) {
+		if (point.table.find(genesys_code) != point.table.end()) {
+			has_point = true;
+			break;
+		}
+	}
+	if (!has_point)
+		return true;
+	
+	std::vector<int> sum;
+	if (DeckManager::CheckDeckPoint(deckManager.current_deck, filterList, sum) != 0U)
+		return false;
+	for (size_t i = 0; i < filterList->point_list.size(); ++i) {
+		auto& point = filterList->point_list[i];
+		auto it = point.table.find(genesys_code);
+		if (it == point.table.end())
+			continue;
+		sum[i] = sum[i] + it->second;
+		if (sum[i] > point.limit)
+			return false;
+	}
+	return true;
 }
 }
