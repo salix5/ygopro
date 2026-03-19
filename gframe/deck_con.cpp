@@ -1867,8 +1867,7 @@ bool DeckBuilder::check_limit(const CardDataC* pointer) {
 	auto flit = filterList->content.find(limitcode);
 	if(flit != filterList->content.end())
 		available = flit->second;
-	auto check_card = [&](code_pointer& cit) {
-		auto card = &(cit->second);
+	auto check_card = [&](const CardDataC* card) {
 		if (card->get_duel_code() == limitcode) {
 			available--;
 		}
@@ -1887,7 +1886,7 @@ bool DeckBuilder::check_limit(const CardDataC* pointer) {
 			return false;
 	}
 	bool has_point = false;
-	auto genesys_code = pointer->second.get_original_code();
+	auto genesys_code = pointer->get_original_code();
 	for (auto& point : filterList->point_list) {
 		if (point.table.find(genesys_code) != point.table.end()) {
 			has_point = true;

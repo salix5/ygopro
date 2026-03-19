@@ -501,16 +501,16 @@ uint32_t DeckManager::CheckDeckPoint(const Deck& deck, const LFList* lflist, std
 		return true;
 	};
 	for (auto& card: deck.main){
-		if (!add_card(card->second.code, lflist))
-			return card->second.code;
+		if (!add_card(card->code, lflist))
+			return card->code;
 	}
 	for (auto& card: deck.extra){
-		if (!add_card(card->second.code, lflist))
-			return card->second.code;
+		if (!add_card(card->code, lflist))
+			return card->code;
 	}
 	for (auto& card: deck.side){
-		if (!add_card(card->second.code, lflist))
-			return card->second.code;
+		if (!add_card(card->code, lflist))
+			return card->code;
 	}
 	return 0U;
 }
