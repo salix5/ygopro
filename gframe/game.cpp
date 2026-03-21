@@ -712,6 +712,11 @@ bool Game::Initialize() {
 	btnSideReload->setVisible(false);
 	btnGenerateScript = env->addButton(irr::core::rect<irr::s32>(205, 100, 295, 135), 0, BUTTON_GENERATE_SCRIPT, dataManager.GetSysString(1800));
 	btnGenerateScript->setVisible(false);
+	btnFillPic = env->addButton(irr::core::rect<irr::s32>(205, 155, 295, 185), 0, BUTTON_FILL_PIC, dataManager.GetSysString(1802));
+	btnFillPic->setVisible(false);
+	progressFillPic = env->addStaticText(L"Hello", irr::core::rect<irr::s32>(205, 195, 295, 225), true, true);
+	progressFillPic->setBackgroundColor(0xc0c0c0ff);
+	progressFillPic->setVisible(false);
 	//
 	scrFilter = env->addScrollBar(false, irr::core::recti(999, 161, 1019, 629), 0, SCROLL_FILTER);
 	scrFilter->setLargeStep(10);
@@ -1441,7 +1446,13 @@ void Game::LoadConfig() {
 		} else if(!std::strcmp(strbuf, "music_mode")) {
 			gameConf.music_mode = std::strtol(valbuf, nullptr, 10);
 #endif
-		} else {
+		}
+#if _WIN32
+		else if (!std::strcmp(strbuf, "pic_source_url")) {
+			BufferIO::DecodeUTF8(valbuf, gameConf.pic_source_url);
+		}
+#endif // _WIN32 
+		else {
 			// options allowing multiple words
 			if (std::sscanf(linebuf, "%63s = %959[^\n]", strbuf, valbuf) != 2)
 				continue;
@@ -1469,6 +1480,7 @@ void Game::LoadConfig() {
 			} else if(!std::strcmp(strbuf, "bot_deck_path")) {
 				BufferIO::DecodeUTF8(valbuf, gameConf.bot_deck_path);
 			}
+
 		}
 	}
 	std::fclose(fp);
@@ -1538,6 +1550,10 @@ void Game::SaveConfig() {
 	std::fprintf(fp, "window_width = %d\n", gameConf.window_width);
 	std::fprintf(fp, "window_height = %d\n", gameConf.window_height);
 	std::fprintf(fp, "resize_popup_menu = %d\n", gameConf.resize_popup_menu ? 1 : 0);
+#if _WIN32
+	BufferIO::EncodeUTF8(gameConf.pic_source_url, linebuf);
+	std::fprintf(fp, "pic_source_url = %s\n", linebuf);
+#endif
 #ifdef YGOPRO_USE_AUDIO
 	std::fprintf(fp, "enable_sound = %d\n", (chkEnableSound->isChecked() ? 1 : 0));
 	std::fprintf(fp, "enable_music = %d\n", (chkEnableMusic->isChecked() ? 1 : 0));
@@ -2076,7 +2092,8 @@ void Game::OnResize() {
 	btnBigCardZoomOut->setRelativePosition(Resize(205, 180, 295, 215));
 	btnBigCardClose->setRelativePosition(Resize(205, 230, 295, 265));
 	btnGenerateScript->setRelativePosition(Resize(205, 100, 295, 135));
-
+	btnFillPic->setRelativePosition(Resize(205, 140, 295, 175));
+	progressFillPic->setRelativePosition(Resize(205, 180, 295, 215));
 	irr::s32 barWidth = (xScale > 1) ? gameConf.textfontsize * xScale : gameConf.textfontsize;
 	env->getSkin()->setSize(irr::gui::EGDS_SCROLLBAR_SIZE, barWidth);
 }

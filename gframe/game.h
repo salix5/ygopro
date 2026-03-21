@@ -71,6 +71,7 @@ struct Config {
 	wchar_t textfont[256]{};
 	wchar_t numfont[256]{};
 	wchar_t bot_deck_path[256]{ L"./WindBot/Decks" };
+	wchar_t pic_source_url[128];
 	//settings
 	int chkMAutoPos{ 0 };
 	int chkSTAutoPos{ 1 };
@@ -555,7 +556,9 @@ public:
 	irr::gui::IGUIButton* btnSideSort;
 	irr::gui::IGUIButton* btnSideReload;
 	irr::gui::IGUIButton* btnGenerateScript;
+	irr::gui::IGUIButton* btnFillPic;
 	irr::gui::IGUIEditBox* ebDeckname;
+	irr::gui::IGUIStaticText* progressFillPic;
 	irr::gui::IGUIStaticText* stDBCategory;
 	irr::gui::IGUIStaticText* stDeck;
 	irr::gui::IGUIStaticText* stCategory;
@@ -883,6 +886,8 @@ extern Game* mainGame;
 #define BUTTON_MARKERS_OK			469
 
 #define BUTTON_GENERATE_SCRIPT		500
+
+#define BUTTON_FILL_PIC				501
 
 #define AVAIL_OCG					0x1
 #define AVAIL_TCG					0x2

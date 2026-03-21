@@ -7,6 +7,7 @@
 #include "sound_manager.h"
 #include "game.h"
 #include "duelclient.h"
+#include "fillpics.h"
 
 namespace ygo {
 
@@ -94,6 +95,7 @@ void DeckBuilder::Initialize() {
 	mainGame->btnSideSort->setVisible(false);
 	mainGame->btnSideReload->setVisible(false);
 	mainGame->btnGenerateScript->setVisible(true);
+	mainGame->btnFillPic->setVisible(true);
 	if (mainGame->gameConf.use_lflist) {
 		if (mainGame->gameConf.default_lflist >= 0 && mainGame->gameConf.default_lflist < (int)deckManager._lfList.size()) {
 			filterList = &deckManager._lfList[mainGame->gameConf.default_lflist];
@@ -136,6 +138,8 @@ void DeckBuilder::Terminate() {
 	mainGame->btnBigCardZoomOut->setVisible(false);
 	mainGame->btnBigCardClose->setVisible(false);
 	mainGame->btnGenerateScript->setVisible(false);
+	mainGame->btnFillPic->setVisible(false);
+	mainGame->progressFillPic->setVisible(false);
 	EnableEditWindow(true);
 	EnableManageWindow(true);
 	mainGame->ResizeChatInputWindow();
@@ -1099,6 +1103,20 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 			mainGame->stACMessage->setText(dataManager.GetSysString(1801));
 			mainGame->PopupElement(mainGame->wACMessage, 40);
 		}
+		break;
+	}
+	case BUTTON_FILL_PIC: {
+#if _WIN32
+		mainGame->progressFillPic->setText(dataManager.GetSysString(1803));
+		mainGame->progressFillPic->setVisible(true);
+		mainGame->env->drawAll();
+		std::thread t([&]() {
+			fillpics fp("cards.cdb");
+			fp.get_card_size();
+			fp.fetch_and_fill_pic();
+			});
+		t.detach();
+#endif
 		break;
 	}
 	}
