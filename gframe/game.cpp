@@ -89,17 +89,17 @@ bool Game::Initialize() {
 	env = device->getGUIEnvironment();
 	numFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 16);
 	if(!numFont) {
-		const wchar_t* numFontPaths[] = {
-			L"C:/Windows/Fonts/arialbd.ttf",
-			L"/usr/share/fonts/truetype/DroidSansFallbackFull.ttf",
-			L"/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-			L"/usr/share/fonts/google-noto-cjk/NotoSansCJK-Bold.ttc",
-			L"/usr/share/fonts/noto-cjk/NotoSansCJK-Bold.ttc",
-			L"/System/Library/Fonts/SFNSTextCondensed-Bold.otf",
-			L"/System/Library/Fonts/SFNS.ttf",
+		const char* numFontPaths[] = {
+			"C:/Windows/Fonts/arialbd.ttf",
+			"/usr/share/fonts/truetype/DroidSansFallbackFull.ttf",
+			"/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+			"/usr/share/fonts/google-noto-cjk/NotoSansCJK-Bold.ttc",
+			"/usr/share/fonts/noto-cjk/NotoSansCJK-Bold.ttc",
+			"/System/Library/Fonts/SFNSTextCondensed-Bold.otf",
+			"/System/Library/Fonts/SFNS.ttf",
 		};
-		for(const wchar_t* path : numFontPaths) {
-			BufferIO::CopyWideString(path, gameConf.numfont);
+		for(auto path : numFontPaths) {
+			BufferIO::CopyString(path, gameConf.numfont);
 			numFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 16);
 			if(numFont)
 				break;
@@ -107,23 +107,23 @@ bool Game::Initialize() {
 	}
 	textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
 	if(!textFont) {
-		const wchar_t* textFontPaths[] = {
-			L"C:/Windows/Fonts/NotoSansCJK-Regular.ttc",
-			L"C:/Windows/Fonts/msyh.ttc",
-			L"C:/Windows/Fonts/msyh.ttf",
-			L"C:/Windows/Fonts/simsun.ttc",
-			L"C:/Windows/Fonts/YuGothM.ttc",
-			L"C:/Windows/Fonts/meiryo.ttc",
-			L"C:/Windows/Fonts/msgothic.ttc",
-			L"/usr/share/fonts/truetype/DroidSansFallbackFull.ttf",
-			L"/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
-			L"/usr/share/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc",
-			L"/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",
-			L"/System/Library/Fonts/PingFang.ttc",
-			L"/System/Library/Fonts/STHeiti Medium.ttc",
+		const char* textFontPaths[] = {
+			"C:/Windows/Fonts/NotoSansCJK-Regular.ttc",
+			"C:/Windows/Fonts/msyh.ttc",
+			"C:/Windows/Fonts/msyh.ttf",
+			"C:/Windows/Fonts/simsun.ttc",
+			"C:/Windows/Fonts/YuGothM.ttc",
+			"C:/Windows/Fonts/meiryo.ttc",
+			"C:/Windows/Fonts/msgothic.ttc",
+			"/usr/share/fonts/truetype/DroidSansFallbackFull.ttf",
+			"/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+			"/usr/share/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc",
+			"/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",
+			"/System/Library/Fonts/PingFang.ttc",
+			"/System/Library/Fonts/STHeiti Medium.ttc",
 		};
-		for(const wchar_t* path : textFontPaths) {
-			BufferIO::CopyWideString(path, gameConf.textfont);
+		for(auto path : textFontPaths) {
+			BufferIO::CopyString(path, gameConf.textfont);
 			textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
 			if(textFont)
 				break;
@@ -131,7 +131,6 @@ bool Game::Initialize() {
 	}
 	if(!numFont || !textFont) {
 		wchar_t fpath[1024]{};
-		fpath[0] = 0;
 		FileSystem::TraversalDir(L"./fonts", [&fpath](const wchar_t* name, bool isdir) {
 			if(!isdir && (IsExtension(name, L".ttf") || IsExtension(name, L".ttc") || IsExtension(name, L".otf"))) {
 				myswprintf(fpath, L"./fonts/%ls", name);
@@ -142,11 +141,11 @@ bool Game::Initialize() {
 			return false;
 		}
 		if(!numFont) {
-			BufferIO::CopyWideString(fpath, gameConf.numfont);
+			BufferIO::EncodeUTF8(fpath, gameConf.numfont);
 			numFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 16);
 		}
 		if(!textFont) {
-			BufferIO::CopyWideString(fpath, gameConf.textfont);
+			BufferIO::EncodeUTF8(fpath, gameConf.textfont);
 			textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
 		}
 	}
@@ -1453,9 +1452,9 @@ void Game::LoadConfig() {
 				if (fontsize > 0)
 					gameConf.textfontsize = fontsize;
 				*last_space = 0;
-				BufferIO::DecodeUTF8(valbuf, gameConf.textfont);
+				BufferIO::CopyString(valbuf, gameConf.textfont);
 			} else if (!std::strcmp(strbuf, "numfont")) {
-				BufferIO::DecodeUTF8(valbuf, gameConf.numfont);
+				BufferIO::CopyString(valbuf, gameConf.numfont);
 			} else if (!std::strcmp(strbuf, "nickname")) {
 				BufferIO::DecodeUTF8(valbuf, gameConf.nickname);
 			} else if (!std::strcmp(strbuf, "gamename")) {
@@ -1493,10 +1492,8 @@ void Game::SaveConfig() {
 	std::fprintf(fp, "lastcategory = %s\n", linebuf);
 	BufferIO::EncodeUTF8(gameConf.lastdeck, linebuf);
 	std::fprintf(fp, "lastdeck = %s\n", linebuf);
-	BufferIO::EncodeUTF8(gameConf.textfont, linebuf);
-	std::fprintf(fp, "textfont = %s %d\n", linebuf, gameConf.textfontsize);
-	BufferIO::EncodeUTF8(gameConf.numfont, linebuf);
-	std::fprintf(fp, "numfont = %s\n", linebuf);
+	std::fprintf(fp, "textfont = %s %d\n", gameConf.textfont, gameConf.textfontsize);
+	std::fprintf(fp, "numfont = %s\n", gameConf.numfont);
 	std::fprintf(fp, "serverport = %d\n", gameConf.serverport);
 	BufferIO::EncodeUTF8(gameConf.lasthost, linebuf);
 	std::fprintf(fp, "lasthost = %s\n", linebuf);
