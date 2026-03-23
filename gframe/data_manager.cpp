@@ -102,7 +102,7 @@ bool DataManager::ReadDB(sqlite3* pDB) {
 bool DataManager::LoadDB(const char* file) {
 	auto reader = FileSystem->createAndOpenFile(file);
 	if (reader == nullptr) {
-		mysnprintf(errmsg, "File does not exist or failed to unzip: %s", file);
+		std::snprintf(errmsg, sizeof errmsg, "File does not exist or failed to unzip: %s", file);
 		return false;
 	}
 
