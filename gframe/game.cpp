@@ -1166,7 +1166,7 @@ void Game::LoadExpansions() {
 		if (isdir)
 			return;
 		char fpath[1024];
-		std::snprintf(fpath, sizeof fpath, "./expansions/%s", name);
+		mysnprintf(fpath, "./expansions/%s", name);
 		if (IsExtension(name, ".cdb")) {
 			if (!dataManager.LoadDB(fpath)) {
 				std::string errmsg = "Warning: Failed to load DB file on disk (";
