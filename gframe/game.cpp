@@ -437,9 +437,6 @@ bool Game::Initialize() {
 	chkMultiKeywords = env->addCheckBox(false, irr::core::rect<irr::s32>(posX, posY, posX + 260, posY + 25), tabSystem, CHECKBOX_MULTI_KEYWORDS, dataManager.GetSysString(1378));
 	chkMultiKeywords->setChecked(gameConf.search_multiple_keywords > 0);
 	posY += 30;
-	chkPreferExpansionScript = env->addCheckBox(false, irr::core::rect<irr::s32>(posX, posY, posX + 260, posY + 25), tabSystem, CHECKBOX_PREFER_EXPANSION, dataManager.GetSysString(1379));
-	chkPreferExpansionScript->setChecked(gameConf.prefer_expansion_script != 0);
-	posY += 30;
 	env->addStaticText(dataManager.GetSysString(1282), irr::core::rect<irr::s32>(posX + 23, posY + 3, posX + 110, posY + 28), false, false, tabSystem);
 	btnWinResizeS = env->addButton(irr::core::rect<irr::s32>(posX + 115, posY, posX + 145, posY + 25), tabSystem, BUTTON_WINDOW_RESIZE_S, dataManager.GetSysString(1283));
 	btnWinResizeM = env->addButton(irr::core::rect<irr::s32>(posX + 150, posY, posX + 180, posY + 25), tabSystem, BUTTON_WINDOW_RESIZE_M, dataManager.GetSysString(1284));
@@ -1430,6 +1427,7 @@ void Game::LoadConfig() {
 			gameConf.hide_player_name = std::strtol(valbuf, nullptr, 10);
 		} else if(!std::strcmp(strbuf, "prefer_expansion_script")) {
 			gameConf.prefer_expansion_script = std::strtol(valbuf, nullptr, 10);
+			DataManager::prefer_expansion_script = gameConf.prefer_expansion_script;
 		} else if(!std::strcmp(strbuf, "window_maximized")) {
 			gameConf.window_maximized = std::strtol(valbuf, nullptr, 10) > 0;
 		} else if(!std::strcmp(strbuf, "window_width")) {

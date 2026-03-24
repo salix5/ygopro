@@ -358,7 +358,6 @@ public:
 	irr::gui::IGUICheckBox* chkIgnoreDeckChanges{};
 	irr::gui::IGUICheckBox* chkAutoSearch{};
 	irr::gui::IGUICheckBox* chkMultiKeywords{};
-	irr::gui::IGUICheckBox* chkPreferExpansionScript{};
 	irr::gui::IGUICheckBox* chkLFlist{};
 	irr::gui::IGUIComboBox* cbLFlist{};
 	irr::gui::IGUICheckBox* chkEnableSound{};
@@ -852,7 +851,6 @@ extern Game* mainGame;
 #define SCROLL_TAB_HELPER			370
 #define SCROLL_TAB_SYSTEM			371
 #define CHECKBOX_MULTI_KEYWORDS		372
-#define CHECKBOX_PREFER_EXPANSION	373
 #define CHECKBOX_DRAW_SINGLE_CHAIN	374
 #define CHECKBOX_LFLIST				375
 #define CHECKBOX_HIDE_PLAYER_NAME	376
