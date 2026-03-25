@@ -11,7 +11,6 @@ class ReplayMode {
 private:
 	static intptr_t pduel;
 	static bool is_continuing;
-	static bool is_closing;
 	static bool is_pausing;
 	static bool is_paused;
 	static bool is_swaping;
@@ -26,7 +25,7 @@ public:
 	static Replay cur_replay;
 	
 	static bool StartReplay(int skipturn);
-	static void StopReplay(bool is_exiting = false);
+	static void StopReplay();
 	static void SwapField();
 	static void Pause(bool is_pause, bool is_step);
 	static bool ReadReplayResponse();
