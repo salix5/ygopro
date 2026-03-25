@@ -2,7 +2,7 @@ include "lzma/."
 
 project "YGOPro"
     kind "WindowedApp"
-    cppdialect "C++17"
+    cppdialect "C++20"
     rtti "Off"
     openmp "On"
 
