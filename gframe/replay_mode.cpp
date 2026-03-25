@@ -38,8 +38,8 @@ void ReplayMode::SwapField() {
 	else
 		is_swaping = true;
 }
-void ReplayMode::Pause(bool is_pause, bool is_step) {
-	if(is_pause)
+void ReplayMode::Pause(bool to_pause, bool is_step) {
+	if(to_pause)
 		is_pausing = true;
 	else {
 		if(!is_step)
