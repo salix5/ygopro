@@ -10,7 +10,6 @@ namespace ygo {
 intptr_t ReplayMode::pduel = 0;
 Replay ReplayMode::cur_replay;
 bool ReplayMode::is_continuing = true;
-bool ReplayMode::is_closing = false;
 bool ReplayMode::is_pausing = false;
 bool ReplayMode::is_paused = false;
 bool ReplayMode::is_swaping = false;
@@ -27,10 +26,9 @@ bool ReplayMode::StartReplay(int skipturn) {
 	std::thread(ReplayThread).detach();
 	return true;
 }
-void ReplayMode::StopReplay(bool is_exiting) {
+void ReplayMode::StopReplay() {
 	is_pausing = false;
 	is_continuing = false;
-	is_closing = is_exiting;
 	exit_pending = true;
 	mainGame->actionSignal.Set();
 }
@@ -40,8 +38,8 @@ void ReplayMode::SwapField() {
 	else
 		is_swaping = true;
 }
-void ReplayMode::Pause(bool is_pause, bool is_step) {
-	if(is_pause)
+void ReplayMode::Pause(bool to_pause, bool is_step) {
+	if(to_pause)
 		is_pausing = true;
 	else {
 		if(!is_step)
@@ -143,7 +141,6 @@ int ReplayMode::ReplayThread() {
 	EndDuel();
 	pduel = 0;
 	is_continuing = true;
-	is_closing = false;
 	is_pausing = false;
 	is_paused = false;
 	is_swaping = false;
@@ -222,32 +219,30 @@ bool ReplayMode::StartDuel() {
 }
 void ReplayMode::EndDuel() {
 	end_duel(pduel);
-	if(!is_closing) {
-		mainGame->actionSignal.Reset();
-		mainGame->gMutex.lock();
-		mainGame->stMessage->setText(dataManager.GetSysString(1501));
-		mainGame->HideElement(mainGame->wCardSelect);
-		mainGame->PopupElement(mainGame->wMessage);
-		mainGame->gMutex.unlock();
-		mainGame->actionSignal.Wait();
-		mainGame->gMutex.lock();
-		mainGame->dInfo.isStarted = false;
-		mainGame->dInfo.isInDuel = false;
-		mainGame->dInfo.isFinished = true;
-		mainGame->dInfo.isReplay = false;
-		mainGame->dInfo.isSingleMode = false;
-		mainGame->gMutex.unlock();
-		mainGame->closeDoneSignal.Reset();
-		mainGame->closeSignal.Set();
-		mainGame->closeDoneSignal.Wait();
-		mainGame->gMutex.lock();
-		mainGame->ShowElement(mainGame->wReplay);
-		mainGame->stTip->setVisible(false);
-		mainGame->device->setEventReceiver(&mainGame->menuHandler);
-		mainGame->gMutex.unlock();
-		if(exit_on_return)
-			mainGame->device->closeDevice();
-	}
+	mainGame->actionSignal.Reset();
+	mainGame->gMutex.lock();
+	mainGame->stMessage->setText(dataManager.GetSysString(1501));
+	mainGame->HideElement(mainGame->wCardSelect);
+	mainGame->PopupElement(mainGame->wMessage);
+	mainGame->gMutex.unlock();
+	mainGame->actionSignal.Wait();
+	mainGame->gMutex.lock();
+	mainGame->dInfo.isStarted = false;
+	mainGame->dInfo.isInDuel = false;
+	mainGame->dInfo.isFinished = true;
+	mainGame->dInfo.isReplay = false;
+	mainGame->dInfo.isSingleMode = false;
+	mainGame->gMutex.unlock();
+	mainGame->closeDoneSignal.Reset();
+	mainGame->closeSignal.Set();
+	mainGame->closeDoneSignal.Wait();
+	mainGame->gMutex.lock();
+	mainGame->ShowElement(mainGame->wReplay);
+	mainGame->stTip->setVisible(false);
+	mainGame->device->setEventReceiver(&mainGame->menuHandler);
+	mainGame->gMutex.unlock();
+	if (exit_on_return)
+		mainGame->device->closeDevice();
 }
 void ReplayMode::Restart(bool refresh) {
 	end_duel(pduel);
@@ -286,8 +281,6 @@ bool ReplayMode::ReplayAnalyze(unsigned char* msg, unsigned int len) {
 	int player, count;
 	is_restarting = false;
 	while (pbuf - msg < (int)len) {
-		if(is_closing)
-			return false;
 		if(is_restarting) {
 			//is_restarting = false;
 			return true;
