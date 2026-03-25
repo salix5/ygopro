@@ -45,7 +45,6 @@ namespace irr {
 
 typedef char32_t uchar32_t;
 typedef char16_t uchar16_t;
-typedef char uchar8_t;
 
 namespace core {
 
