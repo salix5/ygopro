@@ -1,5 +1,5 @@
 #include "data_manager.h"
-#include "game.h"
+#include "bufferio.h"
 #include "client_card.h"
 
 namespace ygo {
@@ -8,6 +8,7 @@ namespace{
 	unsigned char scriptBuffer[0x100000]{};
 }
 
+bool DataManager::prefer_expansion_script = false;
 DataManager dataManager;
 static const char SELECT_STMT[] = "SELECT id, datas.ot, datas.alias, datas.setcode, datas.type, datas.atk, datas.def, datas.level, datas.race, datas.attribute, datas.category,"
 " texts.name, texts.desc, texts.str1, texts.str2, texts.str3, texts.str4, texts.str5, texts.str6, texts.str7, texts.str8,"
@@ -446,7 +447,7 @@ unsigned char* DataManager::ScriptReaderEx(const char* script_path, int* slen) {
 	const char* script_name = script_path + 2;
 	char expansions_path[1024]{};
 	std::snprintf(expansions_path, sizeof expansions_path, "./expansions/%s", script_name);
-	if (mainGame->gameConf.prefer_expansion_script) { // debug script with raw file in expansions
+	if (prefer_expansion_script) { // debug script with raw file in expansions
 		if (ReadScriptFromFile(expansions_path, slen))
 			return scriptBuffer;
 		if (ReadScriptFromIrrFS(script_name, slen))
