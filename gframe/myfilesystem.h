@@ -23,8 +23,11 @@
 class FileSystem {
 public:
 	static void SafeFileName(wchar_t* wfile) {
-		while((wfile = std::wcspbrk(wfile, L"<>:\"/\\|?*")) != nullptr)
-			*wfile++ = L'_';
+		wchar_t* cursor = wfile;
+		while ((cursor = std::wcspbrk(cursor, L"<>:\"/\\|?*")) != nullptr) {
+			*cursor= L'_';
+			cursor++;
+		}
 	}
 
 	static bool IsFileExists(const wchar_t* wfile) {
