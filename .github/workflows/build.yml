@@ -203,6 +203,7 @@ jobs:
             os: windows-2022
             vs: vs2022
             audiolib: miniaudio
+            nodxsdk: true
 #          - name: windows-irrklang
 #            os: windows-2022
 #            vs: vs2022
