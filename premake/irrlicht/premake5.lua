@@ -13,6 +13,7 @@ project "irrlicht"
         "NO_IRR_COMPILE_WITH_LZMA_",
         "NO_IRR_COMPILE_WITH_CONSOLE_DEVICE_",
         "NO_IRR_COMPILE_WITH_DIRECT3D_8_",
+        "NO_IRR_COMPILE_WITH_DIRECT3D_9_",
         "NO_IRR_COMPILE_WITH_DIRECTINPUT_JOYSTICK_",
         "NO_IRR_COMPILE_WITH_JOYSTICK_EVENTS_",
         "NO_IRR_COMPILE_WITH_SOFTWARE_",
@@ -160,12 +161,6 @@ project "irrlicht"
         }
     end
 
-    filter { "system:windows" }
-        if USE_DXSDK then
-            includedirs { "$(DXSDK_DIR)Include" }
-        else
-            defines { "NO_IRR_COMPILE_WITH_DIRECT3D_9_" }
-        end
 
     filter { "system:macosx" }
         defines { "GL_SILENCE_DEPRECATION" }

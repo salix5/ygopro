@@ -17,7 +17,6 @@ BUILD_SQLITE = os.istarget("windows")
 
 BUILD_IRRLICHT = true -- modified Irrlicht is required, can't use the official one
 IRRLICHT_BUILD_JPEG_PNG = os.istarget("windows") -- build the bundled jpeglib and libpng from Irrlicht
-USE_DXSDK = true
 
 USE_AUDIO = true
 AUDIO_LIB = "miniaudio" -- can be "miniaudio" or "irrklang"
@@ -61,7 +60,6 @@ newoption { trigger = "jpeg-include-dir", category = "YGOPro - irrlicht", descri
 newoption { trigger = "jpeg-lib-dir", category = "YGOPro - irrlicht", description = "", value = "PATH" }
 newoption { trigger = "png-include-dir", category = "YGOPro - irrlicht", description = "", value = "PATH" }
 newoption { trigger = "png-lib-dir", category = "YGOPro - irrlicht", description = "", value = "PATH" }
-newoption { trigger = "no-dxsdk", category = "YGOPro - irrlicht", description = "" }
 
 newoption { trigger = "no-audio", category = "YGOPro", description = "" }
 newoption { trigger = "audio-lib", category = "YGOPro", description = "", value = "miniaudio, irrklang", default = AUDIO_LIB }
@@ -167,16 +165,6 @@ if not IRRLICHT_BUILD_JPEG_PNG then
     JPEG_LIB_DIR = GetParam("jpeg-lib-dir") or os.findlib("jpeg")
     PNG_INCLUDE_DIR = GetParam("png-include-dir") or os.findheader("png.h")
     PNG_LIB_DIR = GetParam("png-lib-dir") or os.findlib("png")
-end
-
-if GetParam("no-dxsdk") then
-    USE_DXSDK = false
-end
-if USE_DXSDK and os.istarget("windows") then
-    if not os.getenv("DXSDK_DIR") then
-        print("Warning: DXSDK_DIR environment variable not set, it seems you don't have the DirectX SDK installed. DirectX mode will be disabled.")
-        USE_DXSDK = false
-    end
 end
 
 if GetParam("no-audio") then
