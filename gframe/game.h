@@ -8,13 +8,6 @@
 #include <unordered_map>
 #include <vector>
 #include "config.h"
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else //__APPLE__
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif //__APPLE__
 #include "mysignal.h"
 #include "client_field.h"
 #include "deck_con.h"
