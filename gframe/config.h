@@ -5,7 +5,6 @@
 #define VERSION_MINOR 4
 #define VERSION_PATCH 0
 
-#define _IRR_STATIC_LIB_
 #define IRR_COMPILE_WITH_DX9_DEV_PACK
 
 #include <cerrno>
