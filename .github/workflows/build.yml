@@ -218,6 +218,7 @@ jobs:
             vs: vs2022
             audiolib: miniaudio
             x64: true
+            nodxsdk: true
 #          - name: windows-2025
 #            os: windows-2025
 #            vs: vs2025 # to be enabled after the release of Visual Studio 2025
