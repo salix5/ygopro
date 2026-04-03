@@ -5,8 +5,6 @@
 #define VERSION_MINOR 4
 #define VERSION_PATCH 0
 
-#define IRR_COMPILE_WITH_DX9_DEV_PACK
-
 #include <cerrno>
 
 #ifdef _WIN32
