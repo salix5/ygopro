@@ -6,6 +6,7 @@ project "YGOPro"
     rtti "Off"
     openmp "On"
 
+    defines { "_IRR_STATIC_LIB_" }
     files { "*.cpp", "*.h" }
     includedirs { "../ocgcore" }
     links { "ocgcore", "clzma", LUA_LIB_NAME, "sqlite3", "irrlicht", "freetype", "event" }
