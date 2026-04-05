@@ -3,6 +3,7 @@
 
 #include "game.h"
 #include <random>
+#include <string>
 #ifdef YGOPRO_USE_MINIAUDIO
 #include <miniaudio.h>
 #endif
