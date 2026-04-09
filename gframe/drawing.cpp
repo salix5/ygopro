@@ -11,7 +11,6 @@
 #include "deck_manager.h"
 #include "sound_manager.h"
 #include "duelclient.h"
-#include "CGUIImageButton.h"
 #include "CGUITTFont.h"
 
 namespace ygo {

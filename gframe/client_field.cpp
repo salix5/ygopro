@@ -7,7 +7,6 @@
 #include "data_manager.h"
 #include "image_manager.h"
 #include "materials.h"
-#include "CGUIImageButton.h"
 #include "CGUITTFont.h"
 
 namespace ygo {
