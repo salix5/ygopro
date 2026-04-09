@@ -943,6 +943,8 @@ bool Game::Initialize() {
 	stCardListTip->setBackgroundColor(0xc0ffffff);
 	stCardListTip->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	stCardListTip->setVisible(false);
+	for (auto& editbox : editbox_list)
+		editbox->setMax(LEN_CHAT_MSG - 1);
 	device->setEventReceiver(&menuHandler);
 	if(!soundManager.Init()) {
 		chkEnableSound->setChecked(false);
