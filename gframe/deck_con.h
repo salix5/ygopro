@@ -38,8 +38,6 @@ public:
 	void EnableEditWindow(bool enabled);
 	void EnableManageWindow(bool enabled);
 
-	bool CardNameContains(const wchar_t *haystack, const wchar_t *needle);
-
 	bool push_main(const CardDataC* pointer, int seq = -1);
 	bool push_extra(const CardDataC* pointer, int seq = -1);
 	bool push_side(const CardDataC* pointer, int seq = -1);
