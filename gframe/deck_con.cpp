@@ -153,7 +153,7 @@ void DeckBuilder::Terminate() {
 		BufferIO::CopyWideString(name, mainGame->gameConf.lastcategory);
 	if (const wchar_t* name = mainGame->cbDBDecks->getText())
 		BufferIO::CopyWideString(name, mainGame->gameConf.lastdeck);
-	if(exit_on_return)
+	if(mainGame->exit_on_return)
 		mainGame->device->closeDevice();
 }
 bool DeckBuilder::OnEvent(const irr::SEvent& event) {

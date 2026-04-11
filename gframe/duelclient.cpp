@@ -80,9 +80,9 @@ void DuelClient::ConnectTimeout(evutil_socket_t fd, short events, void* arg) {
 		mainGame->btnStartBot->setEnabled(true);
 		mainGame->btnBotCancel->setEnabled(true);
 		mainGame->gMutex.lock();
-		if(bot_mode && !mainGame->wSinglePlay->isVisible())
+		if(mainGame->bot_mode && !mainGame->wSinglePlay->isVisible())
 			mainGame->ShowElement(mainGame->wSinglePlay);
-		else if(!bot_mode && !mainGame->wLanWindow->isVisible())
+		else if(!mainGame->bot_mode && !mainGame->wLanWindow->isVisible())
 			mainGame->ShowElement(mainGame->wLanWindow);
 		soundManager.PlaySoundEffect(SOUND_INFO);
 		mainGame->env->addMessageBox(L"", dataManager.GetSysString(1400));
@@ -134,7 +134,7 @@ void DuelClient::ClientEvent(bufferevent* bev, short events, void* ctx) {
 		SendPacketToServer(CTOS_PLAYER_INFO, cspi);
 		if(create_game) {
 			CTOS_CreateGame cscg;
-			if(bot_mode) {
+			if(mainGame->bot_mode) {
 				BufferIO::CopyCharArray(L"Bot Game", cscg.name);
 				BufferIO::CopyCharArray(L"", cscg.pass);
 				cscg.info.rule = 5;
@@ -182,9 +182,9 @@ void DuelClient::ClientEvent(bufferevent* bev, short events, void* ctx) {
 				mainGame->btnStartBot->setEnabled(true);
 				mainGame->btnBotCancel->setEnabled(true);
 				mainGame->gMutex.lock();
-				if(bot_mode && !mainGame->wSinglePlay->isVisible())
+				if(mainGame->bot_mode && !mainGame->wSinglePlay->isVisible())
 					mainGame->ShowElement(mainGame->wSinglePlay);
-				else if(!bot_mode && !mainGame->wLanWindow->isVisible())
+				else if(!mainGame->bot_mode && !mainGame->wLanWindow->isVisible())
 					mainGame->ShowElement(mainGame->wLanWindow);
 				soundManager.PlaySoundEffect(SOUND_INFO);
 				mainGame->env->addMessageBox(L"", dataManager.GetSysString(1400));
@@ -198,7 +198,7 @@ void DuelClient::ClientEvent(bufferevent* bev, short events, void* ctx) {
 					mainGame->btnBotCancel->setEnabled(true);
 					mainGame->gMutex.lock();
 					mainGame->HideElement(mainGame->wHostPrepare);
-					if(bot_mode)
+					if(mainGame->bot_mode)
 						mainGame->ShowElement(mainGame->wSinglePlay);
 					else
 						mainGame->ShowElement(mainGame->wLanWindow);
@@ -229,7 +229,7 @@ void DuelClient::ClientEvent(bufferevent* bev, short events, void* ctx) {
 					mainGame->is_building = false;
 					mainGame->ResizeChatInputWindow();
 					mainGame->device->setEventReceiver(&mainGame->menuHandler);
-					if(bot_mode)
+					if(mainGame->bot_mode)
 						mainGame->ShowElement(mainGame->wSinglePlay);
 					else
 						mainGame->ShowElement(mainGame->wLanWindow);
@@ -715,13 +715,13 @@ void DuelClient::HandleSTOCPacketLan(unsigned char* data, int len) {
 		mainGame->stTip->setVisible(false);
 		mainGame->ResizeChatInputWindow();
 		mainGame->device->setEventReceiver(&mainGame->menuHandler);
-		if(bot_mode)
+		if(mainGame->bot_mode)
 			mainGame->ShowElement(mainGame->wSinglePlay);
 		else
 			mainGame->ShowElement(mainGame->wLanWindow);
 		mainGame->gMutex.unlock();
 		event_base_loopbreak(client_base);
-		if(exit_on_return)
+		if(mainGame->exit_on_return)
 			mainGame->device->closeDevice();
 		break;
 	}
@@ -1064,13 +1064,13 @@ bool DuelClient::ClientAnalyze(unsigned char* msg, int len) {
 			mainGame->btnBotCancel->setEnabled(true);
 			mainGame->stTip->setVisible(false);
 			mainGame->device->setEventReceiver(&mainGame->menuHandler);
-			if(bot_mode)
+			if(mainGame->bot_mode)
 				mainGame->ShowElement(mainGame->wSinglePlay);
 			else
 				mainGame->ShowElement(mainGame->wLanWindow);
 			mainGame->gMutex.unlock();
 			event_base_loopbreak(client_base);
-			if(exit_on_return)
+			if(mainGame->exit_on_return)
 				mainGame->device->closeDevice();
 		}
 		return false;

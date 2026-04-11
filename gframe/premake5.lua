@@ -4,7 +4,9 @@ project "YGOPro"
     kind "WindowedApp"
     cppdialect "C++17"
     rtti "Off"
-    openmp "On"
+    if USE_OPENMP then
+        openmp "On"
+    end
 
     defines { "_IRR_STATIC_LIB_" }
     files { "*.cpp", "*.h" }
@@ -78,7 +80,7 @@ project "YGOPro"
     filter "system:windows"
         entrypoint "mainCRTStartup"
         files "ygopro.rc"
-        links { "ws2_32", "iphlpapi" }
+        links { "ws2_32", "iphlpapi", "winmm" }
         if USE_AUDIO and AUDIO_LIB == "irrklang" then
             links { "irrKlang" }
             if IRRKLANG_PRO then
@@ -92,7 +94,6 @@ project "YGOPro"
         end
 
     filter "system:macosx"
-        openmp "Off"
         links { "OpenGL.framework", "Cocoa.framework", "IOKit.framework" }
         defines { "GL_SILENCE_DEPRECATION" }
         if MAC_ARM then
@@ -107,7 +108,9 @@ project "YGOPro"
 
     filter "system:linux"
         links { "GL", "X11", "dl", "pthread" }
-        linkoptions { "-fopenmp" }
+        if USE_OPENMP then
+            linkoptions { "-fopenmp" }
+        end
         if USE_AUDIO and AUDIO_LIB == "irrklang" then
             links { "IrrKlang" }
             linkoptions{ IRRKLANG_LINK_RPATH }

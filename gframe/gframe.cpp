@@ -12,11 +12,6 @@
 #error "This program requires the Windows 10 SDK version 1803 or above to compile on Windows. Otherwise, non-ASCII characters will not be displayed or processed correctly."
 #endif
 
-unsigned int enable_log = 0x3;
-bool exit_on_return = false;
-bool open_file = false;
-wchar_t open_file_name[256] = L"";
-bool bot_mode = false;
 
 void ClickButton(irr::gui::IGUIElement* btn) {
 	irr::SEvent event;
@@ -90,19 +85,19 @@ int main(int argc, char* argv[]) {
 	bool keep_on_return = false;
 	bool deckCategorySpecified = false;
 	for(int i = 1; i < wargc; ++i) {
-		if (std::wcslen(wargv[i]) >= std::size(open_file_name))
+		if (std::wcslen(wargv[i]) >= std::size(ygo::mainGame->open_file_name))
 			break;
 		if (i == 1) {
 			if (ygo::IsExtension(wargv[i], L".ydk")) {
-				BufferIO::CopyWideString(wargv[i], open_file_name);
-				exit_on_return = true;
+				BufferIO::CopyWideString(wargv[i], ygo::mainGame->open_file_name);
+				ygo::mainGame->exit_on_return = true;
 				ygo::mainGame->OpenDeckBuilder(true);
 				break;
 			}
 			if (ygo::IsExtension(wargv[i], L".yrp")) {
-				open_file = true;
-				BufferIO::CopyWideString(wargv[i], open_file_name);
-				exit_on_return = true;
+				ygo::mainGame->open_file = true;
+				BufferIO::CopyWideString(wargv[i], ygo::mainGame->open_file_name);
+				ygo::mainGame->exit_on_return = true;
 				ClickButton(ygo::mainGame->btnReplayMode);
 				ClickButton(ygo::mainGame->btnLoadReplay);
 				break;
@@ -143,7 +138,7 @@ int main(int argc, char* argv[]) {
 				ygo::mainGame->ebJoinPass->setText(wargv[i]);
 			continue;
 		} else if(!std::wcscmp(wargv[i], L"-k")) { // Keep on return
-			exit_on_return = false;
+			ygo::mainGame->exit_on_return = false;
 			keep_on_return = true;
 		} else if(!std::wcscmp(wargv[i], L"--deck-category")) {
 			++i;
@@ -159,39 +154,39 @@ int main(int argc, char* argv[]) {
 				BufferIO::CopyWideString(wargv[i], ygo::mainGame->gameConf.lastdeck);
 			}
 			if (i + 1 >= wargc) {
-				exit_on_return = !keep_on_return;
+				ygo::mainGame->exit_on_return = !keep_on_return;
 				ygo::mainGame->OpenDeckBuilder(false);
 			}
 		} else if(!std::wcscmp(wargv[i], L"-c")) { // Create host
-			exit_on_return = !keep_on_return;
+			ygo::mainGame->exit_on_return = !keep_on_return;
 			ygo::mainGame->HideElement(ygo::mainGame->wMainMenu);
 			ClickButton(ygo::mainGame->btnHostConfirm);
 			break;
 		} else if(!std::wcscmp(wargv[i], L"-j")) { // Join host
-			exit_on_return = !keep_on_return;
+			ygo::mainGame->exit_on_return = !keep_on_return;
 			ygo::mainGame->HideElement(ygo::mainGame->wMainMenu);
 			ClickButton(ygo::mainGame->btnJoinHost);
 			break;
 		} else if(!std::wcscmp(wargv[i], L"-r")) { // Replay
-			exit_on_return = !keep_on_return;
+			ygo::mainGame->exit_on_return = !keep_on_return;
 			++i;
 			if(i < wargc) {
-				open_file = true;
-				BufferIO::CopyWideString(wargv[i], open_file_name);
+				ygo::mainGame->open_file = true;
+				BufferIO::CopyWideString(wargv[i], ygo::mainGame->open_file_name);
 			}
 			ClickButton(ygo::mainGame->btnReplayMode);
-			if(open_file)
+			if(ygo::mainGame->open_file)
 				ClickButton(ygo::mainGame->btnLoadReplay);
 			break;
 		} else if(!std::wcscmp(wargv[i], L"-s")) { // Single
-			exit_on_return = !keep_on_return;
+			ygo::mainGame->exit_on_return = !keep_on_return;
 			++i;
 			if(i < wargc) {
-				open_file = true;
-				BufferIO::CopyWideString(wargv[i], open_file_name);
+				ygo::mainGame->open_file = true;
+				BufferIO::CopyWideString(wargv[i], ygo::mainGame->open_file_name);
 			}
 			ClickButton(ygo::mainGame->btnSingleMode);
-			if(open_file)
+			if(ygo::mainGame->open_file)
 				ClickButton(ygo::mainGame->btnLoadSinglePlay);
 			break;
 		}
