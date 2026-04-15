@@ -361,7 +361,7 @@ workspace "YGOPro"
         defines { "_CRT_SECURE_NO_WARNINGS" }
 
     filter "not action:vs*"
-        buildoptions { "-Wno-multichar", "-Wno-format-security" }
+        buildoptions { "-fno-strict-aliasing", "-Wno-multichar", "-Wno-format-security" }
         if not MAC_ARM and not MAC_INTEL then
             buildoptions "-march=native"
         end
