@@ -54,11 +54,17 @@
 
 template<size_t N, typename... TR>
 inline int myswprintf(wchar_t(&buf)[N], const wchar_t* fmt, TR... args) {
-	return std::swprintf(buf, N, fmt, args...);
+	if constexpr (sizeof...(args) == 0)
+		return std::swprintf(buf, N, L"%ls", fmt);
+	else
+		return std::swprintf(buf, N, fmt, args...);
 }
 template<size_t N, typename... TR>
 inline int mysnprintf(char(&buf)[N], const char* fmt, TR... args) {
-	return std::snprintf(buf, N, fmt, args...);
+	if constexpr (sizeof...(args) == 0)
+		return std::snprintf(buf, N, "%s", fmt);
+	else
+		return std::snprintf(buf, N, fmt, args...);
 }
 
 inline FILE* mywfopen(const wchar_t* filename, const char* mode) {
