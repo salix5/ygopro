@@ -16,6 +16,8 @@ curl -L -O https://github.com/libevent/libevent/releases/download/release-2.1.12
 tar -xf libevent-2.1.12-stable.tar.gz
 rename libevent-2.1.12-stable event
 del libevent-2.1.12-stable.tar.gz
+copy /Y premake\event\msvc-event-config.h event\include\event2\event-config.h
+copy /Y event\WIN32-Code\nmake\evconfig-private.h event\include\evconfig-private.h
 
 curl -L -O https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.1.4.1/libjpeg-turbo-3.1.4.1.tar.gz
 tar -xf libjpeg-turbo-3.1.4.1.tar.gz
