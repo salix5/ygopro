@@ -10,6 +10,7 @@
 #include "netserver.h"
 #include "single_mode.h"
 #include "CGUITTFont.h"
+#include <algorithm>
 #include <filesystem>
 #include <thread>
 #include <chrono>
@@ -1520,18 +1521,18 @@ void Game::LoadConfig() {
 			gameConf.resize_select_window = std::strtol(valbuf, nullptr, 10) > 0;
 		} else if(!std::strcmp(strbuf, "resize_popup_menu")) {
 			int val = std::strtol(valbuf, nullptr, 10);
-			gameConf.resize_popup_menu = myclamp(val, 0, 5);
+			gameConf.resize_popup_menu = std::clamp(val, 0, 5);
 #ifdef YGOPRO_USE_AUDIO
 		} else if(!std::strcmp(strbuf, "enable_sound")) {
 			gameConf.enable_sound = std::strtol(valbuf, nullptr, 10) > 0;
 		} else if(!std::strcmp(strbuf, "sound_volume")) {
 			int vol = std::strtol(valbuf, nullptr, 10);
-			gameConf.sound_volume = myclamp(vol, 0, 100);
+			gameConf.sound_volume = std::clamp(vol, 0, 100);
 		} else if(!std::strcmp(strbuf, "enable_music")) {
 			gameConf.enable_music = std::strtol(valbuf, nullptr, 10) > 0;
 		} else if(!std::strcmp(strbuf, "music_volume")) {
 			int vol = std::strtol(valbuf, nullptr, 10);
-			gameConf.music_volume = myclamp(vol, 0, 100);
+			gameConf.music_volume = std::clamp(vol, 0, 100);
 		} else if(!std::strcmp(strbuf, "music_mode")) {
 			gameConf.music_mode = std::strtol(valbuf, nullptr, 10);
 #endif

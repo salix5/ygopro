@@ -1051,7 +1051,7 @@ void ClientField::GetCardLocation(ClientCard* pcard, irr::core::vector3df* t, ir
 			return;
 		}
 		int oseq = pcard->overlayTarget->sequence;
-		int mseq = myclamp(sequence, 0, MAX_LAYER_COUNT - 1);
+		int mseq = std::clamp(sequence, 0, MAX_LAYER_COUNT - 1);
 		if (pcard->overlayTarget->controler == 0) {
 			t->X = (matManager.vFieldMzone[0][oseq][0].Pos.X + matManager.vFieldMzone[0][oseq][1].Pos.X) / 2 - 0.12f + 0.06f * mseq;
 			t->Y = (matManager.vFieldMzone[0][oseq][0].Pos.Y + matManager.vFieldMzone[0][oseq][2].Pos.Y) / 2 + 0.05f;
