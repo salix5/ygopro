@@ -1916,6 +1916,10 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 					mainGame->ClearChatMsg();
 				return true;
 			}
+			case CHECKBOX_PREFER_EXPANSION: {
+				mainGame->gameConf.prefer_expansion_script = mainGame->chkPreferExpansionScript->isChecked() ? 1 : 0;
+				return true;
+			}
 			case CHECKBOX_LFLIST: {
 				mainGame->gameConf.use_lflist = mainGame->chkLFlist->isChecked() ? 1 : 0;
 				mainGame->cbLFlist->setEnabled(mainGame->gameConf.use_lflist);
