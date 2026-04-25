@@ -7,9 +7,6 @@
 #ifdef YGOPRO_USE_MINIAUDIO
 #include <miniaudio.h>
 #endif
-#ifdef YGOPRO_USE_IRRKLANG
-#include <irrKlang.h>
-#endif
 
 namespace ygo {
 
@@ -31,11 +28,6 @@ private:
 	ma_sound soundBGM;
 	wchar_t currentPlayingMusic[1024]{};
 #endif
-#ifdef YGOPRO_USE_IRRKLANG
-	irrklang::ISoundEngine* engineSound;
-	irrklang::ISoundEngine* engineMusic;
-	irrklang::ISound* soundBGM;
-#endif
 	void RefershBGMDir(std::wstring path, int scene);
 
 public:
@@ -47,8 +39,8 @@ public:
 	void PlayMusic(wchar_t* music, bool loop);
 	void PlayBGM(int scene);
 	void StopBGM();
-	void SetSoundVolume(double volume);
-	void SetMusicVolume(double volume);
+	void SetSoundVolume(int volume);
+	void SetMusicVolume(int volume);
 };
 
 extern SoundManager soundManager;
