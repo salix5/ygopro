@@ -68,9 +68,6 @@ project "YGOPro"
         files "ygopro.rc"
         links { "ws2_32", "iphlpapi", "winmm" }
 
-    filter "not action:vs*"
-        cppdialect "C++14"
-
     filter "system:macosx"
         links { "OpenGL.framework", "Cocoa.framework", "IOKit.framework", "Carbon.framework" }
         defines { "GL_SILENCE_DEPRECATION" }
