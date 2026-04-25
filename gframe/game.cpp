@@ -980,6 +980,8 @@ bool Game::Initialize() {
 		chkMusicMode->setEnabled(false);
 		chkMusicMode->setVisible(false);
 	}
+	env->getSkin()->setFont(guiFont);
+	env->setFocus(wMainMenu);
 	std::set<int> excluded_colors{
 		irr::gui::EGDC_ACTIVE_CAPTION,
 		irr::gui::EGDC_BUTTON_TEXT,
@@ -989,8 +991,6 @@ bool Game::Initialize() {
 		irr::gui::EGDC_TOOLTIP,
 		irr::gui::EGDC_FOCUSED_EDITABLE,
 	};
-	env->getSkin()->setFont(guiFont);
-	env->setFocus(wMainMenu);
 	for (int i = 0; i < irr::gui::EGDC_COUNT; ++i) {
 		if (excluded_colors.find(i) != excluded_colors.end())
 			continue;
