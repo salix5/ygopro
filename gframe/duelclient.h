@@ -2,9 +2,7 @@
 #define DUELCLIENT_H
 
 #include <vector>
-#include <set>
-#include <random>
-#include "config.h"
+#include "bufferio.h"
 #include "deck.h"
 #include "network.h"
 
@@ -12,32 +10,11 @@ namespace ygo {
 
 class DuelClient {
 private:
-	static unsigned int connect_state;
-	static unsigned char response_buf[SIZE_RETURN_VALUE];
-	static size_t response_len;
-	static unsigned int watching;
-	static bool is_host;
-	static event_base* client_base;
-	static bufferevent* client_bev;
-	static unsigned char duel_client_write[SIZE_NETWORK_BUFFER];
-	static bool is_closing;
-	static bool is_swapping;
-	static int select_hint;
-	static int select_unselect_hint;
-	static int last_select_hint;
-	static unsigned char last_successful_msg[SIZE_NETWORK_BUFFER];
-	static size_t last_successful_msg_length;
-	static wchar_t event_string[256];
-	static std::mt19937 rnd;
-	static std::uniform_real_distribution<float> real_dist;
-	static bool is_refreshing;
-	static int match_kill;
-	static event* resp_event;
-	static std::set<std::pair<unsigned int, unsigned short>> remotes;
-	static const std::set<int> select_effectyn_id;
+	static inline bufferevent* client_bev{};
+	static inline unsigned char duel_client_write[SIZE_NETWORK_BUFFER]{};
 
 public:
-	static unsigned char selftype;
+	static inline unsigned char selftype{};
 	static bool StartClient(unsigned int ip, unsigned short port, bool create_game = true);
 	static void ConnectTimeout(evutil_socket_t fd, short events, void* arg);
 	static void StopClient(bool is_exiting = false);
@@ -76,7 +53,7 @@ public:
 		bufferevent_write(client_bev, duel_client_write, len + 3);
 	}
 
-	static std::vector<HostPacket> hosts;
+	static inline std::vector<HostPacket> hosts{};
 	static void BeginRefreshHost();
 	static int RefreshThread(event_base* broadev);
 	static void BroadcastReply(evutil_socket_t fd, short events, void* arg);
