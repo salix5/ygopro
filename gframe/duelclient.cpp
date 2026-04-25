@@ -32,7 +32,7 @@ namespace {
 	unsigned char last_successful_msg[SIZE_NETWORK_BUFFER]{};
 	size_t last_successful_msg_length{};
 	wchar_t event_string[256]{};
-	std::mt19937 rnd{};
+	std::mt19937 rnd{ std::random_device{}() };
 	std::uniform_real_distribution<float> real_dist{};
 
 	bool is_refreshing{};
@@ -64,7 +64,6 @@ bool DuelClient::StartClient(unsigned int ip, unsigned short port, bool create_g
 		return false;
 	}
 	connect_state = 0x1;
-	rnd.seed(std::random_device()());
 	if(!create_game) {
 		timeval timeout = {5, 0};
 		event* timeout_event = event_new(client_base, 0, EV_TIMEOUT, ConnectTimeout, 0);
