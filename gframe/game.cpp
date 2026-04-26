@@ -2030,14 +2030,10 @@ void Game::OnResize() {
 	imageManager.ClearTexture();
 	imageManager.ResizeTexture();
 
-	for(auto& it : btnCardImgInfo) {
-		auto button = it.first;
-		std::pair<int, bool>& imgInfo = it.second;
+	for(auto& [button, imgInfo] : btnCardImgInfo) {
 		btnImagePending[button] = imgInfo;
 	}
-	for(auto& it : btnFacedownImgInfo) {
-		auto button = it.first;
-		std::pair<int, bool>& imgInfo = it.second;
+	for(auto& [button, imgInfo] : btnFacedownImgInfo) {
 		if(imgInfo.second)
 			button->setImage(imageManager.tButtonFacedownDefense[imgInfo.first]);
 		else

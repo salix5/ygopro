@@ -1629,8 +1629,8 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 									str.append(formatBuffer);
 								}
 							}
-							for(auto ctit = mcard->counters.begin(); ctit != mcard->counters.end(); ++ctit) {
-								myswprintf(formatBuffer, L"\n[%ls]: %d", dataManager.GetCounterName(ctit->first), ctit->second);
+							for (const auto& [counter, value] : mcard->counters) {
+								myswprintf(formatBuffer, L"\n[%ls]: %d", dataManager.GetCounterName(counter), value);
 								str.append(formatBuffer);
 							}
 							if(mcard->cHint && mcard->chValue && (mcard->location & LOCATION_ONFIELD)) {
@@ -1650,8 +1650,8 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 									myswprintf(formatBuffer, L"\n%ls%d", dataManager.GetSysString(215), mcard->chValue);
 								str.append(formatBuffer);
 							}
-							for(auto iter = mcard->desc_hints.begin(); iter != mcard->desc_hints.end(); ++iter) {
-								myswprintf(formatBuffer, L"\n*%ls", dataManager.GetDesc(iter->first));
+							for (const auto& entry : mcard->desc_hints) {
+								myswprintf(formatBuffer, L"\n*%ls", dataManager.GetDesc(entry.first));
 								str.append(formatBuffer);
 							}
 							should_show_tip = true;
@@ -1682,8 +1682,8 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 					}
 					std::wstring str(player_name);
 					const auto& mplayer_hints = mainGame->dField.player_desc_hints[mplayer];
-					for(auto iter = mplayer_hints.begin(); iter != mplayer_hints.end(); ++iter) {
-						myswprintf(formatBuffer, L"\n*%ls", dataManager.GetDesc(iter->first));
+					for(const auto& entry : mplayer_hints) {
+						myswprintf(formatBuffer, L"\n*%ls", dataManager.GetDesc(entry.first));
 						str.append(formatBuffer);
 					}
 					if(mainGame->dInfo.turn == 1) {
@@ -2445,8 +2445,8 @@ void ClientField::ShowCardInfoInList(ClientCard* pcard, irr::gui::IGUIElement* e
 		if ((pcard->status & STATUS_PROC_COMPLETE)
 			&& (pcard->type & (TYPE_RITUAL | TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK | TYPE_SPSUMMON)))
 			str.append(L"\n").append(dataManager.GetSysString(224));
-		for (auto iter = pcard->desc_hints.begin(); iter != pcard->desc_hints.end(); ++iter) {
-			myswprintf(formatBuffer, L"\n*%ls", dataManager.GetDesc(iter->first));
+		for (const auto& entry : pcard->desc_hints) {
+			myswprintf(formatBuffer, L"\n*%ls", dataManager.GetDesc(entry.first));
 			str.append(formatBuffer);
 		}
 		for (size_t i = 0; i < chains.size(); ++i) {
