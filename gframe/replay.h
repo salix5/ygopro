@@ -5,7 +5,6 @@
 #include <vector>
 #include <string>
 #include "../ocgcore/ocgapi.h"
-#include "deck.h"
 
 namespace ygo {
 
@@ -48,6 +47,8 @@ struct DuelParameters {
 	int32_t draw_count{};
 	uint32_t duel_flag{};
 };
+
+struct DeckArray;
 
 class Replay {
 public:

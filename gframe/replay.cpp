@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "config.h"
 #include "replay.h"
+#include "deck.h"
 #include "myfilesystem.h"
 #include "deck_manager.h"
 #include "lzma/LzmaLib.h"
