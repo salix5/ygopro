@@ -150,9 +150,9 @@ void NetServer::ServerEchoEvent(bufferevent* bev, short events, void* ctx) {
 }
 int NetServer::ServerThread() {
 	event_base_dispatch(net_evbase);
-	for(auto bit = users.begin(); bit != users.end(); ++bit) {
-		bufferevent_disable(bit->first, EV_READ);
-		bufferevent_free(bit->first);
+	for(auto& entry : users) {
+		bufferevent_disable(entry.first, EV_READ);
+		bufferevent_free(entry.first);
 	}
 	users.clear();
 	evconnlistener_free(listener);

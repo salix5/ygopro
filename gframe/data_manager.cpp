@@ -298,8 +298,7 @@ const wchar_t* DataManager::GetSetName(uint32_t code) const {
 }
 std::vector<uint32_t> DataManager::GetSetCodes(std::wstring setname) const {
 	std::vector<uint32_t> matchingCodes;
-	for(auto csit = _setnameStrings.begin(); csit != _setnameStrings.end(); ++csit) {
-		const std::wstring& setnameString = csit->second;
+	for(const auto& [code, setnameString] : _setnameStrings) {
 		size_t start = 0;
 		while(start < setnameString.size()) { // handle "setname|another setname"
 			auto pos = setnameString.find(L'|', start);
@@ -311,12 +310,12 @@ std::vector<uint32_t> DataManager::GetSetCodes(std::wstring setname) const {
 			if(setname.size() < 2) {
 				// exact match for short set names to avoid too many results
 				if(token == setname) {
-					matchingCodes.push_back(csit->first);
+					matchingCodes.push_back(code);
 					break;
 				}
 			} else {
 				if(token.find(setname) != std::wstring::npos) {
-					matchingCodes.push_back(csit->first);
+					matchingCodes.push_back(code);
 					break;
 				}
 			}
