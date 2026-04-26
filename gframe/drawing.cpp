@@ -789,9 +789,8 @@ void Game::DrawStatus(ClientCard* pcard, int x1, int y1, int x2, int y2) {
 void Game::DrawGUI() {
 	while(btnImagePending.size()) {
 		auto mit = btnImagePending.cbegin();
-		auto button = mit->first;
-		int code = mit->second.first;
-		bool rotated = mit->second.second;
+		const auto& [button, data] = *mit;
+		const auto& [code, rotated] = data;
 		button->setImage(imageManager.GetTextureButton(code, rotated));
 		btnCardImgInfo[button] = {code, rotated};
 		btnFacedownImgInfo.erase(button);

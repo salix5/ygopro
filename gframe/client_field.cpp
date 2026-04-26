@@ -1554,9 +1554,7 @@ void ClientField::UpdateDeclarableList() {
 	ancard.clear();
 	auto& _datas = dataManager.GetDataTable();
 	auto& _strings = dataManager.GetStringTable();
-	for(auto& entry : _strings) {
-		auto& code = entry.first;
-		auto& str = entry.second;
+	for(auto& [code, str] : _strings) {
 		auto cp = _datas.find(code);
 		if (cp == _datas.end())
 			continue;
