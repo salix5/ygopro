@@ -52,7 +52,7 @@ struct Config {
 	bool use_d3d{ false };
 	bool use_image_scale_multi_thread{ false };
 	bool use_image_load_background_thread{ false };
-	unsigned short antialias{ 2 };
+	unsigned short antialias{ 0 };
 	unsigned int enable_log{ 0x3 };
 	unsigned short serverport{ 7911 };
 	unsigned char textfontsize{ 14 };
