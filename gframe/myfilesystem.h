@@ -1,8 +1,10 @@
 #ifndef FILESYSTEM_H
 #define FILESYSTEM_H
 
+#include <algorithm>
 #include <filesystem>
 #include <functional>
+#include <vector>
 
 class FileSystem {
 public:
@@ -46,14 +48,18 @@ public:
 
 	static void TraversalDir(const std::filesystem::path& path, const std::function<void(const char*, bool)>& cb) {
 		std::error_code ec;
-		for (auto& entry : std::filesystem::directory_iterator(path, ec)) {
+		std::vector<std::filesystem::directory_entry> entries(std::filesystem::directory_iterator(path, ec), std::filesystem::directory_iterator{});
+		std::sort(entries.begin(), entries.end());
+		for (auto& entry : entries) {
 			cb(entry.path().filename().string().c_str(), entry.is_directory());
 		}
 	}
 
 	static void TraversalDir(const std::filesystem::path& path, const std::function<void(const wchar_t*, bool)>& cb) {
 		std::error_code ec;
-		for (auto& entry : std::filesystem::directory_iterator(path, ec)) {
+		std::vector<std::filesystem::directory_entry> entries(std::filesystem::directory_iterator(path, ec), std::filesystem::directory_iterator{});
+		std::sort(entries.begin(), entries.end());
+		for (auto& entry : entries) {
 			cb(entry.path().filename().wstring().c_str(), entry.is_directory());
 		}
 	}
