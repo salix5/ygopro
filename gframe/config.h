@@ -68,12 +68,12 @@ inline int mysnprintf(char(&buf)[N], const char* fmt, TR... args) {
 }
 
 inline FILE* mywfopen(const wchar_t* filename, const char* mode) {
-	FILE* fp{};
 	char fname[1024]{};
 	std::mbstate_t state{};
 	std::wcsrtombs(fname, &filename, sizeof fname, &state);
-	fp = std::fopen(fname, mode);
-	return fp;
+	if (filename != nullptr)
+		return nullptr;
+	return std::fopen(fname, mode);
 }
 
 #include <irrlicht.h>
