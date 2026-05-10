@@ -54,7 +54,7 @@ void SoundManager::RefreshBGMList() {
 void SoundManager::RefershBGMDir(std::wstring path, int scene) {
 #ifdef YGOPRO_USE_AUDIO
 	std::wstring search = L"./sound/BGM/" + path;
-	FileSystem::TraversalDir(search.c_str(), [this, &path, scene](const wchar_t* name, bool isdir) {
+	FileSystem::TraversalDir(search, [this, &path, scene](std::wstring name, bool isdir) {
 		if(!isdir && (
 			IsExtension(name, L".mp3")
 #if defined(YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS)

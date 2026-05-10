@@ -49,17 +49,17 @@ public:
 		return std::filesystem::remove(path, ec);
 	}
 
-	static void TraversalDir(const std::filesystem::path& path, const std::function<void(const char*, bool)>& cb) {
+	static void TraversalDir(const std::filesystem::path& path, const std::function<void(std::string, bool)>& cb) {
 		std::error_code ec;
 		for(auto it = std::filesystem::directory_iterator(path, ec); it != std::filesystem::directory_iterator{}; it.increment(ec)) {
-			cb(it->path().filename().string().c_str(), it->is_directory(ec));
+			cb(it->path().filename().string(), it->is_directory(ec));
 		}
 	}
 
-	static void TraversalDir(const std::filesystem::path& path, const std::function<void(const wchar_t*, bool)>& cb) {
+	static void TraversalDir(const std::filesystem::path& path, const std::function<void(std::wstring, bool)>& cb) {
 		std::error_code ec;
 		for(auto it = std::filesystem::directory_iterator(path, ec); it != std::filesystem::directory_iterator{}; it.increment(ec)) {
-			cb(it->path().filename().wstring().c_str(), it->is_directory(ec));
+			cb(it->path().filename().wstring(), it->is_directory(ec));
 		}
 	}
 };

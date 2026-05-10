@@ -153,9 +153,10 @@ bool Game::Initialize() {
 	}
 	if(!numFont || !textFont) {
 		wchar_t fpath[1024]{};
-		FileSystem::TraversalDir(L"./fonts", [&fpath](const wchar_t* name, bool isdir) {
+		FileSystem::TraversalDir(L"./fonts", [&fpath](std::wstring name, bool isdir) {
 			if(!isdir && (IsExtension(name, L".ttf") || IsExtension(name, L".ttc") || IsExtension(name, L".otf"))) {
-				myswprintf(fpath, L"./fonts/%ls", name);
+				myswprintf(fpath, L"./fonts/%ls", name.c_str());
+				return;
 			}
 		});
 		if(fpath[0] == 0) {
@@ -172,7 +173,7 @@ bool Game::Initialize() {
 		}
 	}
 	if(!numFont || !textFont) {
-		ErrorLog("Failed to load font(s)!");
+		ErrorLog("Failed to load fonts!");
 		return false;
 	}
 	adFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 12);
@@ -1236,11 +1237,11 @@ std::wstring Game::SetStaticText(irr::gui::IGUIStaticText* pControl, irr::u32 cW
 	return result;
 }
 void Game::LoadExpansions() {
-	FileSystem::TraversalDir("./expansions", [](const char* name, bool isdir) {
+	FileSystem::TraversalDir("./expansions", [](std::string name, bool isdir) {
 		if (isdir)
 			return;
 		char fpath[1024];
-		mysnprintf(fpath, "./expansions/%s", name);
+		mysnprintf(fpath, "./expansions/%s", name.c_str());
 		if (IsExtension(name, ".cdb")) {
 			if (!dataManager.LoadDB(fpath)) {
 				std::string errmsg = "Warning: Failed to load DB file on disk (";
@@ -1306,11 +1307,16 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 	cbCategory->addItem(dataManager.GetSysString(1451));
 	cbCategory->addItem(dataManager.GetSysString(1452));
 	cbCategory->addItem(dataManager.GetSysString(1453));
-	FileSystem::TraversalDir(L"./deck", [cbCategory](const wchar_t* name, bool isdir) {
+	std::vector<std::wstring> categories;
+	FileSystem::TraversalDir(L"./deck", [&categories](std::wstring name, bool isdir) {
 		if(isdir) {
-			cbCategory->addItem(name);
+			categories.push_back(std::move(name));
 		}
 	});
+	std::sort(categories.begin(), categories.end());
+	for (const auto& cate : categories) {
+		cbCategory->addItem(cate.c_str());
+	}
 	cbCategory->setSelected(DECK_CATEGORY_NONE);
 	if(selectlastused) {
 		for(int i = 0; i < (int)cbCategory->getItemCount(); ++i) {
@@ -1348,28 +1354,42 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 			additem(pack.substr(5, pack.size() - 9).c_str());
 		}
 	}
-	FileSystem::TraversalDir(deckpath, [additem](const wchar_t* name, bool isdir) {
+	std::vector<std::wstring> deck_files;
+	FileSystem::TraversalDir(deckpath, [&deck_files](std::wstring name, bool isdir) {
 		if (!isdir && IsExtension(name, L".ydk")) {
-			wchar_t deckname[256]{};
-			BufferIO::CopyWideString(name, deckname, std::wcslen(name) - 4);
-			additem(deckname);
+			name.erase(name.size() - 4); // remove .ydk
+			deck_files.push_back(std::move(name));
 		}
-	});
+		});
+	std::sort(deck_files.begin(), deck_files.end());
+	for (const auto& deck : deck_files) {
+		additem(deck.c_str());
+	}
 }
 void Game::RefreshReplay() {
 	lstReplayList->clear();
-	FileSystem::TraversalDir(L"./replay", [this](const wchar_t* name, bool isdir) {
+	std::vector<std::wstring> replay_files;
+	FileSystem::TraversalDir(L"./replay", [&replay_files](std::wstring name, bool isdir) {
 		if (!isdir && IsExtension(name, L".yrp"))
-			lstReplayList->addItem(name);
+			replay_files.push_back(std::move(name));
 	});
+	std::sort(replay_files.begin(), replay_files.end());
+	for (const auto& replay : replay_files) {
+		lstReplayList->addItem(replay.c_str());
+	}
 }
 void Game::RefreshSingleplay() {
 	lstSinglePlayList->clear();
 	stSinglePlayInfo->setText(L"");
-	FileSystem::TraversalDir(L"./single", [this](const wchar_t* name, bool isdir) {
+	std::vector<std::wstring> singleplay_files;
+	FileSystem::TraversalDir(L"./single", [&singleplay_files](std::wstring name, bool isdir) {
 		if(!isdir && IsExtension(name, L".lua"))
-			lstSinglePlayList->addItem(name);
+			singleplay_files.push_back(std::move(name));
 	});
+	std::sort(singleplay_files.begin(), singleplay_files.end());
+	for (const auto& singleplay : singleplay_files) {
+		lstSinglePlayList->addItem(singleplay.c_str());
+	}
 }
 void Game::RefreshBot() {
 	if(!gameConf.enable_bot_mode)
