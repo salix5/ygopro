@@ -8,11 +8,9 @@
 #include <sqlite3.h>
 #include "../ocgcore/card_data.h"
 
-namespace irr {
-	namespace io {
-		class IReadFile;
-		class IFileSystem;
-	}
+namespace irr::io {
+	class IReadFile;
+	class IFileSystem;
 }
 
 namespace ygo {
