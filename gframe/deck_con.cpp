@@ -849,7 +849,8 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 			Deck new_deck;
 			if (dmquery_operation == BUTTON_IMPORT_DECK_CODE) {
 				if (const char* txt = mainGame->env->getOSOperator()->getTextFromClipboard()) {
-					DeckManager::LoadDeckFromStream(new_deck, txt);
+					std::istringstream deckStream(txt);
+					DeckManager::LoadDeckFromStream(new_deck, deckStream);
 				}
 			}
 			if (!DeckManager::SaveDeck(new_deck, filepath))

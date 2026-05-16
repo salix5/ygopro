@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <filesystem>
+#include <fstream>
 #include "deck_manager.h"
 #include "data_manager.h"
 #include "game.h"
@@ -194,12 +196,11 @@ uint32_t DeckManager::LoadDeck(Deck& deck, uint32_t dbuf[], uint32_t mainc, uint
 	}
 	return errorcode;
 }
-uint32_t DeckManager::LoadDeckFromStream(Deck& deck, const char* deck_buffer, bool is_packlist) {
+uint32_t DeckManager::LoadDeckFromStream(Deck& deck, std::istream& deckStream, bool is_packlist) {
 	int ct = 0;
 	int mainc = 0, sidec = 0;
 	uint32_t cardlist[PACK_MAX_SIZE]{};
 	bool is_side = false;
-	std::istringstream deckStream(deck_buffer);
 	std::string linebuf;
 	while (std::getline(deckStream, linebuf, '\n') && ct < PACK_MAX_SIZE) {
 		if (linebuf[0] == '!') {
@@ -214,9 +215,9 @@ uint32_t DeckManager::LoadDeckFromStream(Deck& deck, const char* deck_buffer, bo
 			continue;
 		cardlist[ct++] = code;
 		if (is_side)
-			++sidec;
+			sidec++;
 		else
-			++mainc;
+			mainc++;
 	}
 	return LoadDeck(deck, cardlist, mainc, sidec, is_packlist);
 }
@@ -293,29 +294,27 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 	current_deck.clear();
 	if (!file[0])
 		return false;
-	char deckBuffer[MAX_YDK_SIZE]{};
-	FILE* fp = mywfopen(file, "rb");
-	if (fp) {
-		size_t size = std::fread(deckBuffer, 1, sizeof deckBuffer, fp);
-		std::fclose(fp);
-		if (size >= sizeof deckBuffer)
-			return false;
+	std::ifstream fs{ std::filesystem::path{ file } };
+	if (fs) {
+		LoadDeckFromStream(current_deck, fs, is_packlist);
 	}
 	else if (std::wcsncmp(file, L"./pack", 6) == 0) {
+		char deckBuffer[MAX_YDK_SIZE]{};
 		wchar_t zipfile[256]{};
 		if (myswprintf(zipfile, L"%ls", file + 2) <= 0)
 			return false;
 		auto reader = OpenDeckReader(zipfile);
 		if (!reader)
 			return false;
-		int size = reader->read(deckBuffer, sizeof deckBuffer);
+		size_t size = reader->read(deckBuffer, sizeof deckBuffer);
 		reader->drop();
-		if (size >= (int)sizeof deckBuffer)
+		if (size >= sizeof deckBuffer)
 			return false;
+		std::istringstream deckStream(deckBuffer);
+		LoadDeckFromStream(current_deck, deckStream, is_packlist);
 	}
 	else
 		return false;
-	LoadDeckFromStream(current_deck, deckBuffer, is_packlist);
 	return true;
 }
 bool DeckManager::LoadCurrentDeck(int category_index, const wchar_t* category_name, const wchar_t* deckname) {
