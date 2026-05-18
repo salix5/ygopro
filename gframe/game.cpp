@@ -1351,7 +1351,7 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 	FileSystem::TraversalDir(deckpath, [additem](const wchar_t* name, bool isdir) {
 		if (!isdir && IsExtension(name, L".ydk")) {
 			wchar_t deckname[256]{};
-			BufferIO::CopyWideString(name, deckname, std::wcslen(name) - 4);
+			BufferIO::CopyWideString(name, deckname, std::wcslen(name) - 3);
 			additem(deckname);
 		}
 	});
