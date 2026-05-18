@@ -156,7 +156,6 @@ bool Game::Initialize() {
 		FileSystem::TraversalDir(L"./fonts", [&fpath](std::wstring name, bool isdir) {
 			if(!isdir && (IsExtension(name, L".ttf") || IsExtension(name, L".ttc") || IsExtension(name, L".otf"))) {
 				myswprintf(fpath, L"./fonts/%ls", name.c_str());
-				return;
 			}
 		});
 		if(fpath[0] == 0) {
