@@ -78,18 +78,6 @@ public:
 		pstr[l] = 0;
 		return l;
 	}
-	template<typename T1, typename T2>
-	[[deprecated]]
-	static int CopyWStrRef(const T1* src, T2*& pstr, int bufsize) {
-		int l = 0;
-		while(src[l] && l < bufsize - 1) {
-			pstr[l] = (T2)src[l];
-			l++;
-		}
-		pstr += l;
-		*pstr = 0;
-		return l;
-	}
 	template<typename T1, typename T2, size_t N>
 	static int CopyCharArray(const T1* src, T2(&dst)[N]) {
 		return CopyWStr(src, dst, N);
