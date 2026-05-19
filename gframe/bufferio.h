@@ -1,6 +1,7 @@
 #ifndef BUFFERIO_H
 #define BUFFERIO_H
 
+#include <cassert>
 #include <cstdint>
 #include <cstring>
 #include <cwchar>
@@ -77,42 +78,33 @@ public:
 		pstr[l] = 0;
 		return l;
 	}
-	template<typename T1, typename T2>
-	static int CopyWStrRef(const T1* src, T2*& pstr, int bufsize) {
-		int l = 0;
-		while(src[l] && l < bufsize - 1) {
-			pstr[l] = (T2)src[l];
-			l++;
-		}
-		pstr += l;
-		*pstr = 0;
-		return l;
-	}
 	template<typename T1, typename T2, size_t N>
 	static int CopyCharArray(const T1* src, T2(&dst)[N]) {
 		return CopyWStr(src, dst, N);
 	}
-	static void CopyString(const char* src, char* dst, size_t len) {
-		size_t copy_len = std::min(std::strlen(src), len);
+	static void CopyString(const char* src, char* dst, size_t size) {
+		assert(size > 0);
+		size_t copy_len = std::min(std::strlen(src), size - 1);
 		std::memcpy(dst, src, copy_len);
 		dst[copy_len] = 0;
 	}
 	template<size_t N>
-	static void CopyString(const char* src, char(&dst)[N], size_t len = N - 1) {
-		if(len >= N)
-			len = N - 1;
-		CopyString(src, dst + 0, len);
+	static void CopyString(const char* src, char(&dst)[N], size_t size = N) {
+		if(size > N)
+			size = N;
+		CopyString(src, dst + 0, size);
 	}
-	static void CopyWideString(const wchar_t* src, wchar_t* dst, size_t len) {
-		size_t copy_len = std::min(std::wcslen(src), len);
+	static void CopyWideString(const wchar_t* src, wchar_t* dst, size_t size) {
+		assert(size > 0);
+		size_t copy_len = std::min(std::wcslen(src), size - 1);
 		std::wmemcpy(dst, src, copy_len);
 		dst[copy_len] = 0;
 	}
 	template<size_t N>
-	static void CopyWideString(const wchar_t* src, wchar_t(&dst)[N], size_t len = N - 1) {
-		if(len >= N)
-			len = N - 1;
-		CopyWideString(src, dst + 0, len);
+	static void CopyWideString(const wchar_t* src, wchar_t(&dst)[N], size_t size = N) {
+		if(size > N)
+			size = N;
+		CopyWideString(src, dst + 0, size);
 	}
 	static bool IsHighSurrogate(unsigned int c) {
 		return (c >= 0xd800U && c <= 0xdbffU);
