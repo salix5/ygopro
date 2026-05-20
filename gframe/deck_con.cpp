@@ -750,8 +750,6 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 	}
 	case BUTTON_EXPORT_DECK_CODE: {
 		// TODO: export deck code
-		mainGame->stACMessage->setText(dataManager.GetSysString(1480));
-		mainGame->PopupElement(mainGame->wACMessage, 40);
 		break;
 	}
 	case BUTTON_DM_OK: {
