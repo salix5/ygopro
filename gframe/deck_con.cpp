@@ -749,9 +749,7 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 		break;
 	}
 	case BUTTON_EXPORT_DECK_CODE: {
-		std::stringstream textStream;
-		deckManager.SaveDeck(deckManager.current_deck, textStream);
-		mainGame->env->getOSOperator()->copyToClipboard(textStream.str().c_str());
+		// TODO: export deck code
 		mainGame->stACMessage->setText(dataManager.GetSysString(1480));
 		mainGame->PopupElement(mainGame->wACMessage, 40);
 		break;

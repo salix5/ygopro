@@ -328,27 +328,22 @@ bool DeckManager::LoadCurrentDeck(int category_index, const wchar_t* category_na
 		mainGame->deckBuilder.RefreshPackListScroll();
 	return true;
 }
-void DeckManager::SaveDeck(const Deck& deck, std::stringstream& deckStream) {
-	deckStream << "#created by ..." << std::endl;
-	deckStream << "#main" << std::endl;
-	for(size_t i = 0; i < deck.main.size(); ++i)
-		deckStream << deck.main[i]->code << std::endl;
-	deckStream << "#extra" << std::endl;
-	for(size_t i = 0; i < deck.extra.size(); ++i)
-		deckStream << deck.extra[i]->code << std::endl;
-	deckStream << "!side" << std::endl;
-	for(size_t i = 0; i < deck.side.size(); ++i)
-		deckStream << deck.side[i]->code << std::endl;
-}
 bool DeckManager::SaveDeck(const Deck& deck, const wchar_t* file) {
 	if(!FileSystem::IsDirExists(L"./deck") && !FileSystem::MakeDir(L"./deck"))
 		return false;
 	FILE* fp = mywfopen(file, "w");
 	if(!fp)
 		return false;
-	std::stringstream deckStream;
-	SaveDeck(deck, deckStream);
-	std::fputs(deckStream.str().c_str(), fp);
+	std::fprintf(fp, "#created by ...\n");
+	std::fprintf(fp, "#main\n");
+	for (size_t i = 0; i < deck.main.size(); ++i)
+		std::fprintf(fp, "%u\n", deck.main[i]->code);
+	std::fprintf(fp, "#extra\n");
+	for (size_t i = 0; i < deck.extra.size(); ++i)
+		std::fprintf(fp, "%u\n", deck.extra[i]->code);
+	std::fprintf(fp, "!side\n");
+	for (size_t i = 0; i < deck.side.size(); ++i)
+		std::fprintf(fp, "%u\n", deck.side[i]->code);
 	std::fclose(fp);
 	return true;
 }
@@ -438,7 +433,8 @@ bool DeckManager::SaveDeckArray(const DeckArray& deck, const wchar_t* name) {
 	FILE* fp = mywfopen(name, "w");
 	if (!fp)
 		return false;
-	std::fprintf(fp, "#created by ...\n#main\n");
+	std::fprintf(fp, "#created by ...\n");
+	std::fprintf(fp, "#main\n");
 	for (const auto& code : deck.main)
 		std::fprintf(fp, "%u\n", code);
 	std::fprintf(fp, "#extra\n");
