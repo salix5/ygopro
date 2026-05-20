@@ -194,14 +194,15 @@ uint32_t DeckManager::LoadDeck(Deck& deck, uint32_t dbuf[], uint32_t mainc, uint
 	}
 	return errorcode;
 }
-uint32_t DeckManager::LoadDeckFromStream(Deck& deck, const char* deck_buffer, bool is_packlist) {
+uint32_t DeckManager::LoadDeckFromStream(Deck& deck, std::istringstream&& deckStream, bool is_packlist) {
 	int ct = 0;
 	int mainc = 0, sidec = 0;
 	uint32_t cardlist[PACK_MAX_SIZE]{};
 	bool is_side = false;
-	std::istringstream deckStream(deck_buffer);
 	std::string linebuf;
 	while (std::getline(deckStream, linebuf) && ct < PACK_MAX_SIZE) {
+		if (linebuf.empty())
+			continue;
 		if (linebuf[0] == '!') {
 			is_side = true;
 			continue;
@@ -214,9 +215,9 @@ uint32_t DeckManager::LoadDeckFromStream(Deck& deck, const char* deck_buffer, bo
 			continue;
 		cardlist[ct++] = code;
 		if (is_side)
-			++sidec;
+			sidec++;
 		else
-			++mainc;
+			mainc++;
 	}
 	return LoadDeck(deck, cardlist, mainc, sidec, is_packlist);
 }
@@ -308,14 +309,14 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 		auto reader = OpenDeckReader(zipfile);
 		if (!reader)
 			return false;
-		int size = reader->read(deckBuffer, sizeof deckBuffer);
+		size_t size = reader->read(deckBuffer, sizeof deckBuffer);
 		reader->drop();
-		if (size >= (int)sizeof deckBuffer)
+		if (size >= sizeof deckBuffer)
 			return false;
 	}
 	else
 		return false;
-	LoadDeckFromStream(current_deck, deckBuffer, is_packlist);
+	LoadDeckFromStream(current_deck, std::istringstream(deckBuffer), is_packlist);
 	return true;
 }
 bool DeckManager::LoadCurrentDeck(int category_index, const wchar_t* category_name, const wchar_t* deckname) {
