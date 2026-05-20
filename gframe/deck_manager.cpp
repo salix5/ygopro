@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <charconv>
+#include <string_view>
 #include "deck_manager.h"
 #include "data_manager.h"
 #include "game.h"
@@ -194,23 +196,34 @@ uint32_t DeckManager::LoadDeck(Deck& deck, uint32_t dbuf[], uint32_t mainc, uint
 	}
 	return errorcode;
 }
-uint32_t DeckManager::LoadDeckFromStream(Deck& deck, const char* deck_buffer, bool is_packlist) {
-	int ct = 0;
-	int mainc = 0, sidec = 0;
+uint32_t DeckManager::LoadDeckFromStream(Deck& deck, std::string_view content, bool is_packlist) {
+	size_t ct = 0;
+	uint32_t mainc = 0, sidec = 0;
 	uint32_t cardlist[PACK_MAX_SIZE]{};
 	bool is_side = false;
-	std::istringstream deckStream(deck_buffer);
-	std::string linebuf;
-	while (std::getline(deckStream, linebuf) && ct < PACK_MAX_SIZE) {
-		if (linebuf[0] == '!') {
+	while (!content.empty() && ct < PACK_MAX_SIZE) {
+		auto pos = content.find('\n');
+		std::string_view line = content.substr(0, pos);
+		if (pos == std::string_view::npos) {
+			content = {};
+		}
+		else {
+			content = content.substr(pos + 1);
+		}
+		if (!line.empty() && line.back() == '\r') {
+			line.remove_suffix(1);
+		}
+		if (line.empty())
+			continue;
+		if (line[0] == '#')
+			continue;
+		if (line[0] == '!') {
 			is_side = true;
 			continue;
 		}
-		if (linebuf[0] < '0' || linebuf[0] > '9')
-			continue;
-		errno = 0;
-		auto code = std::strtoul(linebuf.c_str(), nullptr, 10);
-		if (errno || code > UINT32_MAX)
+		uint32_t code = 0;
+		auto [ptr, ec] = std::from_chars(line.data(), line.data() + line.size(), code, 10);
+		if (ec != std::errc{})
 			continue;
 		cardlist[ct++] = code;
 		if (is_side)
