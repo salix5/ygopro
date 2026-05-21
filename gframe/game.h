@@ -6,6 +6,7 @@
 #include <list>
 #include <mutex>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include "config.h"
@@ -31,21 +32,21 @@ constexpr int CARD_THUMB_WIDTH = 44;
 constexpr int CARD_THUMB_HEIGHT = 64;
 
 template<size_t N>
-bool IsExtension(const wchar_t* filename, const wchar_t(&extension)[N]) {
-	auto flen = std::wcslen(filename);
+bool IsExtension(std::wstring_view filename, const wchar_t(&extension)[N]) {
+	size_t flen = filename.length();
 	constexpr size_t elen = N - 1;
 	if (!elen || flen < elen)
 		return false;
-	return !mywcsncasecmp(filename + (flen - elen), extension, elen);
+	return !mywcsncasecmp(filename.data() + (flen - elen), extension, elen);
 }
 
 template<size_t N>
-bool IsExtension(const char* filename, const char(&extension)[N]) {
-	auto flen = std::strlen(filename);
+bool IsExtension(std::string_view filename, const char(&extension)[N]) {
+	size_t flen = filename.length();
 	constexpr size_t elen = N - 1;
 	if (!elen || flen < elen)
 		return false;
-	return !mystrncasecmp(filename + (flen - elen), extension, elen);
+	return !mystrncasecmp(filename.data() + (flen - elen), extension, elen);
 }
 
 struct Config {
