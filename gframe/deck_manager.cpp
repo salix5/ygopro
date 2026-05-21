@@ -321,9 +321,9 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 		auto reader = OpenDeckReader(zipfile);
 		if (!reader)
 			return false;
-		int size = reader->read(deckBuffer, sizeof deckBuffer);
+		size_t size = reader->read(deckBuffer, sizeof deckBuffer);
 		reader->drop();
-		if (size >= (int)sizeof deckBuffer)
+		if (size >= sizeof deckBuffer)
 			return false;
 	}
 	else
