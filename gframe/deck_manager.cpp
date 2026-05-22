@@ -221,8 +221,8 @@ uint32_t DeckManager::LoadDeckFromStream(Deck& deck, std::string_view content, b
 			continue;
 		}
 		uint32_t code = 0;
-		auto [ptr, ec] = std::from_chars(line.data(), line.data() + line.size(), code, 10);
-		if (ec != std::errc{})
+		auto res = std::from_chars(line.data(), line.data() + line.size(), code, 10);
+		if (res.ec != std::errc{})
 			continue;
 		cardlist[ct++] = code;
 		if (is_side)
