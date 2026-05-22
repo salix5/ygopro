@@ -124,6 +124,8 @@ Materials::Materials() {
 	mOutLine.ColorMaterial = irr::video::ECM_AMBIENT;
 	mOutLine.DiffuseColor = 0xff000000;
 	mOutLine.Thickness = 2;
+	mOutLine.MaterialType = irr::video::EMT_SOLID;
+	mOutLine.Lighting = false;
 	mTRTexture = mTexture;
 	mTRTexture.AmbientColor = 0xffffff00;
 	mATK.ColorMaterial = irr::video::ECM_AMBIENT;

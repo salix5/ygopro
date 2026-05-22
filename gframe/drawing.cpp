@@ -66,31 +66,20 @@ void Game::Draw2DImageQuad(irr::video::IVideoDriver* driver, irr::video::ITextur
 }
 
 void Game::DrawSelectionLine(irr::video::S3DVertex* vec, bool stipple, irr::video::SColor color) {
-	GLfloat origin[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	irr::u32 rawColor = color.color;
-	constexpr float k = 1.0f / 255.0f;
-	GLfloat cv[4] = {
-		(rawColor >> 16 & 0xff) * k, // red
-		(rawColor >> 8 & 0xff) * k, // green
-		(rawColor & 0xff) * k, // blue
-		(rawColor >> 24 & 0xff) * k  // alpha
-	};
+	driver->setMaterial(matManager.mOutLine);
 	glLineWidth(matManager.mOutLine.Thickness);
 	if (stipple) {
 		glLineStipple(1, stippleMask);
 		glEnable(GL_LINE_STIPPLE);
 	}
-	glDisable(GL_TEXTURE_2D);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, cv);
+	glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 	glBegin(GL_LINE_LOOP);
 	glVertex3fv(&vec[0].Pos.X);
 	glVertex3fv(&vec[1].Pos.X);
 	glVertex3fv(&vec[3].Pos.X);
 	glVertex3fv(&vec[2].Pos.X);
 	glEnd();
-	glMaterialfv(GL_FRONT, GL_AMBIENT, origin);
 	glDisable(GL_LINE_STIPPLE);
-	glEnable(GL_TEXTURE_2D);
 }
 void Game::DrawSelectionLine(irr::gui::IGUIElement* element, int width, irr::video::SColor color) {
 	irr::core::recti pos = element->getAbsolutePosition();
