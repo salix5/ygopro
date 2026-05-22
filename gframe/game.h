@@ -50,7 +50,6 @@ bool IsExtension(std::string_view filename, const char(&extension)[N]) {
 }
 
 struct Config {
-	bool use_d3d{ false };
 	bool use_image_scale_multi_thread{ false };
 	bool use_image_load_background_thread{ false };
 	unsigned short antialias{ 0 };
