@@ -1,8 +1,8 @@
 #ifndef DECKMANAGER_H
 #define DECKMANAGER_H
 
-#include <sstream>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include "deck.h"
@@ -52,7 +52,7 @@ public:
 	bool LoadCurrentDeck(int category_index, const wchar_t* category_name, const wchar_t* deckname);
 
 	static uint32_t LoadDeck(Deck& deck, uint32_t dbuf[], uint32_t mainc, uint32_t sidec, bool is_packlist = false);
-	static uint32_t LoadDeckFromStream(Deck& deck, const char* deck_buffer, bool is_packlist = false);
+	static uint32_t LoadDeckFromStream(Deck& deck, std::string_view content, bool is_packlist = false);
 	static bool LoadSide(Deck& deck, uint32_t dbuf[], uint32_t mainc, uint32_t sidec);
 	static void GetCategoryPath(wchar_t* ret, int index, const wchar_t* text);
 	static void GetDeckFile(wchar_t* ret, int category_index, const wchar_t* category_name, const wchar_t* deckname);
