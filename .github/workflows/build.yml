@@ -271,7 +271,6 @@ jobs:
 #            os: windows-2022
 #            vs: vs2022
 #            platform: x64
-#            nodxsdk: true
           - name: windows-x64-avx2
             os: windows-2022
             vs: vs2022
@@ -346,7 +345,7 @@ jobs:
         7z x ${{ steps.premake.outputs.filepath }}
 
     - name: Check DirectX SDK
-      if: matrix.nodxsdk != true
+      if: matrix.dxsdk == true
       id: dxsdk
       uses: actions/cache@v5
       with:
@@ -354,7 +353,7 @@ jobs:
         path: DXSDK
 
     - name: Download DirectX SDK
-      if: matrix.nodxsdk != true && steps.dxsdk.outputs.cache-hit != 'true'
+      if: matrix.dxsdk == true && steps.dxsdk.outputs.cache-hit != 'true'
       id: dxsdk-download
       uses: mercury233/action-cache-download-file@v1.2.0
       with:
@@ -362,13 +361,13 @@ jobs:
         sha256: 705271dc83bfee54d9b94e028426e288d5f070784b7446d164f48ecfbb2a02cb
 
     - name: Install DirectX SDK
-      if: matrix.nodxsdk != true && steps.dxsdk.outputs.cache-hit != 'true'
+      if: matrix.dxsdk == true && steps.dxsdk.outputs.cache-hit != 'true'
       shell: bash
       run: |
         7z x ${{ steps.dxsdk-download.outputs.filepath }} -aoa
 
     - name: Set DirectX SDK environment variable
-      if: matrix.nodxsdk != true
+      if: matrix.dxsdk == true
       shell: pwsh
       run: |
         $dxsdkPath = Resolve-Path 'DXSDK'
@@ -389,7 +388,7 @@ jobs:
     - name: Use premake to generate Visual Studio solution
       shell: pwsh
       run: |
-        .\premake5.exe ${{ matrix.vs }} ${{ matrix.simd && format('--use-simd={0}', matrix.simd) || '' }}
+        .\premake5.exe ${{ matrix.vs }} ${{ matrix.simd && format('--use-simd={0}', matrix.simd) || '' }} --no-miniaudio-support-opus-vorbis
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v3
