@@ -20,7 +20,7 @@ BUILD_FREETYPE = os.istarget("windows")
 BUILD_SQLITE = os.istarget("windows")
 
 BUILD_IRRLICHT = true -- modified Irrlicht is required, can't use the official one
-USE_DXSDK = true
+USE_DXSDK = false
 
 BUILD_JPEG = os.istarget("windows") -- libjpeg-turbo is required, can't use the bundled IJG jpeglib from Irrlicht
 JPEG_LIB_NAME = "jpeg" -- use the libjpeg API of libjpeg-turbo, the lib name should always be "jpeg", just in case
@@ -91,7 +91,6 @@ newoption { trigger = "build-irrlicht", category = "YGOPro - irrlicht", descript
 newoption { trigger = "no-build-irrlicht", category = "YGOPro - irrlicht", description = "" }
 newoption { trigger = "irrlicht-include-dir", category = "YGOPro - irrlicht", description = "", value = "PATH" }
 newoption { trigger = "irrlicht-lib-dir", category = "YGOPro - irrlicht", description = "", value = "PATH" }
-newoption { trigger = "no-dxsdk", category = "YGOPro - irrlicht", description = "" }
 
 newoption { trigger = "build-jpeg", category = "YGOPro - jpeg", description = "" }
 newoption { trigger = "no-build-jpeg", category = "YGOPro - jpeg", description = "" }
@@ -232,9 +231,6 @@ if not BUILD_ZLIB then
     ZLIB_LIB_DIR = GetParam("zlib-lib-dir") or os.findlib(ZLIB_LIB_NAME)
 end
 
-if GetParam("no-dxsdk") then
-    USE_DXSDK = false
-end
 if USE_DXSDK and os.istarget("windows") then
     if not os.getenv("DXSDK_DIR") then
         print("Warning: DXSDK_DIR environment variable not set, it seems you don't have the DirectX SDK installed. DirectX mode will be disabled.")
