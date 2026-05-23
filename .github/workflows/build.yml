@@ -723,4 +723,4 @@ jobs:
         GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         TAG_NAME: "${{ github.ref_name }}"
       run: |
-        gh release create $TAG_NAME YGOPro.exe --title $TAG_NAME --generate-notes
+        gh release create $TAG_NAME x64/YGOPro.exe --title $TAG_NAME --generate-notes
