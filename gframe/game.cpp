@@ -691,6 +691,7 @@ bool Game::Initialize() {
 	btnImportDeckCode = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_IMPORT_DECK_CODE, dataManager.GetSysString(1478));
 	posY += 35;
 	btnExportDeckCode = env->addButton(irr::core::rect<irr::s32>(dm_posX, posY, dm_posX + 130, posY + 25), wDeckManage, BUTTON_EXPORT_DECK_CODE, dataManager.GetSysString(1479));
+	btnExportDeckCode->setEnabled(false);
 	//deck manage query
 	wDMQuery = env->addWindow(irr::core::rect<irr::s32>(400, 200, 710, 320), false, dataManager.GetSysString(1460), nullptr, WINDOW_DM_QUERY);
 	wDMQuery->getCloseButton()->setVisible(false);
