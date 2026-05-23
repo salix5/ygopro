@@ -9,6 +9,7 @@ permissions: {}
 on:
   push:
     branches: [ "build" ]
+    tags: [ "v*" ]
   pull_request:
     branches: [ "build" ]
 
@@ -255,17 +256,17 @@ jobs:
       fail-fast: false
       matrix:
         name:
-          - windows-x86-sse2
+          - windows-x64-sse2
 #          - windows-no-dxsdk
           - windows-x64-avx2
           - windows-x64-no-simd
           - windows-arm64
           - windows-2025
         include:
-          - name: windows-x86-sse2
+          - name: windows-x64-sse2
             os: windows-2022
             vs: vs2022
-            platform: Win32
+            platform: x64
             simd: sse2
 #          - name: windows-no-dxsdk
 #            os: windows-2022
@@ -700,3 +701,26 @@ jobs:
         name: YGOPro-${{ matrix.name }}
         path: |
           bin/release/YGOPro
+
+  release:
+    needs: build-windows
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v8
+      with:
+        name: YGOPro-windows-x64-sse2
+
+    - name: GitHub Release
+      env:
+        GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        TAG_NAME: "${{ github.ref_name }}"
+      run: |
+        gh release create $TAG_NAME YGOPro.exe --title $TAG_NAME --generate-notes
