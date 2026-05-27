@@ -47,3 +47,9 @@ curl -L -O https://github.com/madler/zlib/releases/download/v1.3.2/zlib-1.3.2.ta
 tar -xf zlib-1.3.2.tar.gz
 rename zlib-1.3.2 zlib
 del zlib-1.3.2.tar.gz
+
+rmdir /S /Q lzma
+curl -L -O https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.gz
+tar -xf xz-5.8.3.tar.gz
+rename xz-5.8.3 lzma
+del xz-5.8.3.tar.gz
