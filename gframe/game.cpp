@@ -11,7 +11,6 @@
 #include "single_mode.h"
 #include "CGUITTFont.h"
 #include <algorithm>
-#include <filesystem>
 #include <thread>
 #include <chrono>
 #ifdef _WIN32

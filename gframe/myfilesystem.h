@@ -4,7 +4,6 @@
 #include <cwchar>
 #include <algorithm>
 #include <filesystem>
-#include <functional>
 #include <type_traits>
 #include <vector>
 
