@@ -1314,7 +1314,7 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 	FileSystem::TraversalDir("./deck", [&categories](const std::filesystem::path& fpath, bool isdir) {
 		if (!isdir)
 			return;
-		categories.push_back(fpath.filename());
+		categories.push_back(fpath.filename().wstring());
 		});
 	std::sort(categories.begin(), categories.end());
 	for (const auto& cate : categories) {
@@ -1362,7 +1362,7 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 		if (isdir)
 			return;
 		if (IsExtension(fpath.extension().wstring(), L".ydk")) {
-			deck_files.push_back(fpath.stem());
+			deck_files.push_back(fpath.stem().wstring());
 		}
 		});
 	std::sort(deck_files.begin(), deck_files.end());
@@ -1377,7 +1377,7 @@ void Game::RefreshReplay() {
 		if (isdir)
 			return;
 		if (IsExtension(fpath.extension().wstring(), L".yrp"))
-			replay_files.push_back(fpath.filename());
+			replay_files.push_back(fpath.filename().wstring());
 	});
 	std::sort(replay_files.begin(), replay_files.end());
 	for (const auto& replay : replay_files) {
@@ -1392,7 +1392,7 @@ void Game::RefreshSingleplay() {
 		if (isdir)
 			return;
 		if (IsExtension(fpath.extension().wstring(), L".lua"))
-			singleplay_files.push_back(fpath.filename());
+			singleplay_files.push_back(fpath.filename().wstring());
 	});
 	std::sort(singleplay_files.begin(), singleplay_files.end());
 	for (const auto& singleplay : singleplay_files) {
