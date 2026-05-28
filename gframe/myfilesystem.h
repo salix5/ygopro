@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <functional>
+#include <type_traits>
 #include <vector>
 
 class FileSystem {
@@ -49,7 +50,9 @@ public:
 		return std::filesystem::remove(path, ec);
 	}
 
-	static void TraversalDir(const std::filesystem::path& path, const std::function<void(const std::filesystem::path&, bool)>& cb) {
+	template<typename Callback>
+	static void TraversalDir(const std::filesystem::path& path, Callback&& cb) {
+		static_assert(std::is_invocable_v<Callback, const std::filesystem::path&, bool>, "Callback must be invocable with (const std::filesystem::path&, bool)");
 		std::error_code ec;
 		for(auto it = std::filesystem::directory_iterator(path, ec); it != std::filesystem::directory_iterator{}; it.increment(ec)) {
 			cb(it->path(), it->is_directory(ec));
