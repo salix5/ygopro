@@ -170,11 +170,11 @@ bool Game::Initialize() {
 			return false;
 		}
 		if(!numFont) {
-			BufferIO::CopyString(fpath.string().c_str(), gameConf.numfont);
+			BufferIO::CopyString(fpath.u8string().c_str(), gameConf.numfont);
 			numFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 16);
 		}
 		if(!textFont) {
-			BufferIO::CopyString(fpath.string().c_str(), gameConf.textfont);
+			BufferIO::CopyString(fpath.u8string().c_str(), gameConf.textfont);
 			textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
 		}
 	}
@@ -1246,9 +1246,9 @@ void Game::LoadExpansions() {
 			return;
 		auto ext = fpath.extension().wstring();
 		if (IsExtension(ext, L".cdb")) {
-			if (!dataManager.LoadDB(fpath.string().c_str())) {
+			if (!dataManager.LoadDB(fpath.u8string().c_str())) {
 				std::string errmsg = "Warning: Failed to load DB file on disk (";
-				errmsg.append(fpath.string());
+				errmsg.append(fpath.u8string());
 				errmsg.append(")! ");
 				errmsg.append(dataManager.errmsg);
 				mainGame->ErrorLog(errmsg.c_str());
@@ -1256,11 +1256,11 @@ void Game::LoadExpansions() {
 			return;
 		}
 		if (IsExtension(ext, L".conf")) {
-			dataManager.LoadStrings(fpath.string().c_str());
+			dataManager.LoadStrings(fpath.u8string().c_str());
 			return;
 		}
 		if (IsExtension(ext, L".zip") || IsExtension(ext, L".ypk")) {
-			dataManager.IrrFileSystem->addFileArchive(fpath.string().c_str(), true, false, irr::io::EFAT_ZIP);
+			dataManager.IrrFileSystem->addFileArchive(fpath.u8string().c_str(), true, false, irr::io::EFAT_ZIP);
 			return;
 		}
 	});
