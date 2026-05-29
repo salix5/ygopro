@@ -156,25 +156,25 @@ bool Game::Initialize() {
 		}
 	}
 	if(!numFont || !textFont) {
-		std::filesystem::path fpath;
-		FileSystem::TraversalDir("./fonts", [&fpath](const std::filesystem::path& name, bool isdir) {
-			if (isdir || !fpath.empty())
+		std::filesystem::path font_path;
+		FileSystem::TraversalDir("./fonts", [&font_path](const std::filesystem::path& fpath, bool isdir) {
+			if (isdir || !font_path.empty())
 				return;
-			auto ext = name.extension().wstring();
+			auto ext = fpath.extension().wstring();
 			if (IsExtension(ext, L".ttf") || IsExtension(ext, L".ttc") || IsExtension(ext, L".otf")) {
-				fpath = name;
+				font_path = fpath;
 			}
 		});
-		if(fpath.empty()) {
+		if(font_path.empty()) {
 			ErrorLog("No fonts found! Please place appropriate font file in the fonts directory, or edit system.conf manually.");
 			return false;
 		}
 		if(!numFont) {
-			BufferIO::CopyString(fpath.u8string().c_str(), gameConf.numfont);
+			BufferIO::CopyString(font_path.u8string().c_str(), gameConf.numfont);
 			numFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 16);
 		}
 		if(!textFont) {
-			BufferIO::CopyString(fpath.u8string().c_str(), gameConf.textfont);
+			BufferIO::CopyString(font_path.u8string().c_str(), gameConf.textfont);
 			textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
 		}
 	}
