@@ -1351,7 +1351,7 @@ bool DuelClient::ClientAnalyze(unsigned char* msg, size_t len) {
 				code &= 0x7fffffff;
 			}
 			mainGame->dField.activatable_cards.push_back(pcard);
-			mainGame->dField.activatable_descs.push_back(std::make_pair(desc, flag));
+			mainGame->dField.activatable_descs.push_back(std::pair(desc, flag));
 			if(flag & EDESC_OPERATION) {
 				pcard->chain_code = code;
 				mainGame->dField.conti_cards.push_back(pcard);
@@ -1483,7 +1483,7 @@ bool DuelClient::ClientAnalyze(unsigned char* msg, size_t len) {
 				code &= 0x7fffffff;
 			}
 			mainGame->dField.activatable_cards.push_back(pcard);
-			mainGame->dField.activatable_descs.push_back(std::make_pair(desc, flag));
+			mainGame->dField.activatable_descs.push_back(std::pair(desc, flag));
 			if(flag & EDESC_OPERATION) {
 				pcard->chain_code = code;
 				mainGame->dField.conti_cards.push_back(pcard);
@@ -1755,7 +1755,7 @@ bool DuelClient::ClientAnalyze(unsigned char* msg, size_t len) {
 			desc = BufferIO::Read<int32_t>(pbuf);
 			pcard = mainGame->dField.GetCard(c, l, s, ss);
 			mainGame->dField.activatable_cards.push_back(pcard);
-			mainGame->dField.activatable_descs.push_back(std::make_pair(desc, flag));
+			mainGame->dField.activatable_descs.push_back(std::pair(desc, flag));
 			pcard->is_selected = false;
 			if(forced) {
 				mainGame->dField.chain_forced = true;
@@ -4160,7 +4160,7 @@ void DuelClient::BroadcastReply(evutil_socket_t fd, short events, void * arg) {
 		if(pHP->version != PRO_VERSION)
 			return;
 		unsigned int ipaddr = bc_addr.sin_addr.s_addr;
-		const auto remote = std::make_pair(ipaddr, pHP->port);
+		const auto remote = std::pair(ipaddr, pHP->port);
 		if(remotes.find(remote) == remotes.end()) {
 			mainGame->gMutex.lock();
 			remotes.insert(remote);

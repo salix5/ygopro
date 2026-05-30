@@ -7,10 +7,8 @@
 #include <vector>
 #include "deck.h"
 
-namespace irr {
-	namespace io {
-		class IReadFile;
-	}
+namespace irr::io {
+	class IReadFile;
 }
 
 namespace ygo {
