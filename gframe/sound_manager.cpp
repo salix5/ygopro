@@ -54,14 +54,16 @@ void SoundManager::RefreshBGMList() {
 void SoundManager::RefershBGMDir(std::wstring path, int scene) {
 #ifdef YGOPRO_USE_AUDIO
 	std::wstring search = L"./sound/BGM/" + path;
-	FileSystem::TraversalDir(search, [this, &path, scene](std::wstring name, bool isdir) {
-		if(!isdir && (
-			IsExtension(name, L".mp3")
+	FileSystem::TraversalDir(search, [this, &path, scene](const std::filesystem::path& fpath, bool isdir) {
+		if (isdir)
+			return;
+		auto ext = fpath.extension().wstring();
+		if ((IsExtension(ext, L".mp3")
 #if defined(YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS)
-			|| IsExtension(name, L".ogg")
+			|| IsExtension(ext, L".ogg")
 #endif
 			)) {
-			std::wstring filename = path + L"/" + name;
+			std::wstring filename = path + L"/" + fpath.filename().wstring();
 			BGMList[BGM_ALL].push_back(filename);
 			BGMList[scene].push_back(filename);
 		}

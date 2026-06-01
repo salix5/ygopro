@@ -11,7 +11,6 @@
 #include "single_mode.h"
 #include "CGUITTFont.h"
 #include <algorithm>
-#include <filesystem>
 #include <thread>
 #include <chrono>
 #ifdef _WIN32
@@ -124,10 +123,11 @@ bool Game::Initialize() {
 			"/System/Library/Fonts/SFNS.ttf",
 		};
 		for(auto path : numFontPaths) {
-			BufferIO::CopyString(path, gameConf.numfont);
-			numFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 16);
-			if(numFont)
+			numFont = irr::gui::CGUITTFont::createTTFont(env, path, 16);
+			if (numFont) {
+				BufferIO::CopyString(path, gameConf.numfont);
 				break;
+			}
 		}
 	}
 	textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
@@ -148,29 +148,33 @@ bool Game::Initialize() {
 			"/System/Library/Fonts/STHeiti Medium.ttc",
 		};
 		for(auto path : textFontPaths) {
-			BufferIO::CopyString(path, gameConf.textfont);
-			textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
-			if(textFont)
+			textFont = irr::gui::CGUITTFont::createTTFont(env, path, gameConf.textfontsize);
+			if (textFont) {
+				BufferIO::CopyString(path, gameConf.textfont);
 				break;
+			}
 		}
 	}
 	if(!numFont || !textFont) {
-		wchar_t fpath[1024]{};
-		FileSystem::TraversalDir(L"./fonts", [&fpath](std::wstring name, bool isdir) {
-			if(!isdir && (IsExtension(name, L".ttf") || IsExtension(name, L".ttc") || IsExtension(name, L".otf"))) {
-				myswprintf(fpath, L"./fonts/%ls", name.c_str());
+		std::filesystem::path font_path;
+		FileSystem::TraversalDir("./fonts", [&font_path](const std::filesystem::path& fpath, bool isdir) {
+			if (isdir || !font_path.empty())
+				return;
+			auto ext = fpath.extension().wstring();
+			if (IsExtension(ext, L".ttf") || IsExtension(ext, L".ttc") || IsExtension(ext, L".otf")) {
+				font_path = fpath;
 			}
 		});
-		if(fpath[0] == 0) {
+		if(font_path.empty()) {
 			ErrorLog("No fonts found! Please place appropriate font file in the fonts directory, or edit system.conf manually.");
 			return false;
 		}
 		if(!numFont) {
-			BufferIO::EncodeUTF8(fpath, gameConf.numfont);
+			BufferIO::CopyString(font_path.u8string().c_str(), gameConf.numfont);
 			numFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 16);
 		}
 		if(!textFont) {
-			BufferIO::EncodeUTF8(fpath, gameConf.textfont);
+			BufferIO::CopyString(font_path.u8string().c_str(), gameConf.textfont);
 			textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
 		}
 	}
@@ -1237,27 +1241,26 @@ std::wstring Game::SetStaticText(irr::gui::IGUIStaticText* pControl, irr::u32 cW
 	return result;
 }
 void Game::LoadExpansions() {
-	FileSystem::TraversalDir("./expansions", [](std::string name, bool isdir) {
+	FileSystem::TraversalDir("./expansions", [](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
-		char fpath[1024];
-		mysnprintf(fpath, "./expansions/%s", name.c_str());
-		if (IsExtension(name, ".cdb")) {
-			if (!dataManager.LoadDB(fpath)) {
+		auto ext = fpath.extension().wstring();
+		if (IsExtension(ext, L".cdb")) {
+			if (!dataManager.LoadDB(fpath.u8string().c_str())) {
 				std::string errmsg = "Warning: Failed to load DB file on disk (";
-				errmsg.append(fpath);
+				errmsg.append(fpath.u8string());
 				errmsg.append(")! ");
 				errmsg.append(dataManager.errmsg);
 				mainGame->ErrorLog(errmsg.c_str());
 			}
 			return;
 		}
-		if (IsExtension(name, ".conf")) {
-			dataManager.LoadStrings(fpath);
+		if (IsExtension(ext, L".conf")) {
+			dataManager.LoadStrings(fpath.u8string().c_str());
 			return;
 		}
-		if (IsExtension(name, ".zip") || IsExtension(name, ".ypk")) {
-			dataManager.IrrFileSystem->addFileArchive(fpath, true, false, irr::io::EFAT_ZIP);
+		if (IsExtension(ext, L".zip") || IsExtension(ext, L".ypk")) {
+			dataManager.IrrFileSystem->addFileArchive(fpath.u8string().c_str(), true, false, irr::io::EFAT_ZIP);
 			return;
 		}
 	});
@@ -1308,11 +1311,11 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 	cbCategory->addItem(dataManager.GetSysString(1452));
 	cbCategory->addItem(dataManager.GetSysString(1453));
 	std::vector<std::wstring> categories;
-	FileSystem::TraversalDir(L"./deck", [&categories](std::wstring name, bool isdir) {
-		if(isdir) {
-			categories.push_back(std::move(name));
-		}
-	});
+	FileSystem::TraversalDir("./deck", [&categories](const std::filesystem::path& fpath, bool isdir) {
+		if (!isdir)
+			return;
+		categories.push_back(fpath.filename().wstring());
+		});
 	std::sort(categories.begin(), categories.end());
 	for (const auto& cate : categories) {
 		cbCategory->addItem(cate.c_str());
@@ -1355,10 +1358,11 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 		}
 	}
 	std::vector<std::wstring> deck_files;
-	FileSystem::TraversalDir(deckpath, [&deck_files](std::wstring name, bool isdir) {
-		if (!isdir && IsExtension(name, L".ydk")) {
-			name.erase(name.size() - 4); // remove .ydk
-			deck_files.push_back(std::move(name));
+	FileSystem::TraversalDir(deckpath, [&deck_files](const std::filesystem::path& fpath, bool isdir) {
+		if (isdir)
+			return;
+		if (IsExtension(fpath.extension().wstring(), L".ydk")) {
+			deck_files.push_back(fpath.stem().wstring());
 		}
 		});
 	std::sort(deck_files.begin(), deck_files.end());
@@ -1369,9 +1373,11 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 void Game::RefreshReplay() {
 	lstReplayList->clear();
 	std::vector<std::wstring> replay_files;
-	FileSystem::TraversalDir(L"./replay", [&replay_files](std::wstring name, bool isdir) {
-		if (!isdir && IsExtension(name, L".yrp"))
-			replay_files.push_back(std::move(name));
+	FileSystem::TraversalDir(L"./replay", [&replay_files](const std::filesystem::path& fpath, bool isdir) {
+		if (isdir)
+			return;
+		if (IsExtension(fpath.extension().wstring(), L".yrp"))
+			replay_files.push_back(fpath.filename().wstring());
 	});
 	std::sort(replay_files.begin(), replay_files.end());
 	for (const auto& replay : replay_files) {
@@ -1382,9 +1388,11 @@ void Game::RefreshSingleplay() {
 	lstSinglePlayList->clear();
 	stSinglePlayInfo->setText(L"");
 	std::vector<std::wstring> singleplay_files;
-	FileSystem::TraversalDir(L"./single", [&singleplay_files](std::wstring name, bool isdir) {
-		if(!isdir && IsExtension(name, L".lua"))
-			singleplay_files.push_back(std::move(name));
+	FileSystem::TraversalDir(L"./single", [&singleplay_files](const std::filesystem::path& fpath, bool isdir) {
+		if (isdir)
+			return;
+		if (IsExtension(fpath.extension().wstring(), L".lua"))
+			singleplay_files.push_back(fpath.filename().wstring());
 	});
 	std::sort(singleplay_files.begin(), singleplay_files.end());
 	for (const auto& singleplay : singleplay_files) {
