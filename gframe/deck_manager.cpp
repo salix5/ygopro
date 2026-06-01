@@ -46,7 +46,7 @@ void DeckManager::LoadLFListSingle(const char* path) {
 			if(linebuf[0] == '$') {
 				int limitValue = 0;
 				char keybuf[256];
-				if (std::sscanf(linebuf, "$%255s %d", keybuf, &limitValue) != 2)
+				if (std::sscanf(linebuf, "$%255[^ \t\n] %d", keybuf, &limitValue) != 2)
 					continue;
 				if (limitValue < 0)
 					limitValue = 0;
@@ -62,7 +62,7 @@ void DeckManager::LoadLFListSingle(const char* path) {
 				continue;
 			uint32_t code = static_cast<uint32_t>(result);
 			int creditValue = 0;
-			if (std::sscanf(end, " $ %d", &creditValue) == 1 || std::sscanf(end, " $%*s %d", &creditValue) == 1) {
+			if (std::sscanf(end, " $%*[^ \t\n] %d", &creditValue) == 1) {
 				if (cur->pointList.empty())
 					continue;
 				if (creditValue <= 0)
