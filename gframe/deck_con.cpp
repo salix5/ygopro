@@ -1815,6 +1815,8 @@ void DeckBuilder::pop_side(int seq) {
 	GetHoveredCard();
 }
 bool DeckBuilder::check_limit(const CardDataC* pointer) {
+	if ((pointer->type & TYPE_MONSTER) && (pointer->type & filterList->noMonsterType))
+		return false;
 	auto limitcode = pointer->get_duel_code();
 	int limit = 3;
 	auto flit = filterList->content.find(limitcode);
