@@ -15,16 +15,24 @@ void DeckManager::LoadLFListSingle(const char* path) {
 	FILE* fp = std::fopen(path, "r");
 	char linebuf[1024]{};
 	wchar_t strBuffer[256]{};
+	uint32_t pointHash{};
 	auto credit_hash = [](const char* s) -> uint32_t {
 		uint32_t h = 2166136261u;
-		for(auto p = s; *p; ++p) {
+		for (auto p = s; *p; ++p) {
 			h ^= static_cast<unsigned char>(*p);
 			h *= 16777619u;
 		}
 		return h;
 	};
 	auto credit_update_hash = [](uint32_t h, uint32_t a, uint32_t b, uint32_t c) -> uint32_t {
-		return h ^ ((a << 18) | (a >> 14)) ^ ((b << 9) | (b >> 23)) ^ ((c << 27) | (c >> 5));
+		uint32_t mix = a + 0x9e3779b9;
+		mix = (mix ^ b) * 0x85ebca6b;
+		mix = (mix ^ c) * 0xc2b2ae35;
+		mix ^= (mix >> 16);
+		return h ^ mix;
+	};
+	auto code_update_hash = [](uint32_t hash, uint32_t code, uint32_t count)-> uint32_t {
+		return hash ^ ((code << 18) | (code >> 14)) ^ ((code << (27 + count)) | (code >> (5 - count)));
 	};
 	if(fp) {
 		while(std::fgets(linebuf, sizeof linebuf, fp)) {
@@ -33,7 +41,7 @@ void DeckManager::LoadLFListSingle(const char* path) {
 			if(linebuf[0] == '!') {
 				auto len = std::strcspn(linebuf, "\r\n");
 				linebuf[len] = 0;
-				BufferIO::DecodeUTF8(&linebuf[1], strBuffer);
+				BufferIO::DecodeUTF8(linebuf + 1, strBuffer);
 				LFList newlist;
 				newlist.listName = strBuffer;
 				newlist.hash = 0x7dfcee6a;
@@ -43,6 +51,15 @@ void DeckManager::LoadLFListSingle(const char* path) {
 			}
 			if (cur == _lfList.rend())
 				continue;
+			if (linebuf[0] == 'M' && linebuf[1] == ' ') {
+				errno = 0;
+				auto type = std::strtoul(linebuf + 2, nullptr, 16);
+				if (errno || type > UINT32_MAX)
+					continue;
+				cur->noMonsterType = static_cast<uint32_t>(type);
+				cur->hash = code_update_hash(cur->hash, cur->noMonsterType, 3);
+				continue;
+			}
 			if(linebuf[0] == '$') {
 				int limitValue = 0;
 				char keybuf[256];
@@ -51,7 +68,8 @@ void DeckManager::LoadLFListSingle(const char* path) {
 				if (limitValue < 0)
 					limitValue = 0;
 				cur->pointList.push_back({ keybuf, limitValue });
-				cur->hash = credit_update_hash(cur->hash, credit_hash(keybuf), static_cast<uint32_t>(limitValue), 0x43524544u);
+				pointHash = credit_hash(keybuf);
+				cur->hash = credit_update_hash(cur->hash, pointHash, static_cast<uint32_t>(limitValue), 0x43524544u);
 				continue;
 			}
 			char* pos = linebuf;
@@ -69,7 +87,7 @@ void DeckManager::LoadLFListSingle(const char* path) {
 					continue;
 				auto& point = cur->pointList.back();
 				point.table[code] = creditValue;
-				cur->hash = credit_update_hash(cur->hash, code, credit_hash(point.name.c_str()), static_cast<uint32_t>(creditValue));
+				cur->hash = credit_update_hash(cur->hash, code, pointHash, static_cast<uint32_t>(creditValue));
 				continue;
 			}
 			pos = end;
@@ -81,7 +99,7 @@ void DeckManager::LoadLFListSingle(const char* path) {
 			if (count < 0 || count > 2)
 				continue;
 			cur->content[code] = count;
-			cur->hash = cur->hash ^ ((code << 18) | (code >> 14)) ^ ((code << (27 + count)) | (code >> (5 - count)));
+			cur->hash = code_update_hash(cur->hash, code, count);
 		}
 		std::fclose(fp);
 	}
@@ -150,6 +168,8 @@ uint32_t DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, size_t ru
 		auto it = list.find(code);
 		if(it != list.end() && dc > it->second)
 			return (DECKERROR_LFLIST << 28) | cit->code;
+		if ((cit->type & TYPE_MONSTER) && (cit->type & lflist->noMonsterType))
+			return (DECKERROR_LFLIST << 28) | cit->code;
 	}
 	for (auto& cit : deck.extra) {
 		auto gameruleDeckError = checkAvail(cit->ot, avail);
@@ -165,6 +185,8 @@ uint32_t DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, size_t ru
 		auto it = list.find(code);
 		if(it != list.end() && dc > it->second)
 			return (DECKERROR_LFLIST << 28) | cit->code;
+		if ((cit->type & TYPE_MONSTER) && (cit->type & lflist->noMonsterType))
+			return (DECKERROR_LFLIST << 28) | cit->code;
 	}
 	for (auto& cit : deck.side) {
 		auto gameruleDeckError = checkAvail(cit->ot, avail);
@@ -179,6 +201,8 @@ uint32_t DeckManager::CheckDeck(const Deck& deck, unsigned int lfhash, size_t ru
 			return (DECKERROR_CARDCOUNT << 28) | cit->code;
 		auto it = list.find(code);
 		if(it != list.end() && dc > it->second)
+			return (DECKERROR_LFLIST << 28) | cit->code;
+		if ((cit->type & TYPE_MONSTER) && (cit->type & lflist->noMonsterType))
 			return (DECKERROR_LFLIST << 28) | cit->code;
 	}
 	std::vector<int> sum = GetDeckPoint(deck, lflist);
