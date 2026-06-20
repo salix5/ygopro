@@ -88,12 +88,6 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		if(wargv[i][0] == L'-' && wargv[i][1] == L'e' && wargv[i][2] != L'\0') {
-			char file[1024];
-			BufferIO::EncodeUTF8(wargv[i] + 2, file);
-			ygo::dataManager.LoadDB(file);
-			continue;
-		}
 		if(!std::wcscmp(wargv[i], L"-e")) { // extra database
 			++i;
 			if(i < wargc) {
