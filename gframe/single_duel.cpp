@@ -354,11 +354,12 @@ void SingleDuel::StartDuel(DuelPlayer* dp) {
 	duel_stage = DUEL_STAGE_FINGER;
 }
 void SingleDuel::HandResult(DuelPlayer* dp, unsigned char res) {
-	if(res > 3)
+	if(res == 0 || res > 3 || dp->state != CTOS_HAND_RESULT)
 		return;
-	if(dp->state != CTOS_HAND_RESULT)
+	auto player = dp->type;
+	if(hand_result[player])
 		return;
-	hand_result[dp->type] = res;
+	hand_result[player] = res;
 	if(hand_result[0] && hand_result[1]) {
 		STOC_HandResult schr;
 		schr.res1 = hand_result[0];
@@ -1565,12 +1566,13 @@ void SingleDuel::RefreshSingle(int player, int location, int sequence, int flag)
 	NetServer::SendBufferToPlayer(players[player], STOC_GAME_MSG, query_buffer, len + 4);
 	if (len <= LEN_HEADER)
 		return;
-	const int clen = BufferIO::Read<int32_t>(qbuf);
-	auto position = GetPosition(qbuf, 8);
+	auto position = GetPosition(qbuf, 12);
 	if (position & POS_FACEDOWN) {
-		BufferIO::Write<int32_t>(qbuf, QUERY_CODE);
-		BufferIO::Write<int32_t>(qbuf, 0);
-		std::memset(qbuf, 0, clen - 12);
+		BufferIO::Write<int32_t>(qbuf, 16);
+		BufferIO::Write<uint32_t>(qbuf, QUERY_CODE | QUERY_POSITION);
+		BufferIO::Write<uint32_t>(qbuf, 0);
+		// keep the 4 bytes position data
+		len = 16;
 	}
 	NetServer::SendBufferToPlayer(players[1 - player], STOC_GAME_MSG, query_buffer, len + 4);
 	for (auto pit = observers.begin(); pit != observers.end(); ++pit)
