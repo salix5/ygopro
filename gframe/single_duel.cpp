@@ -354,7 +354,7 @@ void SingleDuel::StartDuel(DuelPlayer* dp) {
 	duel_stage = DUEL_STAGE_FINGER;
 }
 void SingleDuel::HandResult(DuelPlayer* dp, unsigned char res) {
-	if(res ＜ 1 || res > 3 || dp->state != CTOS_HAND_RESULT)
+	if(res < 1 || res > 3 || dp->state != CTOS_HAND_RESULT)
 		return;
 	auto player = dp->type;
 	if(hand_result[player])
