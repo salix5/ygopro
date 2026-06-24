@@ -105,8 +105,9 @@ void DeckManager::LoadLFListSingle(const char* path) {
 	}
 }
 void DeckManager::LoadLFList() {
-	LoadLFListSingle("expansions/lflist.conf");
 	LoadLFListSingle("lflist.conf");
+	LoadLFListSingle("genesys.conf");
+	LoadLFListSingle("expansions/lflist.conf");
 	LFList nolimit;
 	nolimit.listName = L"N/A";
 	nolimit.hash = 0;
