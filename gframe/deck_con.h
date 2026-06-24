@@ -38,14 +38,6 @@ public:
 	void EnableEditWindow(bool enabled);
 	void EnableManageWindow(bool enabled);
 
-	bool push_main(const CardDataC* pointer, int seq = -1);
-	bool push_extra(const CardDataC* pointer, int seq = -1);
-	bool push_side(const CardDataC* pointer, int seq = -1);
-	void pop_main(int seq);
-	void pop_extra(int seq);
-	void pop_side(int seq);
-	bool check_limit(const CardDataC* pointer);
-
 	unsigned long long filter_effect{};
 	unsigned int filter_type{};
 	unsigned int filter_type2{};
@@ -88,6 +80,15 @@ public:
 	std::vector<const CardDataC*> results;
 	wchar_t result_string[8]{};
 	std::vector<std::wstring> expansionPacks;
+
+private:
+	bool push_main(const CardDataC* pointer, int seq = -1);
+	bool push_extra(const CardDataC* pointer, int seq = -1);
+	bool push_side(const CardDataC* pointer, int seq = -1);
+	void pop_main(int seq);
+	void pop_extra(int seq);
+	void pop_side(int seq);
+	bool check_limit(const CardDataC* pointer);
 };
 
 }
