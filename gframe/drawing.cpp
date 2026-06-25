@@ -1231,7 +1231,7 @@ void Game::DrawThumb(const CardDataC* cp, irr::core::vector2di pos, const LFList
 			driver->draw2DImage(imageManager.tLim, otloc, irr::core::recti(0, 0, 64, 64), 0, 0, true);
 	}
 }
-void Game::DrawDeckBd() {
+void Game::DrawDeckBuilder() {
 	wchar_t textBuffer[64];
 	wchar_t numBuffer[64];
 	//main deck
