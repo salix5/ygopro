@@ -535,10 +535,9 @@ bool DeckManager::SaveDeckArray(const DeckArray& deck, const wchar_t* name) {
 	return true;
 }
 std::vector<int> DeckManager::GetDeckPoint(const Deck& deck, const LFList* lflist) {
-	std::vector<int> sum;
 	if (!lflist || lflist->pointList.empty())
-		return sum;
-	sum.resize(lflist->pointList.size());
+		return {};
+	std::vector<int> sum(lflist->pointList.size());
 	auto add_card = [&](uint32_t code){
 		for (size_t i = 0; i < lflist->pointList.size(); ++i) {
 			auto& point = lflist->pointList[i];
