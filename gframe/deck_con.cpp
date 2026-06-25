@@ -102,6 +102,7 @@ void DeckBuilder::Initialize() {
 	else {
 		filterList = &deckManager._lfList.back();
 	}
+	RefreshCurrentPoint();
 	ClearSearch();
 	mouse_pos.set(0, 0);
 	hovered_code = 0;
@@ -243,6 +244,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					break;
 				wchar_t filepath[256]{};
 				deckManager.LoadCurrentDeck(catesel, mainGame->lstCategories->getListItem(catesel), mainGame->lstDecks->getListItem(decksel));
+				RefreshCurrentPoint();
 				RefreshPackListScroll();
 				break;
 			}
@@ -1108,6 +1110,7 @@ void DeckBuilder::ComboBoxHandler(const irr::SEvent& event) {
 		if (decksel == -1)
 			break;
 		load_current_deck(mainGame->cbDBCategory, mainGame->cbDBDecks);
+		RefreshCurrentPoint();
 		is_modified = false;
 		break;
 	}
@@ -1664,6 +1667,7 @@ void DeckBuilder::ChangeCategory(const wchar_t* deck_name) {
 	mainGame->cbDBDecks->setSelected(sel);
 	mainGame->lstDecks->setSelected(sel);
 	deckManager.LoadCurrentDeck(mainGame->cbDBCategory->getSelected(), mainGame->cbDBCategory->getText(), mainGame->cbDBDecks->getText());
+	RefreshCurrentPoint();
 }
 void DeckBuilder::ShowDeckManage() {
 	wchar_t category_name[256]{};
@@ -1748,6 +1752,13 @@ void DeckBuilder::EnableManageWindow(bool enabled) {
 	mainGame->lstDecks->setEnabled(enabled);
 }
 
+void DeckBuilder::RefreshCurrentPoint() {
+	if (mainGame->is_siding)
+		return;
+	if (!filterList || filterList->pointList.empty())
+		return;
+	current_point = DeckManager::GetDeckPoint(deckManager.current_deck, filterList).front();
+}
 bool DeckBuilder::push_main(const CardDataC* pointer, int seq) {
 	if(pointer->type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK))
 		return false;
@@ -1760,6 +1771,7 @@ bool DeckBuilder::push_main(const CardDataC* pointer, int seq) {
 	else
 		container.push_back(pointer);
 	is_modified = true;
+	RefreshCurrentPoint();
 	GetHoveredCard();
 	return true;
 }
@@ -1775,6 +1787,7 @@ bool DeckBuilder::push_extra(const CardDataC* pointer, int seq) {
 	else
 		container.push_back(pointer);
 	is_modified = true;
+	RefreshCurrentPoint();
 	GetHoveredCard();
 	return true;
 }
@@ -1788,6 +1801,7 @@ bool DeckBuilder::push_side(const CardDataC* pointer, int seq) {
 	else
 		container.push_back(pointer);
 	is_modified = true;
+	RefreshCurrentPoint();
 	GetHoveredCard();
 	return true;
 }
@@ -1795,18 +1809,21 @@ void DeckBuilder::pop_main(int seq) {
 	auto& container = deckManager.current_deck.main;
 	container.erase(container.begin() + seq);
 	is_modified = true;
+	RefreshCurrentPoint();
 	GetHoveredCard();
 }
 void DeckBuilder::pop_extra(int seq) {
 	auto& container = deckManager.current_deck.extra;
 	container.erase(container.begin() + seq);
 	is_modified = true;
+	RefreshCurrentPoint();
 	GetHoveredCard();
 }
 void DeckBuilder::pop_side(int seq) {
 	auto& container = deckManager.current_deck.side;
 	container.erase(container.begin() + seq);
 	is_modified = true;
+	RefreshCurrentPoint();
 	GetHoveredCard();
 }
 bool DeckBuilder::check_limit(const CardDataC* pointer) {

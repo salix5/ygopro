@@ -1950,6 +1950,7 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 					mainGame->cbHostLFlist->setSelected(mainGame->cbHostLFlist->getItemCount() - 1);
 				}
 				mainGame->deckBuilder.filterList = &deckManager._lfList[mainGame->cbLFlist->getSelected()];
+				mainGame->deckBuilder.RefreshCurrentPoint();
 				return true;
 			}
 			}
@@ -1963,6 +1964,7 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 					mainGame->deckBuilder.default_index = mainGame->cbLFlist->getSelected();
 					mainGame->cbHostLFlist->setSelected(sel);
 					mainGame->deckBuilder.filterList = &deckManager._lfList[mainGame->deckBuilder.default_index];
+					mainGame->deckBuilder.RefreshCurrentPoint();
 				}
 				return true;
 			}
