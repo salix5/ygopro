@@ -26,6 +26,7 @@ public:
 	void InstantSearch();
 	void ClearSearch();
 	void SortList();
+	void RefreshCurrentPoint();
 
 	void RefreshDeckList();
 	void RefreshReadonly(int catesel);
@@ -68,6 +69,7 @@ public:
 	size_t pre_mainc{};
 	size_t pre_extrac{};
 	size_t pre_sidec{};
+	int current_point{};
 	const CardDataC* draging_pointer{};
 	irr::s32 prev_operation{};
 	irr::s32 dmquery_operation{};
