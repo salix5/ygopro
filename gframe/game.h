@@ -195,7 +195,7 @@ public:
 	void SetImageButtonDrawing(irr::gui::IGUIElement* element, bool draw = true);
 	void WaitFrameSignal(int frame);
 	void DrawThumb(const CardDataC* cp, irr::core::vector2di pos, const LFList* lflist, bool drag = false);
-	void DrawDeckBd();
+	void DrawDeckBuilder();
 	void LoadConfig(const char* file);
 	void SaveConfig();
 	void ShowCardInfo(int code, bool resize = false);

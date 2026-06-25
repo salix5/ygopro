@@ -1090,7 +1090,7 @@ void Game::MainLoop() {
 		} else if(is_building) {
 			soundManager.PlayBGM(BGM_DECK);
 			DrawBackImage(imageManager.tBackGround_deck);
-			DrawDeckBd();
+			DrawDeckBuilder();
 		} else {
 			soundManager.PlayBGM(BGM_MENU);
 			DrawBackImage(imageManager.tBackGround_menu);
