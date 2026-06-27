@@ -753,4 +753,6 @@ jobs:
         GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         TAG_NAME: "${{ github.ref_name }}"
       run: |
-        gh release create $TAG_NAME x64/YGOPro.exe --title $TAG_NAME --generate-notes
+        tar -czvf "YGOPro-${TAG_NAME}-x64.tar.gz" x64/YGOPro.exe
+        tar -czvf textures.tar.gz textures
+        gh release create $TAG_NAME "YGOPro-${TAG_NAME}-x64.tar.gz" textures.tar.gz textures/lim_credit.png --title $TAG_NAME --generate-notes
