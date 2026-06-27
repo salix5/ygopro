@@ -1279,7 +1279,7 @@ void Game::LoadExpansions() {
 					errmsg.append(name);
 					errmsg.append(")! ");
 					errmsg.append(dataManager.errmsg);
-					mainGame->ErrorLog(errmsg.c_str());
+					ErrorLog(errmsg.c_str());
 				}
 				continue;
 			}
@@ -1298,7 +1298,7 @@ void Game::LoadExpansions() {
 					errmsg.append(" : ");
 					errmsg.append(name);
 					errmsg.append(")! Please make sure the file name is UTF-8 encoded in the archive.");
-					mainGame->ErrorLog(errmsg.c_str());
+					ErrorLog(errmsg.c_str());
 					continue;
 				}
 				deckBuilder.expansionPacks.push_back(fname);
