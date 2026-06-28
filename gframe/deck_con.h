@@ -84,6 +84,11 @@ public:
 	std::vector<const CardDataC*> results;
 	wchar_t result_string[8]{};
 	std::vector<std::wstring> expansionPacks;
+	const wchar_t* deck_string{};
+	const wchar_t* pack_string{};
+	const wchar_t* extra_string{};
+	const wchar_t* side_string{};
+	const wchar_t* search_string{};
 
 private:
 	bool push_main(const CardDataC* pointer, int seq = -1);
@@ -94,9 +99,9 @@ private:
 	void pop_side(int seq);
 	bool check_limit(const CardDataC* pointer);
 
-	Game* game_{ nullptr };
+	Game* game_{};
 };
 
 }
 
-#endif //DECK_CON
+#endif //DECK_CON_H

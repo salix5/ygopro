@@ -81,6 +81,11 @@ DeckBuilder::DeckBuilder(Game* game) : game_(game) {
 	rnd.seed(seq);
 }
 void DeckBuilder::Initialize() {
+	deck_string = dataManager.GetSysString(1330);
+	pack_string = dataManager.GetSysString(1477);
+	extra_string = dataManager.GetSysString(1331);
+	side_string = dataManager.GetSysString(1332);
+	search_string = dataManager.GetSysString(1333);
 	game_->is_building = true;
 	game_->is_siding = false;
 	game_->ClearCardInfo();

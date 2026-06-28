@@ -1242,7 +1242,8 @@ void Game::DrawDeckBuilder() {
 		text_color = modified_color;
 	driver->draw2DRectangle(Resize(310, 137, 460, 157), 0x400000ff, 0x400000ff, 0x40000000, 0x40000000);
 	driver->draw2DRectangleOutline(Resize(309, 136, 460, 157));
-	DrawShadowText(textFont, dataManager.GetSysString(deckBuilder.showing_pack ? 1477 : 1330), Resize(315, 137, 410, 157), Resize(1, 1, 1, 1), text_color, 0xff000000, false, true);
+	auto title = deckBuilder.showing_pack ? deckBuilder.pack_string : deckBuilder.deck_string;
+	DrawShadowText(textFont, title, Resize(315, 137, 410, 157), Resize(1, 1, 1, 1), text_color, 0xff000000, false, true);
 	int mainsize = deckManager.current_deck.main.size();
 	if (!is_siding && deckBuilder.filterList && !deckBuilder.filterList->pointList.empty())
 		myswprintf(numBuffer, L"%d  (%d)", mainsize, deckBuilder.current_point);
@@ -1281,7 +1282,7 @@ void Game::DrawDeckBuilder() {
 		//extra deck
 		driver->draw2DRectangle(Resize(310, 440, 410, 460), 0x400000ff, 0x400000ff, 0x40000000, 0x40000000);
 		driver->draw2DRectangleOutline(Resize(309, 439, 410, 460));
-		DrawShadowText(textFont, dataManager.GetSysString(1331), Resize(315, 440, 410, 460), Resize(1, 1, 1, 1), 0xffffffff, 0xff000000, false, true);
+		DrawShadowText(textFont, deckBuilder.extra_string, Resize(315, 440, 410, 460), Resize(1, 1, 1, 1), 0xffffffff, 0xff000000, false, true);
 		myswprintf(numBuffer, L"%zu", deckManager.current_deck.extra.size());
 		DrawShadowText(numFont, numBuffer, Resize(380, 441, 440, 461), Resize(1, 1, 1, 1), 0xffffffff, 0xff000000, false, true);
 		driver->draw2DRectangle(Resize(310, 463, 797, 533), 0x400000ff, 0x400000ff, 0x40000000, 0x40000000);
@@ -1297,7 +1298,7 @@ void Game::DrawDeckBuilder() {
 		//side deck
 		driver->draw2DRectangle(Resize(310, 537, 410, 557), 0x400000ff, 0x400000ff, 0x40000000, 0x40000000);
 		driver->draw2DRectangleOutline(Resize(309, 536, 410, 557));
-		DrawShadowText(textFont, dataManager.GetSysString(1332), Resize(315, 537, 410, 557), Resize(1, 1, 1, 1), 0xffffffff, 0xff000000, false, true);
+		DrawShadowText(textFont, deckBuilder.side_string, Resize(315, 537, 410, 557), Resize(1, 1, 1, 1), 0xffffffff, 0xff000000, false, true);
 		myswprintf(numBuffer, L"%zu", deckManager.current_deck.side.size());
 		DrawShadowText(numFont, numBuffer, Resize(380, 538, 440, 558), Resize(1, 1, 1, 1), 0xffffffff, 0xff000000, false, true);
 		driver->draw2DRectangle(Resize(310, 560, 797, 630), 0x400000ff, 0x400000ff, 0x40000000, 0x40000000);
@@ -1318,7 +1319,7 @@ void Game::DrawDeckBuilder() {
 	} else {
 		//search result
 		driver->draw2DRectangle(Resize(805, 137, 926, 157), 0x400000ff, 0x400000ff, 0x40000000, 0x40000000);
-		DrawShadowText(textFont, dataManager.GetSysString(1333), Resize(810, 137, 915, 157), Resize(1, 1, 1, 1), 0xffffffff, 0xff000000, false, true);
+		DrawShadowText(textFont, deckBuilder.search_string, Resize(810, 137, 915, 157), Resize(1, 1, 1, 1), 0xffffffff, 0xff000000, false, true);
 		DrawShadowText(numFont, deckBuilder.result_string, Resize(875, 138, 935, 158), Resize(1, 1, 1, 1), 0xffffffff, 0xff000000, false, true);
 		driver->draw2DRectangle(Resize(805, 160, 1020, 630), 0x400000ff, 0x400000ff, 0x40000000, 0x40000000);
 		driver->draw2DRectangleOutline(Resize(804, 159, 1020, 630));
