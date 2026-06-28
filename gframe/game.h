@@ -332,7 +332,7 @@ public:
 
 	ClientField dField{ this };
 	DeckBuilder deckBuilder{ this };
-	MenuHandler menuHandler;
+	MenuHandler menuHandler{ this };
 	irr::IrrlichtDevice* device{};
 	irr::video::IVideoDriver* driver{};
 	irr::scene::ISceneManager* smgr{};
