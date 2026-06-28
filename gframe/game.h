@@ -331,7 +331,7 @@ public:
 	float yScale{ 1.0f };
 
 	ClientField dField{ this };
-	DeckBuilder deckBuilder;
+	DeckBuilder deckBuilder{ this };
 	MenuHandler menuHandler;
 	irr::IrrlichtDevice* device{};
 	irr::video::IVideoDriver* driver{};
