@@ -330,7 +330,7 @@ public:
 	float xScale{ 1.0f };
 	float yScale{ 1.0f };
 
-	ClientField dField;
+	ClientField dField{ this };
 	DeckBuilder deckBuilder;
 	MenuHandler menuHandler;
 	irr::IrrlichtDevice* device{};
