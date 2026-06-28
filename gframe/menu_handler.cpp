@@ -13,11 +13,6 @@
 
 namespace ygo {
 
-void UpdateDeck() {
-	BufferIO::CopyWideString(mainGame->cbCategorySelect->getText(), mainGame->gameConf.lastcategory);
-	BufferIO::CopyWideString(mainGame->cbDeckSelect->getText(), mainGame->gameConf.lastdeck);
-	DuelClient::SendUpdateDeck(deckManager.current_deck);
-}
 MenuHandler::MenuHandler(Game* game) : game_(game) {
 }
 bool MenuHandler::OnEvent(const irr::SEvent& event) {
@@ -656,6 +651,12 @@ void MenuHandler::EnableReplayWindow(bool enabled) {
 	game_->wReplay->setEnabled(enabled);
 	game_->lstReplayList->setEnabled(enabled);
 	game_->ebRepStartTurn->setEnabled(enabled);
+}
+
+void MenuHandler::UpdateDeck() {
+	BufferIO::CopyWideString(game_->cbCategorySelect->getText(), game_->gameConf.lastcategory);
+	BufferIO::CopyWideString(game_->cbDeckSelect->getText(), game_->gameConf.lastdeck);
+	DuelClient::SendUpdateDeck(deckManager.current_deck);
 }
 
 }

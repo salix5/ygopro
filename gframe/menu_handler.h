@@ -19,6 +19,8 @@ public:
 	Replay temp_replay;
 
 private:
+	void UpdateDeck();
+
 	Game* game_{ nullptr };
 };
 
