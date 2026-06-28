@@ -10,10 +10,11 @@ namespace ygo {
 
 struct CardDataC;
 struct LFList;
+class Game;
 
 class DeckBuilder: public irr::IEventReceiver {
 public:
-	DeckBuilder();
+	DeckBuilder(Game* game);
 	bool OnEvent(const irr::SEvent& event) override;
 	void ButtonHandler(const irr::SEvent& event);
 	void ComboBoxHandler(const irr::SEvent& event);
@@ -92,6 +93,8 @@ private:
 	void pop_extra(int seq);
 	void pop_side(int seq);
 	bool check_limit(const CardDataC* pointer);
+
+	Game* game_{ nullptr };
 };
 
 }

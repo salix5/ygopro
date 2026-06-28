@@ -10,6 +10,7 @@
 namespace ygo {
 
 class ClientCard;
+class Game;
 
 struct ChainInfo {
 	irr::core::vector3df chain_pos;
@@ -92,7 +93,7 @@ public:
 	bool tag_teammate_surrender{ false };
 	std::mt19937 rnd;
 
-	ClientField();
+	ClientField(Game* game);
 	~ClientField() override;
 	void Clear();
 	void Initial(int player, int deckc, int extrac, int sidec = 0);
@@ -158,6 +159,9 @@ public:
 	void SetResponseSelectedCards() const;
 	void SetResponseSelectedOption() const;
 	void CancelOrFinish();
+
+private:
+	Game* game_{ nullptr };
 };
 
 }
