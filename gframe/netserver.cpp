@@ -152,7 +152,7 @@ void NetServer::ServerEchoEvent(bufferevent* bev, short events, void* ctx) {
 			DisconnectPlayer(dp);
 	}
 }
-int NetServer::ServerThread() {
+void NetServer::ServerThread() {
 	event_base_dispatch(net_evbase);
 	for(auto& entry : users) {
 		bufferevent_disable(entry.first, EV_READ);
@@ -175,7 +175,6 @@ int NetServer::ServerThread() {
 	duel_mode = nullptr;
 	event_base_free(net_evbase);
 	net_evbase = nullptr;
-	return 0;
 }
 void NetServer::DisconnectPlayer(DuelPlayer* dp) {
 	auto bit = users.find(dp->bev);
