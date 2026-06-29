@@ -143,7 +143,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 					if(game_->exit_on_return)
 						game_->device->closeDevice();
 				} else {
-					if(!(game_->dInfo.isTag && game_->dField.tag_surrender))
+					if(!(game_->dInfo.isTag && tag_surrender))
 						game_->PopupElement(game_->wSurrender);
 				}
 				break;
@@ -152,12 +152,12 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 				soundManager.PlaySoundEffect(SOUND_BUTTON);
 				DuelClient::SendPacketToServer(CTOS_SURRENDER);
 				game_->HideElement(game_->wSurrender);
-				game_->dField.tag_surrender = true;
+				tag_surrender = true;
 				break;
 			}
 			case BUTTON_SURRENDER_NO: {
 				soundManager.PlaySoundEffect(SOUND_BUTTON);
-				game_->dField.tag_teammate_surrender = false;
+				tag_teammate_surrender = false;
 				game_->HideElement(game_->wSurrender);
 				break;
 			}
@@ -213,7 +213,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 				case MSG_SELECT_SUM: {
 					game_->HideElement(game_->wQuery);
 					if(select_panalmode)
-						game_->dField.ShowSelectCard(true);
+						ShowSelectCard(true);
 					break;
 				}
 				case MSG_SELECT_CHAIN: {
@@ -1677,7 +1677,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 							player_name = game_->dInfo.clientname_tag;
 					}
 					std::wstring str(player_name);
-					const auto& mplayer_hints = game_->dField.player_desc_hints[mplayer];
+					const auto& mplayer_hints = player_desc_hints[mplayer];
 					for(const auto& entry : mplayer_hints) {
 						myswprintf(formatBuffer, L"\n*%ls", dataManager.GetDesc(entry.first));
 						str.append(formatBuffer);
@@ -2256,7 +2256,7 @@ void ClientField::GetHoverField(int x, int y) {
 						hovered_sequence = 6;
 					}
 					else if((game_->dInfo.curMsg == MSG_SELECT_PLACE || game_->dInfo.curMsg == MSG_SELECT_DISFIELD)) {
-						if (game_->dField.selectable_field & (0x1 << (16 + 6))) {
+						if (selectable_field & (0x1 << (16 + 6))) {
 							hovered_controler = 1;
 							hovered_location = LOCATION_MZONE;
 							hovered_sequence = 6;
@@ -2285,7 +2285,7 @@ void ClientField::GetHoverField(int x, int y) {
 						hovered_sequence = 5;
 					}
 					else if ((game_->dInfo.curMsg == MSG_SELECT_PLACE || game_->dInfo.curMsg == MSG_SELECT_DISFIELD)) {
-						if (game_->dField.selectable_field & (0x1 << (16 + 5))) {
+						if (selectable_field & (0x1 << (16 + 5))) {
 							hovered_controler = 1;
 							hovered_location = LOCATION_MZONE;
 							hovered_sequence = 5;
@@ -2662,7 +2662,7 @@ void ClientField::CancelOrFinish() {
 			respbuf[0] = game_->LocalPlayer(0);
 			respbuf[1] = 0;
 			respbuf[2] = 0;
-			game_->dField.selectable_field = 0;
+			selectable_field = 0;
 			DuelClient::SetResponseB(respbuf, 3);
 			DuelClient::SendResponse();
 			ShowCancelOrFinishButton(0);

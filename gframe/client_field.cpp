@@ -1144,7 +1144,7 @@ bool ClientField::ShowSelectSum(bool panelmode) {
 	if(panelmode) {
 		game_->wCardSelect->setText(textBuffer);
 		game_->wCardSelect->setVisible(false);
-		game_->dField.ShowSelectCard();
+		ShowSelectCard();
 	} else {
 		game_->stHintMsg->setText(textBuffer);
 		game_->stHintMsg->setVisible(true);
