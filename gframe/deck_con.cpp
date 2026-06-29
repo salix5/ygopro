@@ -97,7 +97,7 @@ void DeckBuilder::Initialize() {
 	game_->btnSideReload->setVisible(false);
 	game_->btnGenerateScript->setVisible(true);
 	if (game_->gameConf.use_lflist) {
-		filterList = &deckManager._lfList[default_index];
+		filterList = &deckManager._lfList[default_lflist_index];
 	}
 	else {
 		filterList = &deckManager._lfList.back();

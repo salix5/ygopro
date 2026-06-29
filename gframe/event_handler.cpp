@@ -1940,8 +1940,8 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 				if (game_->chkLFlist->isChecked()) {
 					game_->gameConf.use_lflist = 1;
 					game_->cbLFlist->setEnabled(true);
-					game_->cbLFlist->setSelected(game_->deckBuilder.default_index);
-					game_->cbHostLFlist->setSelected(game_->deckBuilder.default_index);
+					game_->cbLFlist->setSelected(game_->deckBuilder.default_lflist_index);
+					game_->cbHostLFlist->setSelected(game_->deckBuilder.default_lflist_index);
 				}
 				else {
 					game_->gameConf.use_lflist = 0;
@@ -1961,9 +1961,9 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 			case COMBOBOX_LFLIST: {
 				int sel = game_->cbLFlist->getSelected();
 				if (sel != -1) {
-					game_->deckBuilder.default_index = game_->cbLFlist->getSelected();
+					game_->deckBuilder.default_lflist_index = game_->cbLFlist->getSelected();
 					game_->cbHostLFlist->setSelected(sel);
-					game_->deckBuilder.filterList = &deckManager._lfList[game_->deckBuilder.default_index];
+					game_->deckBuilder.filterList = &deckManager._lfList[game_->deckBuilder.default_lflist_index];
 					game_->deckBuilder.RefreshCurrentPoint();
 				}
 				return true;
