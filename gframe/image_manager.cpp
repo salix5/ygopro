@@ -291,7 +291,7 @@ irr::video::ITexture* ImageManager::GetBigPicture(int code, float zoom) {
 	tBigPicture = addTexture(name, img, origsize.Width * zoom, origsize.Height * zoom);
 	return tBigPicture;
 }
-int ImageManager::LoadThumbThread() {
+void ImageManager::LoadThumbThread() {
 	while(true) {
 		imageManager.tThumbLoadingMutex.lock();
 		imageManager.tThumbLoadingThreadRunning = !imageManager.tThumbLoadingCodes.empty();
@@ -331,7 +331,6 @@ int ImageManager::LoadThumbThread() {
 			imageManager.tThumbLoadingMutex.unlock();
 		}
 	}
-	return 0;
 }
 /**
  * Load managed card thumbnail texture.
