@@ -1,3 +1,6 @@
+git submodule update ocgcore
+git -C ocgcore checkout master
+
 git clone https://github.com/salix5/irrlicht.git
 git clone --depth=1 -b 0.11.25 https://github.com/mackron/miniaudio
 copy /Y miniaudio\extras\miniaudio_split\miniaudio.* miniaudio
