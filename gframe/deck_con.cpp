@@ -81,22 +81,23 @@ DeckBuilder::DeckBuilder(Game* game) : game_(game) {
 	rnd.seed(seq);
 }
 void DeckBuilder::Initialize() {
-	mainGame->is_building = true;
-	mainGame->is_siding = false;
-	mainGame->ClearCardInfo();
-	mainGame->wInfos->setVisible(true);
-	mainGame->wCardImg->setVisible(true);
-	mainGame->wDeckEdit->setVisible(true);
-	mainGame->wFilter->setVisible(true);
-	mainGame->wSort->setVisible(true);
-	mainGame->btnLeaveGame->setVisible(true);
-	mainGame->btnLeaveGame->setText(dataManager.GetSysString(1306));
-	mainGame->btnSideOK->setVisible(false);
-	mainGame->btnSideShuffle->setVisible(false);
-	mainGame->btnSideSort->setVisible(false);
-	mainGame->btnSideReload->setVisible(false);
-	if (mainGame->gameConf.use_lflist) {
-		filterList = &deckManager._lfList[mainGame->gameConf.default_lflist];
+	game_->is_building = true;
+	game_->is_siding = false;
+	game_->ClearCardInfo();
+	game_->wInfos->setVisible(true);
+	game_->wCardImg->setVisible(true);
+	game_->wDeckEdit->setVisible(true);
+	game_->wFilter->setVisible(true);
+	game_->wSort->setVisible(true);
+	game_->btnLeaveGame->setVisible(true);
+	game_->btnLeaveGame->setText(dataManager.GetSysString(1306));
+	game_->btnSideOK->setVisible(false);
+	game_->btnSideShuffle->setVisible(false);
+	game_->btnSideSort->setVisible(false);
+	game_->btnSideReload->setVisible(false);
+	game_->btnGenerateScript->setVisible(true);
+	if (game_->gameConf.use_lflist) {
+		filterList = &deckManager._lfList[game_->gameConf.default_lflist];
 	}
 	else {
 		filterList = &deckManager._lfList.back();
