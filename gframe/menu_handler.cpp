@@ -336,15 +336,10 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				flag += (game_->chkBotHand->isChecked() ? 0x1 : 0);
 				processArgs.push_back(std::to_wstring(flag));
 				processArgs.push_back(std::to_wstring(bot_server_port));
-#ifdef _WIN32
-				std::wstring executableName = L"Bot.exe";
-#else
-				std::wstring executableName = L"./bot";
-#endif
-				game_->pending_bot_executable = executableName;
 				game_->pending_bot_args = processArgs;
+				game_->bot_pending = true;
 				if(!DuelClient::StartClient(localhost, bot_server_port)) {
-					game_->pending_bot_executable.clear();
+					game_->bot_pending = false;
 					game_->pending_bot_args.clear();
 					NetServer::StopServer();
 					soundManager.PlaySoundEffect(SOUND_INFO);
