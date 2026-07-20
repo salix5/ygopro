@@ -5,13 +5,15 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <sqlite3.h>
 #include "../ocgcore/card_data.h"
 
 namespace irr::io {
 	class IReadFile;
 	class IFileSystem;
 }
+
+struct sqlite3;
+struct sqlite3_stmt;
 
 namespace ygo {
 
