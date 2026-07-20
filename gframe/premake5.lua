@@ -85,6 +85,7 @@ project "YGOPro"
         entrypoint "mainCRTStartup"
         files "ygopro.rc"
         links { "ws2_32", "iphlpapi", "winmm" }
+        defines { "NOMINMAX=1", "WIN32_LEAN_AND_MEAN" }
 
     filter "system:macosx"
         links { "OpenGL.framework", "Cocoa.framework", "IOKit.framework", "Carbon.framework" }
