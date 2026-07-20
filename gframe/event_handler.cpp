@@ -1974,9 +1974,9 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 		case irr::gui::EGET_LISTBOX_CHANGED: {
 			switch (id) {
 			case LISTBOX_LOG: {
-				int sel = mainGame->lstLog->getSelected();
-				if(sel >= 0 && (int)mainGame->logParam.size() > sel && mainGame->logParam[sel] > 0) {
-					mainGame->ShowCardInfo(mainGame->logParam[sel]);
+				int sel = game_->lstLog->getSelected();
+				if(sel >= 0 && (int)game_->logParam.size() > sel && game_->logParam[sel] > 0) {
+					game_->ShowCardInfo(game_->logParam[sel]);
 				}
 				return true;
 			}
@@ -1986,9 +1986,9 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 		case irr::gui::EGET_LISTBOX_SELECTED_AGAIN: {
 			switch (id) {
 			case LISTBOX_LOG: {
-				int sel = mainGame->lstLog->getSelected();
-				if(sel >= 0 && (int)mainGame->logParam.size() > sel && mainGame->logParam[sel] > 0) {
-					mainGame->wInfos->setActiveTab(0);
+				int sel = game_->lstLog->getSelected();
+				if(sel >= 0 && (int)game_->logParam.size() > sel && game_->logParam[sel] > 0) {
+					game_->wInfos->setActiveTab(0);
 				}
 				return true;
 			}
