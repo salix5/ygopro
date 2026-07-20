@@ -89,6 +89,7 @@ struct Config {
 	int chkIgnoreDeckChanges{ 0 };
 	int defaultOT{ 1 };
 	int enable_bot_mode{ 1 };
+	int bot_room_public{ 0 };
 	int quick_animation{ 0 };
 	int auto_save_replay{ 0 };
 	int draw_single_chain{ 0 };
@@ -328,6 +329,8 @@ public:
 	bool open_file{ false };
 	wchar_t open_file_name[256]{};
 	bool bot_mode{ false };
+	std::wstring pending_bot_executable;
+	std::vector<std::wstring> pending_bot_args;
 
 	irr::core::dimension2d<irr::u32> window_size;
 	float xScale{ 1.0f };

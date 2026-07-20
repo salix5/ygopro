@@ -1974,9 +1974,9 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 		case irr::gui::EGET_LISTBOX_CHANGED: {
 			switch (id) {
 			case LISTBOX_LOG: {
-				int sel = game_->lstLog->getSelected();
-				if (sel != -1) {
-					game_->ShowCardInfo(game_->logParam[sel]);
+				int sel = mainGame->lstLog->getSelected();
+				if(sel >= 0 && (int)mainGame->logParam.size() > sel && mainGame->logParam[sel] > 0) {
+					mainGame->ShowCardInfo(mainGame->logParam[sel]);
 				}
 				return true;
 			}
@@ -1986,9 +1986,9 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 		case irr::gui::EGET_LISTBOX_SELECTED_AGAIN: {
 			switch (id) {
 			case LISTBOX_LOG: {
-				int sel = game_->lstLog->getSelected();
-				if (sel != -1) {
-					game_->wInfos->setActiveTab(0);
+				int sel = mainGame->lstLog->getSelected();
+				if(sel >= 0 && (int)mainGame->logParam.size() > sel && mainGame->logParam[sel] > 0) {
+					mainGame->wInfos->setActiveTab(0);
 				}
 				return true;
 			}
@@ -2077,6 +2077,14 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 			if (!game_->HasFocus(irr::gui::EGUIET_EDIT_BOX))
 				game_->device->minimizeWindow();
 			return true;
+		}
+		case irr::KEY_KEY_V: {
+			irr::gui::IGUIElement* focus = mainGame->env->getFocus();
+			if(focus && focus->hasType(irr::gui::EGUIET_EDIT_BOX)
+				&& !event.KeyInput.PressedDown && event.KeyInput.Control) {
+				mainGame->TrimText(focus);
+			}
+			break;
 		}
 		default:
 			break;
