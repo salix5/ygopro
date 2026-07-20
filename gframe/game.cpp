@@ -2510,12 +2510,7 @@ bool Game::SpawnAsync(const std::wstring& exePath, const std::vector<std::wstrin
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));
 
-	// CreateProcessW can modify the command line buffer, so we need to create a mutable copy of it
-	// TODO: Move to C++17 and use cmdLine.data() directly without copying to a vector
-	std::vector<wchar_t> cmdBuffer(cmdLine.begin(), cmdLine.end());
-	cmdBuffer.push_back(L'\0');
-
-	if (!CreateProcessW(exePath.c_str(), cmdBuffer.data(), nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi)) {
+	if (!CreateProcessW(exePath.c_str(), cmdLine.data(), nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi)) {
 		return false;
 	}
 
