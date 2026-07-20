@@ -633,13 +633,12 @@ void DuelClient::HandleSTOCPacketLan(unsigned char* data, size_t len) {
 			}
 		}
 		mainGame->dInfo.player_type = selftype;
-		if(mainGame->bot_mode && !mainGame->pending_bot_executable.empty()) {
-			std::wstring executableName = mainGame->pending_bot_executable;
+		if(mainGame->bot_mode && mainGame->bot_pending) {
 			std::vector<std::wstring> processArgs = mainGame->pending_bot_args;
-			mainGame->pending_bot_executable.clear();
+			mainGame->bot_pending = false;
 			mainGame->pending_bot_args.clear();
 			if(!is_host) break; // should not happen
-			if(!Game::SpawnAsync(executableName, processArgs)) {
+			if (!Game::SpawnAsync(Game::bot_executable_name, processArgs)) {
 				StopClient();
 				// don't call NetServer::StopServer(), StopClient will trigger LeaveGame, which will call StopServer
 				mainGame->btnCreateHost->setEnabled(true);
