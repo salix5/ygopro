@@ -4,6 +4,8 @@
 
 namespace ygo {
 
+ClientCard::ClientCard(ClientField* field) : field_(field) {
+}
 ClientCard::~ClientCard() {
 	ClearTarget();
 	if (equipTarget) {
@@ -40,7 +42,7 @@ void ClientCard::SetCode(unsigned int x) {
 	}
 	code = x;
 	if (location == LOCATION_HAND) {
-		mainGame->dField.MoveCard(this, 5);
+		field_->MoveCard(this, 5);
 	}
 }
 void ClientCard::UpdateInfo(unsigned char* buf) {
@@ -59,7 +61,7 @@ void ClientCard::UpdateInfo(unsigned char* buf) {
 		int pdata = (BufferIO::Read<int32_t>(buf) >> 24) & 0xff;
 		if((location & (LOCATION_EXTRA | LOCATION_REMOVED)) && pdata != position) {
 			position = pdata;
-			mainGame->dField.MoveCard(this, 1);
+			field_->MoveCard(this, 1);
 		} else
 			position = pdata;
 	}
@@ -117,7 +119,7 @@ void ClientCard::UpdateInfo(unsigned char* buf) {
 		unsigned int l = BufferIO::Read<uint8_t>(buf);
 		int s = BufferIO::Read<uint8_t>(buf);
 		BufferIO::Read<uint8_t>(buf);
-		ClientCard* ecard = mainGame->dField.GetCard(mainGame->LocalPlayer(c), l, s);
+		ClientCard* ecard = field_->GetCard(mainGame->LocalPlayer(c), l, s);
 		if (ecard) {
 			equipTarget = ecard;
 			ecard->equipped.insert(this);
@@ -130,7 +132,7 @@ void ClientCard::UpdateInfo(unsigned char* buf) {
 			unsigned int l = BufferIO::Read<uint8_t>(buf);
 			int s = BufferIO::Read<uint8_t>(buf);
 			BufferIO::Read<uint8_t>(buf);
-			ClientCard* tcard = mainGame->dField.GetCard(mainGame->LocalPlayer(c), l, s);
+			ClientCard* tcard = field_->GetCard(mainGame->LocalPlayer(c), l, s);
 			if (tcard) {
 				cardTarget.insert(tcard);
 				tcard->ownerTarget.insert(this);
@@ -141,9 +143,9 @@ void ClientCard::UpdateInfo(unsigned char* buf) {
 		int count = BufferIO::Read<int32_t>(buf);
 		for(int i = 0; i < count; ++i) {
 			if(i >= overlayed.size()) {
-				ClientCard* xcard = new ClientCard;
+				ClientCard* xcard = field_->CreateCard();
 				overlayed.push_back(xcard);
-				mainGame->dField.overlay_cards.insert(xcard);
+				field_->overlay_cards.insert(xcard);
 				xcard->overlayTarget = this;
 				xcard->location = LOCATION_OVERLAY;
 				xcard->sequence = (unsigned char)(overlayed.size() - 1);
