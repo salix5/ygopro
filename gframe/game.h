@@ -330,7 +330,12 @@ public:
 	bool open_file{ false };
 	wchar_t open_file_name[256]{};
 	bool bot_mode{ false };
-	std::wstring pending_bot_executable;
+	bool bot_pending{ false };
+#ifdef _WIN32
+	static constexpr const wchar_t* bot_executable_name{ L"Bot.exe" };
+#else
+	static constexpr const wchar_t* bot_executable_name{ L"./bot" };
+#endif
 	std::vector<std::wstring> pending_bot_args;
 
 	irr::core::dimension2d<irr::u32> window_size;
