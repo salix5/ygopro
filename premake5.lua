@@ -10,7 +10,7 @@
 
 --- Use global variables to share settings across different scripts.
 
-USE_DXSDK = true
+USE_DXSDK = false
 
 USE_AUDIO = true
 AUDIO_LIB = "miniaudio" -- only miniaudio is supported for now
@@ -202,8 +202,6 @@ end
 
 newoption { trigger = "build-all", category = "YGOPro", description = "Build all dependencies from source" }
 
-newoption { trigger = "no-dxsdk", category = "YGOPro - irrlicht", description = "Do not use DirectX SDK, disable D3D9 support" }
-
 newoption { trigger = "no-audio", category = "YGOPro", description = "Disable audio support" }
 newoption { trigger = "audio-lib", category = "YGOPro", description = "Specify audio library (only miniaudio is supported for now)", value = "NAME" }
 
@@ -301,16 +299,6 @@ for _, dep in ipairs(DEPENDENCIES_METADATA) do
         ResolveBuildFromSourceDependencyDirectory(dep)
     else
         ResolvePreBuiltDependencyDirectory(dep)
-    end
-end
-
-if GetParam("no-dxsdk") then
-    USE_DXSDK = false
-end
-if USE_DXSDK and os.istarget("windows") then
-    if not os.getenv("DXSDK_DIR") then
-        print("::warning:: DXSDK_DIR environment variable not set, it seems you don't have the DirectX SDK installed. DirectX mode will be disabled.")
-        USE_DXSDK = false
     end
 end
 
