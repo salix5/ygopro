@@ -5,8 +5,6 @@
 #define VERSION_MINOR 7
 #define VERSION_PATCH 2
 
-#define IRR_COMPILE_WITH_DX9_DEV_PACK
-
 #include <cerrno>
 #include <cstdio>
 #include <string>
