@@ -6,10 +6,8 @@
 #include <string>
 #include <vector>
 
-namespace irr {
-	namespace gui {
-		class IGUIElement;
-	}
+namespace irr::gui {
+	class IGUIElement;
 }
 
 namespace ygo {
