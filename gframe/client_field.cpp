@@ -456,19 +456,19 @@ void ClientField::ShowSelectCard(bool buttonok, bool is_continuous) {
 			game_->btnFacedownImgInfo[game_->btnCardSelect[i]] = {selectable_cards[i]->controler, false};
 			game_->btnCardImgInfo.erase(game_->btnCardSelect[i]);
 		}
-		mainGame->btnCardSelect[i]->setPressed(false);
-		mainGame->btnCardSelect[i]->setVisible(true);
-		if(mainGame->dInfo.curMsg != MSG_SORT_CARD) {
-			SetCardListLabel(mainGame->stCardPos[i], selectable_cards[i], true);
+		game_->btnCardSelect[i]->setPressed(false);
+		game_->btnCardSelect[i]->setVisible(true);
+		if(game_->dInfo.curMsg != MSG_SORT_CARD) {
+			SetCardListLabel(game_->stCardPos[i], selectable_cards[i], true);
 		} else {
 			if(sort_list[i]) {
 				wchar_t formatBuffer[2048];
 				myswprintf(formatBuffer, L"%d", sort_list[i]);
 				game_->stCardPos[i]->setText(formatBuffer);
 			} else
-				mainGame->stCardPos[i]->setText(L"");
-			mainGame->stCardPos[i]->enableOverrideColor(false);
-			mainGame->stCardPos[i]->setBackgroundColor(CARD_LIST_DEFAULT_BACKGROUND_COLOR);
+				game_->stCardPos[i]->setText(L"");
+			game_->stCardPos[i]->enableOverrideColor(false);
+			game_->stCardPos[i]->setBackgroundColor(CARD_LIST_DEFAULT_BACKGROUND_COLOR);
 		}
 		game_->stCardPos[i]->setVisible(true);
 	}
@@ -502,10 +502,10 @@ void ClientField::ShowChainCard() {
 			game_->btnFacedownImgInfo[game_->btnCardSelect[i]] = {selectable_cards[i]->controler, false};
 			game_->btnCardImgInfo.erase(game_->btnCardSelect[i]);
 		}
-		mainGame->btnCardSelect[i]->setPressed(false);
-		mainGame->btnCardSelect[i]->setVisible(true);
-		SetCardListLabel(mainGame->stCardPos[i], selectable_cards[i], false);
-		mainGame->stCardPos[i]->setVisible(true);
+		game_->btnCardSelect[i]->setPressed(false);
+		game_->btnCardSelect[i]->setVisible(true);
+		SetCardListLabel(game_->stCardPos[i], selectable_cards[i], false);
+		game_->stCardPos[i]->setVisible(true);
 	} 
 	if(selectable_cards.size() <= 5) {
 		for(int i = selectable_cards.size(); i < 5; ++i) {
@@ -537,10 +537,10 @@ void ClientField::ShowLocationCard() {
 			game_->btnFacedownImgInfo[game_->btnCardDisplay[i]] = {display_cards[i]->controler, false};
 			game_->btnCardImgInfo.erase(game_->btnCardDisplay[i]);
 		}
-		mainGame->btnCardDisplay[i]->setPressed(false);
-		mainGame->btnCardDisplay[i]->setVisible(true);
-		SetCardListLabel(mainGame->stDisplayPos[i], display_cards[i], false);
-		mainGame->stDisplayPos[i]->setVisible(true);
+		game_->btnCardDisplay[i]->setPressed(false);
+		game_->btnCardDisplay[i]->setVisible(true);
+		SetCardListLabel(game_->stDisplayPos[i], display_cards[i], false);
+		game_->stDisplayPos[i]->setVisible(true);
 	}
 	if(display_cards.size() <= 5) {
 		for(int i = display_cards.size(); i < 5; ++i) {
