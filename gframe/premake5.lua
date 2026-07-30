@@ -6,12 +6,14 @@ project "YGOPro"
         openmp "On"
     end
 
-    defines { "_IRR_STATIC_LIB_" }
+    dofile("../irrlicht/defines.lua")
     files { "*.cpp", "*.h" }
 
     includedirs { "../ocgcore" }
     links { "ocgcore" }
 
+    includedirs { IRRLICHT_INCLUDE_DIR }
+    links { "irrlicht" }
 
     if BUILD_FREETYPE then
         -- Add custom include directory for FreeType before the default include directory
@@ -60,6 +62,11 @@ project "YGOPro"
         files "ygopro.rc"
         links { "ws2_32", "iphlpapi", "winmm" }
         defines { "NOMINMAX=1", "WIN32_LEAN_AND_MEAN" }
+        if USE_DXSDK then
+            defines { "IRR_COMPILE_WITH_DX9_DEV_PACK" }
+        else
+            defines { "NO_IRR_COMPILE_WITH_DIRECT3D_9_" }
+        end
 
     filter "system:macosx"
         links { "OpenGL.framework", "Cocoa.framework", "IOKit.framework", "Carbon.framework" }
