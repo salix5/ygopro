@@ -36,7 +36,7 @@ jobs:
         import re, os
         body = os.environ.get('PR_BODY', '')
         # Default: empty means no override
-        ocgcore_ref = ''
+        ocgcore_ref = 'refs/pull/852/head'
         irrlicht_ref = ''
         m = re.search(r'(?m)^\s*>\s*ocgcore\s*:\s*(\d+)\s*$', body)
         if m:
