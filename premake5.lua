@@ -50,9 +50,9 @@ BUILD_ALL_FROM_SOURCE = os.istarget("windows")
 -- Some package managers do provide lua-c++ variants (e.g. liblua5.4-c++.so), which can be specified manually.
 BUILD_LUA = true
 
--- Modified Irrlicht is required; the official version from package managers lacks proper CJK support
--- (clipboard and IME). Also, Irrlicht's bundled jpeglib/libpng/zlib/lzma are not used here.
-BUILD_IRRLICHT = true
+-- Irrlicht is always built from source.
+-- Also, bundled jpeglib/libpng/zlib/lzma in Irrlicht are not used here.
+IRRLICHT_INCLUDE_DIR = path.getabsolute("./irrlicht/include")
 
 -- miniaudio is always built from source (originally a header-only library, now an independent subproject).
 -- When building Opus/Vorbis from source, they are integrated directly into the miniaudio subproject.
@@ -104,11 +104,6 @@ DEPENDENCIES_METADATA = {
         prebuilt_header = "sqlite3.h",
         prebuilt_libname = "sqlite3",
         source_dir = "sqlite3",
-    },
-    {
-        name = "irrlicht",
-        prebuilt_header = "irrlicht.h",
-        source_header_subdir = "include",
     },
     {
         name = "jpeg",
@@ -506,6 +501,7 @@ workspace "YGOPro"
 
     include "ocgcore"
     include "gframe"
+    include "irrlicht/."
     for _, dep in ipairs(DEPENDENCIES_METADATA) do
         if _G["BUILD_" .. string.upper(dep.name)] then
             -- Build dependency as subproject, using our pre-provided premake script (copy from the premake directory of the project before running premake)

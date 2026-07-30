@@ -12,6 +12,8 @@ project "YGOPro"
     includedirs { "../ocgcore" }
     links { "ocgcore" }
 
+    includedirs { IRRLICHT_INCLUDE_DIR }
+    links { "irrlicht" }
 
     if BUILD_FREETYPE then
         -- Add custom include directory for FreeType before the default include directory
