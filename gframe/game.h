@@ -9,7 +9,6 @@
 #include <string_view>
 #include <unordered_map>
 #include <vector>
-#include "config.h"
 #include "mysignal.h"
 #include "client_field.h"
 #include "deck_con.h"
