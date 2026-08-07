@@ -4,8 +4,9 @@
 #include <vector>
 #include <set>
 #include <map>
-#include <irrlicht.h>
-#include "../ocgcore/common.h"
+#include <irrTypes.h>
+#include <matrix4.h>
+#include <vector3d.h>
 
 namespace ygo {
 

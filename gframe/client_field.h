@@ -6,7 +6,14 @@
 #include <set>
 #include <map>
 #include <memory>
-#include <irrlicht.h>
+#include <IEventReceiver.h>
+#include <vector3d.h>
+
+namespace irr {
+	namespace gui {
+		class IGUIStaticText;
+	}
+}
 
 namespace ygo {
 

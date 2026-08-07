@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 #include <random>
-#include <irrlicht.h>
+#include <IEventReceiver.h>
+#include <vector2d.h>
 
 namespace ygo {
 

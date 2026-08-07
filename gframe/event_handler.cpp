@@ -1438,7 +1438,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 					should_show_tip = true;
 					myswprintf(formatBuffer, dataManager.GetSysString(1700), game_->btnCancelOrFinish->getText());
 					game_->stTip->setText(formatBuffer);
-					irr::core::dimension2d<unsigned int> dtip = game_->guiFont->getDimension(formatBuffer) + irr::core::dimension2d<unsigned int>(10, 10);
+					irr::core::dimension2d<unsigned int> dtip = game_->GetGUIFontDimension(formatBuffer) + irr::core::dimension2d<unsigned int>(10, 10);
 					game_->stTip->setRelativePosition(game_->Resize(x - 10 - dtip.Width, y - 10 - dtip.Height, x - 10, y - 10));
 				}
 				game_->stTip->setVisible(should_show_tip);
@@ -1573,7 +1573,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 								str.append(formatBuffer);
 							}
 							should_show_tip = true;
-							irr::core::dimension2d<unsigned int> dtip = game_->guiFont->getDimension(str.c_str()) + irr::core::dimension2d<unsigned int>(10, 10);
+							irr::core::dimension2d<unsigned int> dtip = game_->GetGUIFontDimension(str.c_str()) + irr::core::dimension2d<unsigned int>(10, 10);
 							game_->stTip->setRelativePosition(irr::core::recti(mousepos.X - 10 - dtip.Width, mousepos.Y - 10 - dtip.Height, mousepos.X - 10, mousepos.Y - 10));
 							game_->stTip->setText(str.c_str());
 						}
@@ -1612,7 +1612,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						str.append(formatBuffer);
 					}
 					should_show_tip = true;
-					irr::core::dimension2d<unsigned int> dtip = game_->guiFont->getDimension(str.c_str()) + irr::core::dimension2d<unsigned int>(10, 10);
+					irr::core::dimension2d<unsigned int> dtip = game_->GetGUIFontDimension(str.c_str()) + irr::core::dimension2d<unsigned int>(10, 10);
 					game_->stTip->setRelativePosition(irr::core::recti(mousepos.X - 10 - dtip.Width, mousepos.Y + 10, mousepos.X - 10, mousepos.Y + 10 + dtip.Height));
 					game_->stTip->setText(str.c_str());
 				}
@@ -1980,18 +1980,16 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 	else if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
 		switch (event.KeyInput.Key) {
 		case irr::KEY_KEY_R: {
-			if (game_->gameConf.control_mode == 0
-				&& !event.KeyInput.PressedDown && !game_->HasFocus(irr::gui::EGUIET_EDIT_BOX)) {
-				game_->textFont->setTransparency(true);
-				game_->guiFont->setTransparency(true);
+			if(mainGame->gameConf.control_mode == 0
+				&& !event.KeyInput.PressedDown && !mainGame->HasFocus(irr::gui::EGUIET_EDIT_BOX)) {
+				mainGame->FixFontGlitch();
 			}
 			return true;
 		}
 		case irr::KEY_F9: {
-			if (game_->gameConf.control_mode == 1
-				&& !event.KeyInput.PressedDown && !game_->HasFocus(irr::gui::EGUIET_EDIT_BOX)) {
-				game_->textFont->setTransparency(true);
-				game_->guiFont->setTransparency(true);
+			if(mainGame->gameConf.control_mode == 1
+				&& !event.KeyInput.PressedDown && !mainGame->HasFocus(irr::gui::EGUIET_EDIT_BOX)) {
+				mainGame->FixFontGlitch();
 			}
 			return true;
 		}
@@ -2406,7 +2404,7 @@ void ClientField::ShowCardInfoInList(ClientCard* pcard, irr::gui::IGUIElement* e
 		irr::s32 x = (ePos.UpperLeftCorner.X + ePos.LowerRightCorner.X) / 2;
 		irr::s32 y = ePos.LowerRightCorner.Y;
 		game_->SetStaticText(game_->stCardListTip, 320, game_->guiFont, str.c_str());
-		irr::core::dimension2d<unsigned int> dTip = game_->guiFont->getDimension(game_->stCardListTip->getText()) + irr::core::dimension2d<unsigned int>(10, 10);
+		irr::core::dimension2d<unsigned int> dTip = game_->GetGUIFontDimension(game_->stCardListTip->getText()) + irr::core::dimension2d<unsigned int>(10, 10);
 		irr::s32 w = dTip.Width / 2;
 		if(x - w < 10)
 			x = w + 10;

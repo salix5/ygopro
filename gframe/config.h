@@ -43,8 +43,6 @@ inline int mysnprintf(char(&buf)[N], const char* fmt, TR... args) {
 		return std::snprintf(buf, N, fmt, args...);
 }
 
-#include <irrlicht.h>
-
 constexpr uint16_t PRO_VERSION = 0x1362;
 
 #endif // YGOPRO_CONFIG_H
