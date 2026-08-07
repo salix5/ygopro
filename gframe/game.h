@@ -21,10 +21,8 @@ struct HWND__;
 using HWND = HWND__*;
 #endif
 
-namespace irr {
-	namespace gui {
-		class CGUITTFont;
-	}
+namespace irr::gui {
+	class CGUITTFont;
 }
 
 namespace ygo {

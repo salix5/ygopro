@@ -3,14 +3,12 @@
 
 #include <irrTypes.h>
 
-namespace irr {
-	namespace io {
-		class IReadFile;
-	}
-	namespace video {
-		class IImage;
-		class IVideoDriver;
-	}
+namespace irr::io {
+	class IReadFile;
+}
+namespace irr::video {
+	class IImage;
+	class IVideoDriver;
 }
 
 namespace ygo {
