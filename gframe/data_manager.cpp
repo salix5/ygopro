@@ -3,6 +3,7 @@
 #include "client_card.h"
 #include "file_system.h"
 #include <sqlite3.h>
+#include <irrlicht.h>
 
 namespace ygo {
 
