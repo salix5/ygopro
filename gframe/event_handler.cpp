@@ -697,7 +697,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						command_card->is_selected = true;
 						selected_cards.push_back(command_card);
 					}
-					SetCardListLabel(mainGame->stCardPos[id - BUTTON_CARD_0], command_card, true);
+					SetCardListLabel(game_->stCardPos[id - BUTTON_CARD_0], command_card, true);
 					int sel = selected_cards.size();
 					if (sel >= select_max) {
 						SetResponseSelectedCards();
@@ -724,7 +724,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 					} else {
 						command_card->is_selected = true;
 					}
-					SetCardListLabel(mainGame->stCardPos[id - BUTTON_CARD_0], command_card, true);
+					SetCardListLabel(game_->stCardPos[id - BUTTON_CARD_0], command_card, true);
 					selected_cards.push_back(command_card);
 					if (selected_cards.size() > 0) {
 						SetResponseSelectedCards();
@@ -744,7 +744,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						command_card->is_selected = true;
 						selected_cards.push_back(command_card);
 					}
-					SetCardListLabel(mainGame->stCardPos[id - BUTTON_CARD_0], command_card, true);
+					SetCardListLabel(game_->stCardPos[id - BUTTON_CARD_0], command_card, true);
 					ShowSelectSum(true);
 					break;
 				}
@@ -893,17 +893,17 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						game_->btnFacedownImgInfo[game_->btnCardSelect[i]] = {selectable_cards[i + pos]->controler, false};
 						game_->btnCardImgInfo.erase(game_->btnCardSelect[i]);
 					}
-					if(mainGame->dInfo.curMsg == MSG_SORT_CARD) {
+					if(game_->dInfo.curMsg == MSG_SORT_CARD) {
 						wchar_t formatBuffer[2048];
 						if(sort_list[pos + i])
 							myswprintf(formatBuffer, L"%d", sort_list[pos + i]);
 						else
 							myswprintf(formatBuffer, L"");
-						mainGame->stCardPos[i]->setText(formatBuffer);
-						mainGame->stCardPos[i]->enableOverrideColor(false);
-						mainGame->stCardPos[i]->setBackgroundColor(CARD_LIST_DEFAULT_BACKGROUND_COLOR);
+						game_->stCardPos[i]->setText(formatBuffer);
+						game_->stCardPos[i]->enableOverrideColor(false);
+						game_->stCardPos[i]->setBackgroundColor(CARD_LIST_DEFAULT_BACKGROUND_COLOR);
 					} else {
-						SetCardListLabel(mainGame->stCardPos[i], selectable_cards[i + pos], true);
+						SetCardListLabel(game_->stCardPos[i], selectable_cards[i + pos], true);
 					}
 				}
 				break;
@@ -921,7 +921,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						game_->btnFacedownImgInfo[game_->btnCardDisplay[i]] = {display_cards[i + pos]->controler, false};
 						game_->btnCardImgInfo.erase(game_->btnCardDisplay[i]);
 					}
-					SetCardListLabel(mainGame->stDisplayPos[i], display_cards[i + pos], false);
+					SetCardListLabel(game_->stDisplayPos[i], display_cards[i + pos], false);
 				}
 				break;
 			}
@@ -1980,16 +1980,16 @@ bool ClientField::OnCommonEvent(const irr::SEvent& event) {
 	else if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
 		switch (event.KeyInput.Key) {
 		case irr::KEY_KEY_R: {
-			if(mainGame->gameConf.control_mode == 0
-				&& !event.KeyInput.PressedDown && !mainGame->HasFocus(irr::gui::EGUIET_EDIT_BOX)) {
-				mainGame->FixFontGlitch();
+			if(game_->gameConf.control_mode == 0
+				&& !event.KeyInput.PressedDown && !game_->HasFocus(irr::gui::EGUIET_EDIT_BOX)) {
+				game_->FixFontGlitch();
 			}
 			return true;
 		}
 		case irr::KEY_F9: {
-			if(mainGame->gameConf.control_mode == 1
-				&& !event.KeyInput.PressedDown && !mainGame->HasFocus(irr::gui::EGUIET_EDIT_BOX)) {
-				mainGame->FixFontGlitch();
+			if(game_->gameConf.control_mode == 1
+				&& !event.KeyInput.PressedDown && !game_->HasFocus(irr::gui::EGUIET_EDIT_BOX)) {
+				game_->FixFontGlitch();
 			}
 			return true;
 		}
