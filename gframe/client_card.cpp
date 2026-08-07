@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "config.h"
 #include "client_card.h"
 #include "game.h"
 
