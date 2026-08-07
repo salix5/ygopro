@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <stack>
+#include "config.h"
 #include "game.h"
 #include "client_field.h"
 #include "client_card.h"
