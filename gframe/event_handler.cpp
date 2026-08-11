@@ -1,7 +1,8 @@
 #include <algorithm>
-#include "game.h"
 #include "client_card.h"
+#include "client_field.h"
 #include "network.h"
+#include "game.h"
 #include "duelclient.h"
 #include "data_manager.h"
 #include "image_manager.h"

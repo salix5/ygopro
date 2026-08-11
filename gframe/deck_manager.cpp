@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <charconv>
+#include <cerrno>
 #include "deck_manager.h"
 #include "data_manager.h"
 #include "game.h"

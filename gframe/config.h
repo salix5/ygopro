@@ -5,28 +5,21 @@
 #define VERSION_MINOR 8
 #define VERSION_PATCH 0
 
-#include <cerrno>
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 8
+#define VERSION_PATCH 0
+
 #include <cstdio>
-#include <string>
 #include "bufferio.h"
-#include "../ocgcore/ocgapi.h"
+#include "../ocgcore/common.h"
 
 #ifdef _WIN32
-
-#if defined(_MSC_VER) || defined(__MINGW32__)
 #define mywcsncasecmp _wcsnicmp
 #define mystrncasecmp _strnicmp
 #else
 #define mywcsncasecmp wcsncasecmp
 #define mystrncasecmp strncasecmp
 #endif
-
-#else //_WIN32
-
-#define mywcsncasecmp wcsncasecmp
-#define mystrncasecmp strncasecmp
-
-#endif // _WIN32
 
 template<size_t N, typename... TR>
 inline int myswprintf(wchar_t(&buf)[N], const wchar_t* fmt, TR... args) {
