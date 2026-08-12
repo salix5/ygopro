@@ -1,7 +1,6 @@
 #ifndef CLIENT_FIELD_H
 #define CLIENT_FIELD_H
 
-#include <random>
 #include <vector>
 #include <set>
 #include <map>
@@ -97,7 +96,6 @@ public:
 	bool cant_check_grave{ false };
 	bool tag_surrender{ false };
 	bool tag_teammate_surrender{ false };
-	std::mt19937 rnd;
 
 	ClientField(Game* game);
 	~ClientField() override;
