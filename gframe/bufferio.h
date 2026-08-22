@@ -123,17 +123,17 @@ public:
 		return true;
 	}
 	// UTF-16/UTF-32 to UTF-8
-	static std::string EncodeUTF8String(const std::wstring& wstr) {
-		if (wstr.empty())
+	static std::string EncodeUTF8String(const wchar_t* wstr) {
+		if (*wstr == L'\0')
 			return std::string();
 		std::mbstate_t state{};
-		const wchar_t* src = wstr.c_str();
+		const wchar_t* src = wstr;
 		size_t len = std::wcsrtombs(nullptr, &src, 0, &state);
 		if (len == static_cast<size_t>(-1))
 			return std::string();
 		std::string result(len, '\0');
 		state = std::mbstate_t{};
-		src = wstr.c_str();
+		src = wstr;
 		std::wcsrtombs(&result[0], &src, len, &state);
 		return result;
 	}
@@ -150,17 +150,17 @@ public:
 		return static_cast<int>(result_len);
 	}
 	// UTF-8 to UTF-16/UTF-32
-	static std::wstring DecodeUTF8String(const std::string& str) {
-		if (str.empty())
+	static std::wstring DecodeUTF8String(const char* str) {
+		if (*str == '\0')
 			return std::wstring();
 		std::mbstate_t state{};
-		const char* src = str.c_str();
+		const char* src = str;
 		size_t len = std::mbsrtowcs(nullptr, &src, 0, &state);
 		if (len == static_cast<size_t>(-1))
 			return std::wstring();
 		std::wstring result(len, L'\0');
 		state = std::mbstate_t{};
-		src = str.c_str();
+		src = str;
 		std::mbsrtowcs(&result[0], &src, len, &state);
 		return result;
 	}
