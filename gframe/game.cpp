@@ -2527,12 +2527,12 @@ bool Game::SpawnAsync(const std::wstring& exePath, const std::vector<std::wstrin
 	CloseHandle(pi.hProcess);
 	return true;
 #else
-	std::string exePathUTF8 = BufferIO::EncodeUTF8String(exePath);
+	std::string exePathUTF8 = BufferIO::EncodeUTF8String(exePath.data());
 
 	std::vector<std::string> utf8Args;
 	utf8Args.emplace_back(exePathUTF8);
 	for (const auto& arg : args) {
-		utf8Args.push_back(BufferIO::EncodeUTF8String(arg));
+		utf8Args.push_back(BufferIO::EncodeUTF8String(arg.data()));
 	}
 
 	std::vector<char*> execArgs;
