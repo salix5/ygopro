@@ -26,7 +26,7 @@ void ClickButton(irr::gui::IGUIElement* btn) {
 	ygo::mainGame->device->postEventFromUser(event);
 }
 
-static int mymain(int wargc, const wchar_t* const wargv[]) {
+static int mymain(int wargc, wchar_t* wargv[]) {
 #ifdef __APPLE__
 	ygo::Game::FixMacOSBundleWorkingDirectory();
 #endif //__APPLE__
@@ -192,11 +192,11 @@ int main(int argc, char* argv[]) {
 	std::vector<std::wstring> wide_arguments;
 	wide_arguments.reserve(argc);
 	for(int i = 0; i < argc; ++i)
-		wide_arguments.emplace_back(BufferIO::DecodeUTF8String(argv[i]));
-	std::vector<const wchar_t*> wargv;
+		wide_arguments.push_back(BufferIO::DecodeUTF8String(argv[i]));
+	std::vector<wchar_t*> wargv;
 	wargv.reserve(argc);
-	for(const auto& argument : wide_arguments)
-		wargv.emplace_back(argument.c_str());
+	for(auto& argument : wide_arguments)
+		wargv.push_back(argument.data());
 	return mymain(argc, wargv.data());
 }
 
