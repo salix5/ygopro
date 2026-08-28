@@ -1,6 +1,6 @@
 project "YGOPro"
     kind "WindowedApp"
-    cppdialect "C++17"
+    cppdialect "C++20"
     rtti "Off"
     if USE_OPENMP then
         openmp "On"
