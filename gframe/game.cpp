@@ -169,7 +169,7 @@ bool Game::Initialize() {
 	}
 	if(!numFont || !textFont) {
 		std::filesystem::path font_path;
-		FileSystem::TraversalDir("./fonts", [&font_path](const std::filesystem::path& fpath, bool isdir) {
+		FileUtils::TraversalDir("./fonts", [&font_path](const std::filesystem::path& fpath, bool isdir) {
 			if (isdir || !font_path.empty())
 				return;
 			auto ext = fpath.extension().wstring();
@@ -1271,7 +1271,7 @@ std::wstring Game::SetStaticText(irr::gui::IGUIStaticText* pControl, irr::u32 cW
 	return result;
 }
 void Game::LoadExpansions() {
-	FileSystem::TraversalDir("./expansions", [](const std::filesystem::path& fpath, bool isdir) {
+	FileUtils::TraversalDir("./expansions", [](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
 		auto ext = fpath.extension().wstring();
@@ -1341,7 +1341,7 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 	cbCategory->addItem(dataManager.GetSysString(1452));
 	cbCategory->addItem(dataManager.GetSysString(1453));
 	std::vector<std::wstring> categories;
-	FileSystem::TraversalDir("./deck", [&categories](const std::filesystem::path& fpath, bool isdir) {
+	FileUtils::TraversalDir("./deck", [&categories](const std::filesystem::path& fpath, bool isdir) {
 		if (!isdir)
 			return;
 		categories.push_back(fpath.filename().wstring());
@@ -1388,7 +1388,7 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 		}
 	}
 	std::vector<std::wstring> deck_files;
-	FileSystem::TraversalDir(deckpath, [&deck_files](const std::filesystem::path& fpath, bool isdir) {
+	FileUtils::TraversalDir(deckpath, [&deck_files](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
 		if (IsExtension(fpath.extension().wstring(), L".ydk")) {
@@ -1403,7 +1403,7 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 void Game::RefreshReplay() {
 	lstReplayList->clear();
 	std::vector<std::wstring> replay_files;
-	FileSystem::TraversalDir(L"./replay", [&replay_files](const std::filesystem::path& fpath, bool isdir) {
+	FileUtils::TraversalDir(L"./replay", [&replay_files](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
 		if (IsExtension(fpath.extension().wstring(), L".yrp"))
@@ -1418,7 +1418,7 @@ void Game::RefreshSingleplay() {
 	lstSinglePlayList->clear();
 	stSinglePlayInfo->setText(L"");
 	std::vector<std::wstring> singleplay_files;
-	FileSystem::TraversalDir(L"./single", [&singleplay_files](const std::filesystem::path& fpath, bool isdir) {
+	FileUtils::TraversalDir(L"./single", [&singleplay_files](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
 		if (IsExtension(fpath.extension().wstring(), L".lua"))
@@ -1632,7 +1632,7 @@ void Game::LoadConfig(const char* file) {
 		std::wcsncpy(gameConf.bot_deck_path, L"./deck", 7);
 }
 void Game::SaveConfig() {
-	FileSystem::RemoveFile("load-once.conf");
+	FileUtils::RemoveFile("load-once.conf");
 	FILE* fp = std::fopen("system.conf", "w");
 	std::fprintf(fp, "#config file\n#nickname & gamename should be less than 20 characters\n");
 	char linebuf[CONFIG_LINE_SIZE];

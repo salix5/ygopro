@@ -109,7 +109,7 @@ void SoundManager::RefreshBGMList() {
 void SoundManager::RefreshBGMDir(std::wstring path, int scene) {
 #ifdef YGOPRO_USE_AUDIO
 	std::wstring search = L"./sound/BGM/" + path;
-	FileSystem::TraversalDir(search, [this, &path, scene](const std::filesystem::path& fpath, bool isdir) {
+	FileUtils::TraversalDir(search, [this, &path, scene](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
 		auto ext = fpath.extension().wstring();
