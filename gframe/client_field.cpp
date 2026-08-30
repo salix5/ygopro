@@ -17,7 +17,6 @@ ClientField::ClientField() {
 		szone[p].resize(8, 0);
 	}
 }
-ClientField::~ClientField() = default;
 void ClientField::Clear() {
 	for(int i = 0; i < 2; ++i) {
 		deck[i].clear();
@@ -37,7 +36,6 @@ void ClientField::Clear() {
 		extra_act[i] = false;
 		pzone_act[i] = false;
 	}
-	cards_.clear();
 	overlay_cards.clear();
 	extra_p_count[0] = 0;
 	extra_p_count[1] = 0;
@@ -65,6 +63,7 @@ void ClientField::Clear() {
 	cant_check_grave = false;
 	tag_surrender = false;
 	tag_teammate_surrender = false;
+	cards_.clear();
 }
 void ClientField::Initial(int player, int deckc, int extrac, int sidec) {
 	auto load_location = [&](std::vector<ClientCard*>& container, int count, uint8_t location) {
