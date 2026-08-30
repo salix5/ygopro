@@ -383,7 +383,7 @@ bool DeckManager::LoadCurrentDeck(const wchar_t* file, bool is_packlist) {
 	if (!file[0])
 		return false;
 	char deckBuffer[MAX_YDK_SIZE]{};
-	FILE* fp = mywfopen(file, "rb");
+	FILE* fp = FileUtils::mywfopen(file, "rb");
 	if (fp) {
 		size_t size = std::fread(deckBuffer, 1, sizeof deckBuffer, fp);
 		std::fclose(fp);
@@ -418,9 +418,9 @@ bool DeckManager::LoadCurrentDeck(int category_index, const wchar_t* category_na
 	return true;
 }
 bool DeckManager::SaveDeck(const Deck& deck, const wchar_t* file) {
-	if(!FileSystem::IsDirExists(L"./deck") && !FileSystem::MakeDir(L"./deck"))
+	if(!FileUtils::IsDirExists(L"./deck") && !FileUtils::MakeDir(L"./deck"))
 		return false;
-	FILE* fp = mywfopen(file, "w");
+	FILE* fp = FileUtils::mywfopen(file, "w");
 	if(!fp)
 		return false;
 	std::fprintf(fp, "#created by ...\n");
@@ -437,10 +437,10 @@ bool DeckManager::SaveDeck(const Deck& deck, const wchar_t* file) {
 	return true;
 }
 bool DeckManager::DeleteDeck(const wchar_t* file) {
-	return FileSystem::RemoveFile(file);
+	return FileUtils::RemoveFile(file);
 }
 bool DeckManager::GenerateTestScript(const Deck& deck, const wchar_t* base_name) {
-	if (!FileSystem::IsDirExists(L"./single") && !FileSystem::MakeDir(L"./single"))
+	if (!FileUtils::IsDirExists(L"./single") && !FileUtils::MakeDir(L"./single"))
 		return false;
 	if (std::wcschr(base_name, L'/') || std::wcschr(base_name, L'\\'))
 		return false;
@@ -449,7 +449,7 @@ bool DeckManager::GenerateTestScript(const Deck& deck, const wchar_t* base_name)
 	wchar_t path[256]{};
 	if (myswprintf(path, L"./single/%ls.lua", base_name) <= 0)
 		return false;
-	FILE* fp = mywfopen(path, "w");
+	FILE* fp = FileUtils::mywfopen(path, "w");
 	if (!fp)
 		return false;
 	const char AI_NAME[] = "Crescent";
@@ -478,7 +478,7 @@ bool DeckManager::GenerateTestScript(const Deck& deck, const wchar_t* base_name)
 	return true;
 }
 bool DeckManager::CreateCategory(const wchar_t* name) {
-	if(!FileSystem::IsDirExists(L"./deck") && !FileSystem::MakeDir(L"./deck"))
+	if(!FileUtils::IsDirExists(L"./deck") && !FileUtils::MakeDir(L"./deck"))
 		return false;
 	if(name[0] == 0)
 		return false;
@@ -487,10 +487,10 @@ bool DeckManager::CreateCategory(const wchar_t* name) {
 	wchar_t localname[256];
 	if (myswprintf(localname, L"./deck/%ls", name) <= 0)
 		return false;
-	return FileSystem::MakeDir(localname);
+	return FileUtils::MakeDir(localname);
 }
 bool DeckManager::RenameCategory(const wchar_t* oldname, const wchar_t* newname) {
-	if(!FileSystem::IsDirExists(L"./deck") && !FileSystem::MakeDir(L"./deck"))
+	if(!FileUtils::IsDirExists(L"./deck") && !FileUtils::MakeDir(L"./deck"))
 		return false;
 	if(newname[0] == 0)
 		return false;
@@ -504,7 +504,7 @@ bool DeckManager::RenameCategory(const wchar_t* oldname, const wchar_t* newname)
 		return false;
 	if (myswprintf(newlocalname, L"./deck/%ls", newname) <= 0)
 		return false;
-	return FileSystem::Rename(oldlocalname, newlocalname);
+	return FileUtils::Rename(oldlocalname, newlocalname);
 }
 bool DeckManager::DeleteCategory(const wchar_t* name) {
 	if (std::wcschr(name, L'/') || std::wcschr(name, L'\\'))
@@ -512,14 +512,14 @@ bool DeckManager::DeleteCategory(const wchar_t* name) {
 	wchar_t localname[256];
 	if (myswprintf(localname, L"./deck/%ls", name) <= 0)
 		return false;
-	if(!FileSystem::IsDirExists(localname))
+	if(!FileUtils::IsDirExists(localname))
 		return false;
-	return FileSystem::DeleteDir(localname);
+	return FileUtils::DeleteDir(localname);
 }
 bool DeckManager::SaveDeckArray(const DeckArray& deck, const wchar_t* name) {
-	if (!FileSystem::IsDirExists(L"./deck") && !FileSystem::MakeDir(L"./deck"))
+	if (!FileUtils::IsDirExists(L"./deck") && !FileUtils::MakeDir(L"./deck"))
 		return false;
-	FILE* fp = mywfopen(name, "w");
+	FILE* fp = FileUtils::mywfopen(name, "w");
 	if (!fp)
 		return false;
 	std::fprintf(fp, "#created by ...\n");

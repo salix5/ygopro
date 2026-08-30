@@ -291,7 +291,7 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 					break;
 				for (size_t i = 0; i < replay.decks.size(); ++i) {
 					BufferIO::CopyWideString(replay.players[Replay::GetDeckPlayer(i)].c_str(), namebuf[i]);
-					FileSystem::SafeFileName(namebuf[i]);
+					FileUtils::SafeFileName(namebuf[i]);
 				}
 				replay_filename[len - extension_len] = 0;
 				for (size_t i = 0; i < replay.decks.size(); ++i) {
@@ -479,7 +479,7 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				const wchar_t* name = game_->lstSinglePlayList->getListItem(sel);
 				wchar_t fname[256];
 				myswprintf(fname, L"./single/%ls", name);
-				FILE* fp = mywfopen(fname, "r");
+				FILE* fp = FileUtils::mywfopen(fname, "r");
 				if(!fp) {
 					game_->stSinglePlayInfo->setText(L"");
 					break;

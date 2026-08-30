@@ -530,7 +530,7 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 		get_deck_file(filepath, dname);
 		if (!filepath[0])
 			break;
-		bool is_exist = FileSystem::IsFileExists(filepath);
+		bool is_exist = FileUtils::IsFileExists(filepath);
 		if (!DeckManager::SaveDeck(deckManager.current_deck, filepath))
 			break;
 		int sel = -1;
@@ -832,7 +832,7 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 			get_list_file(filepath, deckname);
 			if (!filepath[0])
 				break;
-			if (FileSystem::IsFileExists(filepath)) {
+			if (FileUtils::IsFileExists(filepath)) {
 				ChangeCategory(deckname);
 				game_->stACMessage->setText(dataManager.GetSysString(1475));
 				game_->PopupElement(game_->wACMessage, 40);
@@ -866,13 +866,13 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 			get_list_file(newfilepath, newdeckname);
 			if (!newfilepath[0])
 				break;
-			if (FileSystem::IsFileExists(newfilepath)) {
+			if (FileUtils::IsFileExists(newfilepath)) {
 				ChangeCategory(newdeckname);
 				game_->stACMessage->setText(dataManager.GetSysString(1475));
 				game_->PopupElement(game_->wACMessage, 40);
 				break;
 			}
-			if (!FileSystem::Rename(oldfilepath, newfilepath))
+			if (!FileUtils::Rename(oldfilepath, newfilepath))
 				break;
 			ChangeCategory(newdeckname);
 			break;
@@ -915,7 +915,7 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 			DeckManager::GetDeckFile(newfilepath, new_category_index, newcatename, deckname);
 			if (!newfilepath[0])
 				break;
-			if (FileSystem::IsFileExists(newfilepath)) {
+			if (FileUtils::IsFileExists(newfilepath)) {
 				game_->lstCategories->setSelected(new_category_index);
 				game_->cbDBCategory->setSelected(new_category_index);
 				ChangeCategory(deckname);
@@ -923,7 +923,7 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 				game_->PopupElement(game_->wACMessage, 40);
 				break;
 			}
-			if (!FileSystem::Rename(oldfilepath, newfilepath))
+			if (!FileUtils::Rename(oldfilepath, newfilepath))
 				break;
 			game_->lstCategories->setSelected(new_category_index);
 			game_->cbDBCategory->setSelected(new_category_index);
@@ -951,7 +951,7 @@ void DeckBuilder::ButtonHandler(const irr::SEvent& event) {
 			DeckManager::GetDeckFile(newfilepath, new_category_index, newcatename, deckname);
 			if (!newfilepath[0])
 				break;
-			if (FileSystem::IsFileExists(newfilepath)) {
+			if (FileUtils::IsFileExists(newfilepath)) {
 				game_->lstCategories->setSelected(new_category_index);
 				game_->cbDBCategory->setSelected(new_category_index);
 				ChangeCategory(deckname);

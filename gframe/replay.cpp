@@ -19,7 +19,7 @@ Replay::~Replay() {
 	delete[] comp_data;
 }
 void Replay::BeginRecord() {
-	if(!FileSystem::IsDirExists(L"./replay") && !FileSystem::MakeDir(L"./replay"))
+	if(!FileUtils::IsDirExists(L"./replay") && !FileUtils::MakeDir(L"./replay"))
 		return;
 	if(is_recording)
 		std::fclose(fp);
@@ -110,15 +110,15 @@ void Replay::EndRecord() {
 	is_recording = false;
 }
 bool Replay::SaveReplay(const wchar_t* base_name) {
-	if(!FileSystem::IsDirExists(L"./replay") && !FileSystem::MakeDir(L"./replay"))
+	if(!FileUtils::IsDirExists(L"./replay") && !FileUtils::MakeDir(L"./replay"))
 		return false;
 	wchar_t filename[256]{};
 	wchar_t path[256]{};
 	BufferIO::CopyWideString(base_name, filename);
-	FileSystem::SafeFileName(filename);
+	FileUtils::SafeFileName(filename);
 	if (myswprintf(path, L"./replay/%ls.yrp", filename) <= 0)
 		return false;
-	FILE* rfp = mywfopen(path, "wb");
+	FILE* rfp = FileUtils::mywfopen(path, "wb");
 	if(!rfp)
 		return false;
 	std::fwrite(&pheader, sizeof pheader, 1, rfp);
@@ -127,12 +127,12 @@ bool Replay::SaveReplay(const wchar_t* base_name) {
 	return true;
 }
 bool Replay::OpenReplay(const wchar_t* name) {
-	FILE* rfp = mywfopen(name, "rb");
+	FILE* rfp = FileUtils::mywfopen(name, "rb");
 	if(!rfp) {
 		wchar_t fname[256];
 		if (myswprintf(fname, L"./replay/%ls", name) <= 0)
 			return false;
-		rfp = mywfopen(fname, "rb");
+		rfp = FileUtils::mywfopen(fname, "rb");
 	}
 	if(!rfp)
 		return false;
@@ -199,7 +199,7 @@ bool Replay::DeleteReplay(const wchar_t* name) {
 	wchar_t fname[256];
 	if(myswprintf(fname, L"./replay/%ls", name) <= 0)
 		return false;
-	return FileSystem::RemoveFile(fname);
+	return FileUtils::RemoveFile(fname);
 }
 bool Replay::RenameReplay(const wchar_t* oldname, const wchar_t* newname) {
 	wchar_t old_path[256];
@@ -212,7 +212,7 @@ bool Replay::RenameReplay(const wchar_t* oldname, const wchar_t* newname) {
 		return false;
 	if (myswprintf(new_path, L"./replay/%ls", newname) <= 0)
 		return false;
-	return FileSystem::Rename(old_path, new_path);
+	return FileUtils::Rename(old_path, new_path);
 }
 bool Replay::ReadNextResponse(unsigned char resp[]) {
 	uint8_t len{};
