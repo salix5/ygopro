@@ -894,6 +894,7 @@ int TagDuel::Analyze(unsigned char* msgbuffer, unsigned int len) {
 			break;
 		}
 		case MSG_NEW_TURN: {
+			turn_count++;
 			pbuf++;
 			time_limit[0] = host_info.time_limit;
 			time_limit[1] = host_info.time_limit;
@@ -1541,7 +1542,8 @@ void TagDuel::GetResponse(DuelPlayer* dp, unsigned char* pdata, unsigned int len
 void TagDuel::EndDuel() {
 	if(!pduel)
 		return;
-	last_replay.pheader.turns = mainGame->dInfo.turn;
+	last_replay.pheader.turns = turn_count;
+	turn_count = 0;
 	last_replay.EndRecord();
 	std::vector<unsigned char> replay_buffer;
 	replay_buffer.reserve(sizeof last_replay.pheader + last_replay.comp_size);

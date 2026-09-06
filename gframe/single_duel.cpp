@@ -922,6 +922,7 @@ int SingleDuel::Analyze(unsigned char* msgbuffer, unsigned int len) {
 			break;
 		}
 		case MSG_NEW_TURN: {
+			turn_count++;
 			RefreshMzone(0);
 			RefreshMzone(1);
 			RefreshSzone(0);
@@ -1441,7 +1442,8 @@ void SingleDuel::GetResponse(DuelPlayer* dp, unsigned char* pdata, unsigned int 
 void SingleDuel::EndDuel() {
 	if(!pduel)
 		return;
-	last_replay.pheader.turns = mainGame->dInfo.turn;
+	last_replay.pheader.turns = turn_count;
+	turn_count = 0;
 	last_replay.EndRecord();
 	std::vector<unsigned char> replay_buffer;
 	replay_buffer.reserve(sizeof last_replay.pheader + last_replay.comp_size);
