@@ -412,6 +412,7 @@ void SingleDuel::TPResult(DuelPlayer* dp, unsigned char tp) {
 		std::swap(pdeck[0], pdeck[1]);
 		swapped = true;
 	}
+	turn_count = 0;
 	dp->state = CTOS_RESPONSE;
 	std::random_device rd;
 	ExtendedReplayHeader rh;
@@ -922,7 +923,6 @@ int SingleDuel::Analyze(unsigned char* msgbuffer, unsigned int len) {
 			break;
 		}
 		case MSG_NEW_TURN: {
-			turn_count++;
 			RefreshMzone(0);
 			RefreshMzone(1);
 			RefreshSzone(0);
@@ -936,6 +936,7 @@ int SingleDuel::Analyze(unsigned char* msgbuffer, unsigned int len) {
 			NetServer::ReSendToPlayer(players[1]);
 			for(auto oit = observers.begin(); oit != observers.end(); ++oit)
 				NetServer::ReSendToPlayer(*oit);
+			turn_count++;
 			break;
 		}
 		case MSG_NEW_PHASE: {
@@ -1443,7 +1444,6 @@ void SingleDuel::EndDuel() {
 	if(!pduel)
 		return;
 	last_replay.pheader.turns = turn_count;
-	turn_count = 0;
 	last_replay.EndRecord();
 	std::vector<unsigned char> replay_buffer;
 	replay_buffer.reserve(sizeof last_replay.pheader + last_replay.comp_size);
