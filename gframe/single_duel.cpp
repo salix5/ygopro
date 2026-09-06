@@ -1441,6 +1441,7 @@ void SingleDuel::GetResponse(DuelPlayer* dp, unsigned char* pdata, unsigned int 
 void SingleDuel::EndDuel() {
 	if(!pduel)
 		return;
+	last_replay.pheader.turns = mainGame->dInfo.turn;
 	last_replay.EndRecord();
 	std::vector<unsigned char> replay_buffer;
 	replay_buffer.reserve(sizeof last_replay.pheader + last_replay.comp_size);
