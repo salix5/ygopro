@@ -7,53 +7,62 @@ git clone --depth=1 -b 0.11.25 https://github.com/mackron/miniaudio
 cp miniaudio/extras/miniaudio_split/miniaudio.* miniaudio
 
 rm -rf lua
-curl -q -f -L -O https://www.lua.org/ftp/lua-5.4.8.tar.gz
-tar -xf lua-5.4.8.tar.gz
-mv lua-5.4.8 lua
-rm lua-5.4.8.tar.gz
+LUA_VERSION=5.4.8
+curl -q -f -L -O "https://www.lua.org/ftp/lua-${LUA_VERSION}.tar.gz"
+tar -xf lua-${LUA_VERSION}.tar.gz
+mv lua-${LUA_VERSION} lua
+rm lua-${LUA_VERSION}.tar.gz
 
 rm -rf freetype
-curl -q -f -L -O https://downloads.sourceforge.net/freetype/freetype-2.14.2.tar.gz
-tar -xf freetype-2.14.2.tar.gz
-mv freetype-2.14.2 freetype
-rm freetype-2.14.2.tar.gz
+FREETYPE_VERSION=2.14.2
+curl -q -f -L -O "https://downloads.sourceforge.net/freetype/freetype-${FREETYPE_VERSION}.tar.gz"
+tar -xf freetype-${FREETYPE_VERSION}.tar.gz
+mv freetype-${FREETYPE_VERSION} freetype
+rm freetype-${FREETYPE_VERSION}.tar.gz
 
 rm -rf event
-curl -q -f -L -O https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
-tar -xf libevent-2.1.12-stable.tar.gz
-mv libevent-2.1.12-stable event
-rm libevent-2.1.12-stable.tar.gz
+LIBEVENT_VERSION=2.1.12-stable
+curl -q -f -L -O "https://github.com/libevent/libevent/releases/download/release-${LIBEVENT_VERSION}/libevent-${LIBEVENT_VERSION}.tar.gz"
+tar -xf libevent-${LIBEVENT_VERSION}.tar.gz
+mv libevent-${LIBEVENT_VERSION} event
+rm libevent-${LIBEVENT_VERSION}.tar.gz
 cp premake/event/msvc-event-config.h event/include/event2/event-config.h
 cp event/WIN32-Code/nmake/evconfig-private.h event/include/evconfig-private.h
 
 rm -rf jpeg
-curl -q -f -L -O https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.1.4.1/libjpeg-turbo-3.1.4.1.tar.gz
-tar -xf libjpeg-turbo-3.1.4.1.tar.gz
-mv libjpeg-turbo-3.1.4.1 jpeg
-rm libjpeg-turbo-3.1.4.1.tar.gz
+LIBJPEG_VERSION=3.1.4.1
+curl -q -f -L -O "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/${LIBJPEG_VERSION}/libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz"
+tar -xf libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
+mv libjpeg-turbo-${LIBJPEG_VERSION} jpeg
+rm libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
 cp jpeg/src/jversion.h.in jpeg/src/jversion.h
 
 rm -rf sqlite3
-curl -q -f -L -O https://www.sqlite.org/2026/sqlite-amalgamation-3510300.zip
-unzip sqlite-amalgamation-3510300.zip
-mv sqlite-amalgamation-3510300 sqlite3
-rm sqlite-amalgamation-3510300.zip
+SQLITE_YEAR=2026
+SQLITE_VERSION=3510300
+curl -q -f -L -O "https://www.sqlite.org/${SQLITE_YEAR}/sqlite-amalgamation-${SQLITE_VERSION}.zip"
+unzip sqlite-amalgamation-${SQLITE_VERSION}.zip
+mv sqlite-amalgamation-${SQLITE_VERSION} sqlite3
+rm sqlite-amalgamation-${SQLITE_VERSION}.zip
 
 rm -rf png
-curl -q -f -L -O https://downloads.sourceforge.net/libpng/libpng-1.6.58.tar.gz
-tar -xf libpng-1.6.58.tar.gz
-mv libpng-1.6.58 png
+LIBPNG_VERSION=1.6.58
+curl -q -f -L -O "https://downloads.sourceforge.net/libpng/libpng-${LIBPNG_VERSION}.tar.gz"
+tar -xf libpng-${LIBPNG_VERSION}.tar.gz
+mv libpng-${LIBPNG_VERSION} png
 cp png/scripts/pnglibconf.h.prebuilt png/pnglibconf.h
-rm libpng-1.6.58.tar.gz
+rm libpng-${LIBPNG_VERSION}.tar.gz
 
 rm -rf zlib
-curl -q -f -L -O https://github.com/madler/zlib/releases/download/v1.3.2/zlib-1.3.2.tar.gz
-tar -xf zlib-1.3.2.tar.gz
-mv zlib-1.3.2 zlib
-rm zlib-1.3.2.tar.gz
+ZLIB_VERSION=1.3.2
+curl -q -f -L -O "https://github.com/madler/zlib/releases/download/v${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz"
+tar -xf zlib-${ZLIB_VERSION}.tar.gz
+mv zlib-${ZLIB_VERSION} zlib
+rm zlib-${ZLIB_VERSION}.tar.gz
 
 rm -rf lzma
-curl -q -f -L -O https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.gz
-tar -xf xz-5.8.3.tar.gz
-mv xz-5.8.3 lzma
-rm xz-5.8.3.tar.gz
+XZ_VERSION=5.8.3
+curl -q -f -L -O "https://github.com/tukaani-project/xz/releases/download/v${XZ_VERSION}/xz-${XZ_VERSION}.tar.gz"
+tar -xf xz-${XZ_VERSION}.tar.gz
+mv xz-${XZ_VERSION} lzma
+rm xz-${XZ_VERSION}.tar.gz
