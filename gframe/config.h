@@ -2,8 +2,8 @@
 #define YGOPRO_CONFIG_H
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 8
-#define VERSION_PATCH 0
+#define VERSION_MINOR 10
+#define VERSION_PATCH 1
 
 #include <cstdio>
 #include "bufferio.h"
