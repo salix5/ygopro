@@ -452,6 +452,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::EMIE_MOUSE_WHEEL: {
+			if (event.MouseInput.Wheel == 0)
+				break;
 			auto element = root->getElementFromPoint(current_pos);
 			if (element == game_->imgBigCard) {
 				ZoomBigCard(0.1f * event.MouseInput.Wheel, event.MouseInput.X, event.MouseInput.Y);
