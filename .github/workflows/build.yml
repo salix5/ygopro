@@ -16,6 +16,8 @@ on:
 jobs:
   prepare:
     runs-on: ubuntu-latest
+    env:
+      SQLITE3_VERSION: 3530400
 
     steps:
     - name: Parse pull request description for dependency overrides
@@ -79,13 +81,13 @@ jobs:
       id: sqlite
       uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
       with:
-        url: https://www.sqlite.org/2026/sqlite-amalgamation-3530300.zip
-        sha256: 646421e12aac110282ef8cc68f1a62d4bb15fc7b8f09da0b53e29ee690500431
+        url: https://www.sqlite.org/2026/sqlite-amalgamation-${{ env.SQLITE3_VERSION }}.zip
+        sha256: 1e71ddf93849c6a6ecf58b827c0692073d2dd7ee40196158068f7b29f422e87d
 
     - name: Extract sqlite
       run: |
         unzip ${{ steps.sqlite.outputs.filepath }}
-        mv sqlite-amalgamation-3530300 sqlite3
+        mv sqlite-amalgamation-${{ env.SQLITE3_VERSION }} sqlite3
 
     - name: Fetch miniaudio
       uses: actions/checkout@v6
