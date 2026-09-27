@@ -502,7 +502,8 @@ workspace "YGOPro"
 
     include "ocgcore"
     include "gframe"
-    include "irrlicht/."
+    include "irrlicht"
+    include "sqlite3"
     for _, dep in ipairs(DEPENDENCIES_METADATA) do
         if _G["BUILD_" .. string.upper(dep.name)] then
             -- Build dependency as subproject, using our pre-provided premake script (copy from the premake directory of the project before running premake)
@@ -511,6 +512,6 @@ workspace "YGOPro"
     end
     if USE_AUDIO then
         if AUDIO_LIB == "miniaudio" then
-            include "miniaudio/."
+            include "miniaudio"
         end
     end

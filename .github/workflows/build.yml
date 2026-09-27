@@ -696,8 +696,6 @@ jobs:
       if: matrix.static-link != true
       run: |
         DYLD_LIBRARY_PATH=$(brew --prefix)/lib ./premake5 gmake \
-          --sqlite-include-dir=$(brew --prefix sqlite)/include \
-          --sqlite-lib-dir=$(brew --prefix sqlite)/lib \
           --zlib-include-dir=$(brew --prefix zlib)/include \
           --zlib-lib-dir=$(brew --prefix zlib)/lib
 
