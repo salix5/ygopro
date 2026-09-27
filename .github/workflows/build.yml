@@ -259,7 +259,6 @@ jobs:
           !jpeg/testimages/
           png/
           zlib/
-          sqlite3/
           lzma/
           miniaudio/
           !miniaudio/external/opus/dnn/
