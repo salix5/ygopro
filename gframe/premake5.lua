@@ -15,7 +15,7 @@ project "YGOPro"
     includedirs { IRRLICHT_INCLUDE_DIR }
     links { "irrlicht" }
 
-    includedirs { SQLITE_INCLUDE_DIR }
+    includedirs { SQLITE3_INCLUDE_DIR }
     links { "sqlite3" }
 
     if BUILD_FREETYPE then
