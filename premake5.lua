@@ -54,6 +54,9 @@ BUILD_LUA = true
 -- Also, bundled jpeglib/libpng/zlib/lzma in Irrlicht are not used here.
 IRRLICHT_INCLUDE_DIR = path.getabsolute("./irrlicht/include")
 
+-- SQLite is always built from source.
+SQLITE3_INCLUDE_DIR = path.getabsolute("./sqlite3")
+
 -- miniaudio is always built from source (originally a header-only library, now an independent subproject).
 -- When building Opus/Vorbis from source, they are integrated directly into the miniaudio subproject.
 -- To simplify the build process, support for Ogg format audio (Opus/Vorbis) is optional.
@@ -98,12 +101,6 @@ DEPENDENCIES_METADATA = {
         prebuilt_header = "freetype2/ft2build.h",
         prebuilt_header_subdir = "freetype2",
         source_header_subdir = "include",
-    },
-    {
-        name = "sqlite",
-        prebuilt_header = "sqlite3.h",
-        prebuilt_libname = "sqlite3",
-        source_dir = "sqlite3",
     },
     {
         name = "jpeg",
@@ -244,7 +241,8 @@ local function ResolveDirectoryVariableToFullPath(varname)
     if not dir or dir == "" then
         print("::warning:: " .. varname .. " is not set")
         return
-    elseif not os.isdir(dir) then
+    end
+    if not os.isdir(dir) then
         print("::warning:: " .. varname .. " is not a valid directory: " .. dir)
         return
     end
@@ -504,15 +502,16 @@ workspace "YGOPro"
 
     include "ocgcore"
     include "gframe"
-    include "irrlicht/."
+    include "irrlicht"
+    include "sqlite3"
     for _, dep in ipairs(DEPENDENCIES_METADATA) do
         if _G["BUILD_" .. string.upper(dep.name)] then
             -- Build dependency as subproject, using our pre-provided premake script (copy from the premake directory of the project before running premake)
-            include((dep.source_dir or dep.name) .. "/.")
+            include((dep.source_dir or dep.name))
         end
     end
     if USE_AUDIO then
         if AUDIO_LIB == "miniaudio" then
-            include "miniaudio/."
+            include "miniaudio"
         end
     end
