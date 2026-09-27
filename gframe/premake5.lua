@@ -15,6 +15,9 @@ project "YGOPro"
     includedirs { IRRLICHT_INCLUDE_DIR }
     links { "irrlicht" }
 
+    includedirs { SQLITE_INCLUDE_DIR }
+    links { "sqlite3" }
+
     if BUILD_FREETYPE then
         -- Add custom include directory for FreeType before the default include directory
         includedirs { FREETYPE_CUSTOM_INCLUDE_DIR }
