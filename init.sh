@@ -39,7 +39,7 @@ cp jpeg/src/jversion.h.in jpeg/src/jversion.h
 
 rm -rf sqlite3
 SQLITE_YEAR=2026
-SQLITE_VERSION=3530300
+SQLITE_VERSION=3530400
 curl -q -f -L -O "https://www.sqlite.org/${SQLITE_YEAR}/sqlite-amalgamation-${SQLITE_VERSION}.zip"
 unzip sqlite-amalgamation-${SQLITE_VERSION}.zip
 mv sqlite-amalgamation-${SQLITE_VERSION} sqlite3
