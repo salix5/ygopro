@@ -265,7 +265,7 @@ end
 local function ResolveBuildFromSourceDependencyDirectory(dep)
     local upper = string.upper(dep.name)
     local include_dir_var = upper .. "_INCLUDE_DIR"
-    local source_dir = dep.source_dir or ("./" .. dep.name)
+    local source_dir = "./" .. dep.name
     local source_header_subdir = dep.source_header_subdir or "."
     _G[include_dir_var] = path.join(source_dir, source_header_subdir)
     ResolveDirectoryVariableToFullPath(include_dir_var)
@@ -507,7 +507,7 @@ workspace "YGOPro"
     for _, dep in ipairs(DEPENDENCIES_METADATA) do
         if _G["BUILD_" .. string.upper(dep.name)] then
             -- Build dependency as subproject, using our pre-provided premake script (copy from the premake directory of the project before running premake)
-            include(dep.source_dir or dep.name)
+            include(dep.name)
         end
     end
     if USE_AUDIO then
