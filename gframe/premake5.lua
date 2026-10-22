@@ -70,6 +70,10 @@ project "YGOPro"
             defines { "NO_IRR_COMPILE_WITH_DIRECT3D_9_" }
         end
 
+    filter { "system:windows", "action:gmake" }
+        links { "opengl32", "imm32" }
+        linkoptions { "-static" }
+
     filter "system:macosx"
         links { "OpenGL.framework", "Cocoa.framework", "IOKit.framework", "Carbon.framework" }
         defines { "GL_SILENCE_DEPRECATION" }
