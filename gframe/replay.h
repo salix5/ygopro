@@ -37,6 +37,9 @@ struct ExtendedReplayHeader {
 	uint8_t value[14]{};
 };
 
+static_assert(sizeof(ReplayHeader) == 32, "ReplayHeader size must be 32 bytes");
+static_assert(sizeof(ExtendedReplayHeader) == 80, "ExtendedReplayHeader size must be 80 bytes");
+
 struct DuelParameters {
 	int32_t start_lp{};
 	int32_t start_hand{};
