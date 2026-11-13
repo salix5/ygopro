@@ -624,13 +624,10 @@ jobs:
       fail-fast: false
       matrix:
         name:
-          - macos-15-intel
           - macos-26-arm
           - macos-26-intel-cross-compile-static-link
           - macos-26-arm-static-link
         include:
-          - name: macos-15-intel
-            os: macos-15-intel
           - name: macos-26-arm
             os: macos-26
           - name: macos-26-intel-cross-compile-static-link
