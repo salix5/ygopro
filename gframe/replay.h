@@ -90,7 +90,7 @@ public:
 	}
 	bool OpenReplay(const wchar_t* name);
 	bool ReadNextResponse(unsigned char resp[]);
-	bool ReadName(wchar_t* data);
+	bool ReadName(std::wstring& name);
 	void ReadHeader(ExtendedReplayHeader& header);
 	bool ReadData(void* data, size_t length);
 	template<typename T>

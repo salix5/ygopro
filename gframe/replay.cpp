@@ -221,12 +221,14 @@ bool Replay::ReadNextResponse(unsigned char resp[]) {
 		return false;
 	return true;
 }
-bool Replay::ReadName(wchar_t* data) {
+bool Replay::ReadName(std::wstring& name) {
 	uint16_t buffer[20]{};
 	if (!ReadData(buffer, sizeof buffer)) {
 		return false;
 	}
-	BufferIO::CopyWStr(buffer, data, 20);
+	wchar_t data[20]{};
+	BufferIO::CopyCharArray(buffer, data);
+	name = data;
 	return true;
 }
 void Replay::ReadHeader(ExtendedReplayHeader& header) {
@@ -282,10 +284,10 @@ bool Replay::SaveDeck(size_t index, const wchar_t* filename) {
 bool Replay::ReadInfo() {
 	int player_count = (pheader.base.flag & REPLAY_TAG) ? 4 : 2;
 	for (int i = 0; i < player_count; ++i) {
-		wchar_t name[20]{};
+		std::wstring name;
 		if (!ReadName(name))
 			return false;
-		players.push_back(name);
+		players.push_back(std::move(name));
 	}
 	if (!ReadData(&params, sizeof params))
 		return false;
