@@ -50,10 +50,11 @@ struct DuelParameters {
 	uint32_t duel_flag{};
 };
 
-// max size
+// size
 constexpr size_t MAX_REPLAY_SIZE = 0x80000;
 constexpr size_t MAX_COMP_SIZE = UINT16_MAX - 1 - sizeof(ExtendedReplayHeader); // UINT16_MAX - 1 : MAX_DATA_SIZE
 constexpr size_t SIZE_LZMA1_PROPS = 5;
+constexpr size_t HEADER_DICT_SIZE = 0x1U << 24;
 
 class Replay {
 public:

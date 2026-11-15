@@ -98,7 +98,7 @@ void Replay::EndRecord() {
 	pheader.base.flag |= REPLAY_COMPRESSED;
 	lzma_options_lzma opt;
 	lzma_lzma_preset(&opt, 5);
-	opt.dict_size = 0x1U << 24;
+	opt.dict_size = HEADER_DICT_SIZE;
 	opt.lc = 3;
 	opt.lp = 0;
 	opt.pb = 2;
@@ -178,11 +178,15 @@ bool Replay::OpenReplay(const wchar_t* name) {
 		filter.options = nullptr;
 		if (lzma_properties_decode(&filter, nullptr, pheader.base.props, SIZE_LZMA1_PROPS) != LZMA_OK)
 			return false;
-		lzma_options_lzma *lzma_opt = static_cast<lzma_options_lzma *>(filter.options);
+		lzma_options_lzma* lzma_opt = static_cast<lzma_options_lzma*>(filter.options);
 		lzma_set_ext_size(*lzma_opt, replay_size);
 		lzma_opt->ext_flags = LZMA_LZMA1EXT_ALLOW_EOPM;
 		filter.id = LZMA_FILTER_LZMA1EXT;
 		lzma_filter filters[2] = { filter, { LZMA_VLI_UNKNOWN, nullptr } };
+		if (lzma_opt->dict_size > HEADER_DICT_SIZE) {
+			lzma_filters_free(filters, nullptr);
+			return false;
+		}
 		size_t in_pos = 0, out_pos = 0;
 		lzma_ret lret = lzma_raw_buffer_decode(filters, nullptr, comp_data, &in_pos, comp_size, replay_data, &out_pos, replay_size);
 		lzma_filters_free(filters, nullptr);
