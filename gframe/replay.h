@@ -101,7 +101,6 @@ public:
 	}
 	int32_t ReadInt32();
 	void Rewind();
-	void Reset();
 	void SkipInfo();
 	bool IsReplaying() const;
 	bool SaveDeck(size_t index, const wchar_t* filename);
@@ -119,6 +118,7 @@ public:
 
 private:
 	bool ReadInfo();
+	void Reset();
 
 	unsigned char* replay_data;
 	size_t replay_size{};

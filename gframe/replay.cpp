@@ -257,6 +257,10 @@ void Replay::Rewind() {
 	can_read = true;
 }
 void Replay::Reset() {
+	if (fp) {
+		std::fclose(fp);
+		fp = nullptr;
+	}
 	is_recording = false;
 	is_replaying = false;
 	can_read = false;
