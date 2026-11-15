@@ -14,19 +14,19 @@ Replay::Replay() {
 	comp_data = new unsigned char[MAX_COMP_SIZE];
 }
 Replay::~Replay() {
+	if (fp) {
+		std::fclose(fp);
+		fp = nullptr;
+	}
 	delete[] replay_data;
 	delete[] comp_data;
 }
 void Replay::BeginRecord() {
 	if(!FileSystem::IsDirExists(L"./replay") && !FileSystem::MakeDir(L"./replay"))
 		return;
-	if(is_recording)
-		std::fclose(fp);
-	fp = myfopen("./replay/_LastReplay.yrp", "wb");
-	if(!fp)
-		return;
 	Reset();
 	is_recording = true;
+	fp = myfopen("./replay/_LastReplay.yrp", "wb");
 }
 void Replay::WriteHeader(ExtendedReplayHeader& header) {
 	pheader = header;
@@ -73,14 +73,17 @@ bool Replay::RemoveData(size_t length) {
 	return true;
 }
 void Replay::Flush() {
-	if(!is_recording)
+	if (!is_recording || !fp)
 		return;
 	std::fflush(fp);
 }
 void Replay::EndRecord() {
 	if(!is_recording)
 		return;
-	std::fclose(fp);
+	if (fp){
+		std::fclose(fp);
+		fp = nullptr;
+	}
 	pheader.base.datasize = replay_size;
 	pheader.base.flag |= REPLAY_COMPRESSED;
 	lzma_options_lzma opt;
