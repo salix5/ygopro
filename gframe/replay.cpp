@@ -44,8 +44,12 @@ void Replay::WriteData(const void* data, size_t length, bool flush) {
 		return;
 	if (length > MAX_REPLAY_SIZE - replay_size)
 		return;
+	if (length == 0)
+		return;
 	std::memcpy(replay_data + replay_size, data, length);
 	replay_size += length;
+	if (!fp)
+		return;
 	std::fwrite(data, length, 1, fp);
 	if(flush)
 		std::fflush(fp);
@@ -72,10 +76,10 @@ bool Replay::RemoveData(size_t length) {
 	if(length > replay_size)
 		return false;
 	replay_size -= length;
-	if(fp) {
-		std::fflush(fp);
-		std::fseek(fp, -static_cast<long>(length), SEEK_CUR);
-	}
+	if (!fp)
+		return true;
+	std::fflush(fp);
+	std::fseek(fp, sizeof(pheader) + replay_size, SEEK_SET);
 	return true;
 }
 void Replay::Flush() {
