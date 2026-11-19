@@ -81,3 +81,30 @@ project "YGOPro"
     filter "system:linux"
         links { "GL", "X11", "dl", "pthread" }
         fatalwarnings { "All" }
+
+    filter { "system:windows", "action:vs*", "platforms:Win32", "configurations:Release" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x86-windows-static/lib" }
+    filter { "system:windows", "action:vs*", "platforms:Win32", "configurations:Debug" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x86-windows-static/debug/lib" }
+
+    filter { "system:windows", "action:vs*", "platforms:x64", "configurations:Release" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x64-windows-static/lib" }
+    filter { "system:windows", "action:vs*", "platforms:x64", "configurations:Debug" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x64-windows-static/debug/lib" }
+
+    filter { "system:windows", "action:vs*", "platforms:ARM64", "configurations:Release" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/arm64-windows-static/lib" }
+    filter { "system:windows", "action:vs*", "platforms:ARM64", "configurations:Debug" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/arm64-windows-static/debug/lib" }
+
+    filter { "system:windows", "action:gmake" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x64-mingw-static/lib" }
+
+    filter { "system:windows", "action:vs*", "configurations:Release" }
+        links { "jpeg", "libpng16", "libzs" }
+
+    filter { "system:windows", "action:vs*", "configurations:Debug" }
+        links { "jpeg", "libpng16d", "libzsd" }
+    
+    filter { "action:gmake" }
+        links { "jpeg", "png", "z" }

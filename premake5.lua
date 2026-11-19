@@ -103,23 +103,9 @@ DEPENDENCIES_METADATA = {
         source_header_subdir = "include",
     },
     {
-        name = "jpeg",
-        prebuilt_header = "jpeglib.h",
-        source_header_subdir = "src",
-    },
-    {
-        name = "png",
-        prebuilt_header = "png.h",
-    },
-    {
         name = "lzma",
         prebuilt_header = "lzma.h",
         source_header_subdir = "src/liblzma/api",
-    },
-    {
-        name = "zlib",
-        prebuilt_header = "zlib.h",
-        prebuilt_libname = "z",
     },
 }
 
@@ -519,6 +505,18 @@ workspace "YGOPro"
             vectorextensions "AVX2"
             isaextensions { "FMA" }
         end
+
+    filter { "system:windows", "action:vs*", "platforms:Win32" }
+        includedirs { "vcpkg_installed/x86-windows-static/include" }
+
+    filter { "system:windows", "action:vs*", "platforms:x64" }
+        includedirs { "vcpkg_installed/x64-windows-static/include" }
+
+    filter { "system:windows", "action:vs*", "platforms:ARM64" }
+        includedirs { "vcpkg_installed/arm64-windows-static/include" }
+
+    filter { "system:windows", "action:gmake" }
+        includedirs { "vcpkg_installed/x64-mingw-static/include" }
 
     filter {}
 
