@@ -3,10 +3,6 @@ project "miniaudio"
     files { "miniaudio.c", "miniaudio.h" }
     defines { "MA_NO_ENCODING", "MA_NO_GENERATION" }
 
-    if USE_SIMD == "none" then
-        defines { "MA_NO_SSE2", "MA_NO_AVX2", "MA_NO_NEON" }
-    end
-
     if MINIAUDIO_SUPPORT_OPUS_VORBIS then
         files { "extras/decoders/libopus/*", "extras/decoders/libvorbis/*" }
         if MINIAUDIO_BUILD_OPUS_VORBIS then

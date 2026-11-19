@@ -15,10 +15,6 @@ USE_DXSDK = false
 USE_AUDIO = true
 AUDIO_LIB = "miniaudio" -- only miniaudio is supported for now
 
--- Available: none, sse2, avx2, neon, best
--- "best" means avx2 on x86-* and neon on ARM
-USE_SIMD = "best"
-
 -- On Linux and macOS, builds target the current machine's CPU architecture by default, but Premake needs an explicit
 -- architecture for the corresponding filters to take effect, so use os.hostarch() to detect it.
 HOST_ARCH = os.hostarch()
@@ -198,14 +194,6 @@ newoption { trigger = "mac-intel", category = "YGOPro", description = "Cross Com
 
 newoption { trigger = "use-openmp", category = "YGOPro", description = "Enable OpenMP support for card picture resizing (only for benchmarking)" }
 
-newoption { trigger = "use-simd", category = "YGOPro", description = "Specify SIMD instruction set", allowed = {
-    { "none", "Turn off extra SIMD support" },
-    { "sse2", "Use SSE2 instructions" },
-    { "avx2", "Use AVX2 instructions" },
-    { "neon", "Use NEON instructions" },
-    { "best", "Default, use the best SIMD instructions (AVX2 on x86-*, NEON on ARM)" },
-}}
-
 ---- Process options
 
 -- Read settings from command line or environment variables.
@@ -313,8 +301,6 @@ if USE_AUDIO then
     end
 end
 
-USE_SIMD = GetParam("use-simd") or USE_SIMD
-
 -- Variables indicating the target Mac architecture for cross-compilation; automatically detected based on Premake's
 -- host architecture if neither --mac-arm nor --mac-intel is specified.
 local mac_arm = false
@@ -327,17 +313,6 @@ if os.istarget("macosx") then
     if GetParam("mac-intel") then
         mac_intel = true
     end
-end
-
-if not mac_arm and not mac_intel and table.indexof({ "x86", "x86_64", "ARM64" }, HOST_ARCH) == nil then
-    print("::warning:: Detected architecture '" .. HOST_ARCH .. "' is not recognized. Proceeding with the build; SIMD will be disabled.")
-    USE_SIMD = "none"
-end
-
--- Normalize "avx2" and "neon" to "best": downstream code only checks "best",
--- which already maps to AVX2 on x86-* and NEON on ARM.
-if USE_SIMD == "avx2" or USE_SIMD == "neon" then
-    USE_SIMD = "best"
 end
 
 if os.istarget("windows") and GetParam("vs2026-win7-support") then
@@ -396,22 +371,9 @@ workspace "YGOPro"
 
     filter { "system:windows", "action:vs*", "platforms:Win32" }
         architecture "x86"
-        if USE_SIMD == "none" then
-            vectorextensions "IA32"
-        end
-        if USE_SIMD == "sse2" then
-            vectorextensions "SSE2"
-        end
-        if USE_SIMD == "best" then
-            vectorextensions "AVX2"
-        end
 
     filter { "system:windows", "action:vs*", "platforms:x64" }
         architecture "x86_64"
-        -- x86_64 must have SSE2, so we shouldn't check USE_SIMD for SSE2
-        if USE_SIMD == "best" then
-            vectorextensions "AVX2"
-        end
 
     filter { "system:windows", "action:vs*", "platforms:ARM64" }
         architecture "AARCH64"
@@ -499,12 +461,6 @@ workspace "YGOPro"
 
     filter "action:gmake"
         buildoptions { "-fno-strict-aliasing" }
-
-    filter { "action:gmake", "architecture:x86_64" }
-        if USE_SIMD == "best" then
-            vectorextensions "AVX2"
-            isaextensions { "FMA" }
-        end
 
     filter { "system:windows", "action:vs*", "platforms:Win32" }
         includedirs { "vcpkg_installed/x86-windows-static/include" }

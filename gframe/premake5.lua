@@ -39,10 +39,6 @@ project "YGOPro"
         links { EVENT_PTHREADS_LIB_NAME }
     end
 
-    if USE_SIMD == "none" then
-        defines { "STBIR_NO_SIMD" }
-    end
-
     if USE_AUDIO then
         defines { "YGOPRO_USE_AUDIO" }
         if AUDIO_LIB == "miniaudio" then
