@@ -26,6 +26,7 @@
 /bin/
 /build
 /obj/
+/vcpkg_installed
 /event
 /freetype
 /irrlicht
