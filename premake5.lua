@@ -398,6 +398,8 @@ workspace "YGOPro"
         -- We need to specify architecture on macOS to make the premake filters work correctly.
         if mac_arm then
             architecture "AARCH64"
+            includedirs { "/opt/homebrew/include" }
+            libdirs { "/opt/homebrew/lib" }
         end
         if mac_intel then
             architecture "x86_64"
