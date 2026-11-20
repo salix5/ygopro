@@ -280,22 +280,6 @@ if USE_AUDIO then
         elseif GetParam("miniaudio-support-opus-vorbis") then
             MINIAUDIO_SUPPORT_OPUS_VORBIS = true
         end
-        if MINIAUDIO_SUPPORT_OPUS_VORBIS then
-            MINIAUDIO_BUILD_OPUS_VORBIS = BUILD_ALL_FROM_SOURCE
-            if GetParam("no-build-opus-vorbis") then
-                MINIAUDIO_BUILD_OPUS_VORBIS = false
-            elseif GetParam("build-opus-vorbis") then
-                MINIAUDIO_BUILD_OPUS_VORBIS = true
-            end
-            if MINIAUDIO_BUILD_OPUS_VORBIS then
-                -- Opus, Vorbis and Ogg dependencies are integrated into the miniaudio subproject instead of being maintained as separate subprojects.
-                -- Since their locations are predefined in the miniaudio subproject, nothing needs to be done here.
-            else
-                for _, dep in ipairs(MINIAUDIO_DEPENDENCIES_METADATA) do
-                    ResolvePreBuiltDependencyDirectory(dep)
-                end
-            end
-        end
     else
         error("Unknown audio library: " .. AUDIO_LIB)
     end
