@@ -1,0 +1,11 @@
+{
+  "name": "ygopro",
+  "dependencies": [
+    "libjpeg-turbo",
+    {
+      "name": "libpng",
+      "default-features": false
+    },
+    "zlib"
+  ]
+}

@@ -113,9 +113,6 @@ jobs:
           miniaudio/
           irrlicht/include/
           irrlicht/source/
-          !irrlicht/source/Irrlicht/jpeglib/
-          !irrlicht/source/Irrlicht/libpng/
-          !irrlicht/source/Irrlicht/zlib/
           ocgcore/
 
   prepare-static-dependencies:
@@ -146,44 +143,6 @@ jobs:
       run: |
         tar xf ${{ steps.freetype.outputs.filepath }}
         mv freetype-2.14.3 freetype
-
-    - name: Download libjpeg-turbo
-      id: libjpeg-turbo
-      uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
-      with:
-        url: https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.2.0/libjpeg-turbo-3.2.0.tar.gz
-        sha256: 6f30092cef9fb839779646608f4ee14ae3cbac989c47fa05e841b0841f09878e
-
-    - name: Extract libjpeg-turbo
-      run: |
-        tar xf ${{ steps.libjpeg-turbo.outputs.filepath }}
-        mv libjpeg-turbo-3.2.0 jpeg
-        cp jpeg/src/jversion.h.in jpeg/src/jversion.h
-
-    - name: Download libpng
-      id: libpng
-      uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
-      with:
-        url: https://downloads.sourceforge.net/libpng/libpng-1.6.58.tar.gz
-        sha256: 8c9b05b675ca7301a458df2c2e46f26e1d41ff36b8863f8c33530bc58c2e6225
-
-    - name: Extract libpng
-      run: |
-        tar xf ${{ steps.libpng.outputs.filepath }}
-        mv libpng-1.6.58 png
-        cp png/scripts/pnglibconf.h.prebuilt png/pnglibconf.h
-    
-    - name: Download zlib
-      id: zlib
-      uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
-      with:
-        url: https://github.com/madler/zlib/releases/download/v1.3.2/zlib-1.3.2.tar.gz
-        sha256: bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16
-
-    - name: Extract zlib
-      run: |
-        tar xf ${{ steps.zlib.outputs.filepath }}
-        mv zlib-1.3.2 zlib
 
     - name: Download lzma (xz)
       id: lzma
@@ -257,11 +216,6 @@ jobs:
           event/
           freetype/
           !freetype/docs/
-          jpeg/
-          !jpeg/java/
-          !jpeg/testimages/
-          png/
-          zlib/
           lzma/
           miniaudio/
           !miniaudio/external/opus/dnn/
@@ -272,44 +226,30 @@ jobs:
       fail-fast: false
       matrix:
         name:
-          - windows-x64-sse2
-#          - windows-no-dxsdk
-          - windows-x64-avx2
-          - windows-x64-no-simd
+          - windows-x64
           - windows-arm64
           - windows-2025
           - windows-mingw
         include:
-          - name: windows-x64-sse2
+          - name: windows-x64
             os: windows-2022
             vs: vs2022
             platform: x64
-            simd: sse2
-#          - name: windows-no-dxsdk
-#            os: windows-2022
-#            vs: vs2022
-#            platform: x64
-          - name: windows-x64-avx2
-            os: windows-2022
-            vs: vs2022
-            platform: x64
-            simd: avx2
-          - name: windows-x64-no-simd
-            os: windows-2022
-            vs: vs2022
-            platform: x64
-            simd: none
+            triplet: x64-windows-static
           - name: windows-arm64
             os: windows-2022
             vs: vs2022
             platform: ARM64
+            triplet: arm64-windows-static
           - name: windows-2025
             os: windows-2025-vs2026
             vs: vs2026
             platform: x64
+            triplet: x64-windows-static
           - name: windows-mingw
             os: windows-2022
             mingw: true
+            triplet: x64-mingw-static
 
     runs-on: ${{ matrix.os }}
 
@@ -335,25 +275,6 @@ jobs:
         name: dependencies-sources-static-link
         path: .
 
-    - name: Download NASM
-      if: matrix.mingw != true
-      id: nasm
-      uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
-      with:
-        url: https://www.nasm.us/pub/nasm/releasebuilds/3.02/win64/nasm-3.02-win64.zip
-        filename: nasm.zip
-        sha256: 161d0bfaff53c2f9e9f3e69fd0672323ebabafd1268976a5cec11be92a19aee7
-
-    - name: Install NASM
-      if: matrix.mingw != true
-      shell: pwsh
-      run: |
-        New-Item -ItemType Directory -Path nasm | Out-Null
-        Expand-Archive -Path ${{ steps.nasm.outputs.filepath }} -DestinationPath nasm
-        Move-Item .\nasm\nasm-3.02\nasm.exe .\nasm
-        $nasmPath = (Resolve-Path .\nasm).Path
-        $nasmPath | Out-File -FilePath $env:GITHUB_PATH -Append
-
     - name: Download premake
       id: premake
       uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
@@ -366,6 +287,31 @@ jobs:
       shell: bash
       run: |
         7z x ${{ steps.premake.outputs.filepath }}
+
+    - name: Install MinGW
+      if: matrix.mingw == true
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+        update: true
+        install: mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-make
+
+    - name: Cache vcpkg binary archives
+      uses: actions/cache@v5
+      with:
+        path: ~/AppData/Local/vcpkg/archives
+        key: vcpkg-${{ matrix.name }}-${{ hashFiles('vcpkg.json') }}
+
+    - name: Install dependencies via vcpkg (MSVC)
+      if: matrix.mingw != true
+      shell: pwsh
+      run: vcpkg install --triplet ${{ matrix.triplet }}
+
+    - name: Install dependencies via vcpkg (MinGW)
+      if: matrix.mingw == true
+      shell: msys2 {0}
+      run: |
+        "$VCPKG_INSTALLATION_ROOT/vcpkg.exe" install --triplet ${{ matrix.triplet }}
 
     - name: Check DirectX SDK
       if: matrix.dxsdk == true
@@ -412,7 +358,7 @@ jobs:
       if: matrix.mingw != true
       shell: pwsh
       run: |
-        .\premake5.exe ${{ matrix.vs }} ${{ matrix.simd && format('--use-simd={0}', matrix.simd) || '' }} --no-miniaudio-support-opus-vorbis
+        .\premake5.exe ${{ matrix.vs }} --no-miniaudio-support-opus-vorbis
 
     - name: Add msbuild to PATH
       if: matrix.mingw != true
@@ -423,14 +369,6 @@ jobs:
       shell: pwsh
       run: |
         MSBuild.exe build\YGOPro.${{ matrix.vs == 'vs2026' && 'slnx' || 'sln' }} /m /p:Configuration=Release /p:Platform=${{ matrix.platform }}
-
-    - name: Install MinGW
-      if: matrix.mingw == true
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: UCRT64
-        update: true
-        install: mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-make nasm
 
     - name: Use premake to generate make files
       if: matrix.mingw == true
@@ -506,17 +444,12 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev
+        sudo apt-get install -y libgl1-mesa-dev libjpeg-dev libpng-dev zlib1g-dev
 
     - name: Install dependencies (dynamic link)
       if: matrix.static-link != true
       run: |
-        sudo apt-get install -y libevent-dev libfreetype6-dev libopusfile-dev libvorbis-dev libjpeg-dev libpng-dev zlib1g-dev liblzma-dev
-
-    - name: Install NASM
-      if: matrix.static-link == true
-      run: |
-        sudo apt-get install -y nasm
+        sudo apt-get install -y libevent-dev libfreetype6-dev libopusfile-dev libvorbis-dev liblzma-dev
 
     - name: Download premake
       id: premake
@@ -625,15 +558,10 @@ jobs:
       matrix:
         name:
           - macos-26-arm
-          - macos-26-intel-cross-compile-static-link
           - macos-26-arm-static-link
         include:
           - name: macos-26-arm
             os: macos-26
-          - name: macos-26-intel-cross-compile-static-link
-            os: macos-26
-            cross-build-intel: true
-            static-link: true
           - name: macos-26-arm-static-link
             os: macos-26
             static-link: true
@@ -660,14 +588,13 @@ jobs:
         path: .
 
     - name: Install dependencies
+      run: |
+        brew install zlib libjpeg-turbo libpng
+
+    - name: Install dependencies (dynamic link)
       if: matrix.static-link != true
       run: |
-        brew install libevent opus opusfile libvorbis zlib libx11 freetype libjpeg-turbo libpng xz
-
-    - name: Install NASM
-      if: matrix.static-link == true
-      run: |
-        brew install nasm
+        brew install libevent opus opusfile libvorbis libx11 freetype xz
 
     - name: Download premake
       id: premake
@@ -726,15 +653,12 @@ jobs:
     - name: Use premake to generate make files (Homebrew packages)
       if: matrix.static-link != true
       run: |
-        DYLD_LIBRARY_PATH=$(brew --prefix)/lib ./premake5 gmake \
-          --zlib-include-dir=$(brew --prefix zlib)/include \
-          --zlib-lib-dir=$(brew --prefix zlib)/lib
+        DYLD_LIBRARY_PATH=$(brew --prefix)/lib ./premake5 gmake
 
     - name: Use premake to generate make files (static link)
       if: matrix.static-link == true
       run: |
-        ./premake5 gmake ${{ matrix.cross-build-intel == true && '--mac-intel' || '' }} ${{ matrix.cross-build-arm == true && '--mac-arm' || '' }} \
-          --build-all
+        ./premake5 gmake --build-all
 
     - name: Make
       run: |
@@ -763,7 +687,7 @@ jobs:
     - name: Download Artifact
       uses: actions/download-artifact@v8
       with:
-        name: YGOPro-windows-x64-sse2
+        name: YGOPro-windows-x64
 
     - name: GitHub Release
       env:

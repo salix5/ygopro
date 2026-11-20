@@ -15,10 +15,6 @@ USE_DXSDK = false
 USE_AUDIO = true
 AUDIO_LIB = "miniaudio" -- only miniaudio is supported for now
 
--- Available: none, sse2, avx2, neon, best
--- "best" means avx2 on x86-* and neon on ARM
-USE_SIMD = "best"
-
 -- On Linux and macOS, builds target the current machine's CPU architecture by default, but Premake needs an explicit
 -- architecture for the corresponding filters to take effect, so use os.hostarch() to detect it.
 HOST_ARCH = os.hostarch()
@@ -103,23 +99,9 @@ DEPENDENCIES_METADATA = {
         source_header_subdir = "include",
     },
     {
-        name = "jpeg",
-        prebuilt_header = "jpeglib.h",
-        source_header_subdir = "src",
-    },
-    {
-        name = "png",
-        prebuilt_header = "png.h",
-    },
-    {
         name = "lzma",
         prebuilt_header = "lzma.h",
         source_header_subdir = "src/liblzma/api",
-    },
-    {
-        name = "zlib",
-        prebuilt_header = "zlib.h",
-        prebuilt_libname = "z",
     },
 }
 
@@ -212,14 +194,6 @@ newoption { trigger = "mac-intel", category = "YGOPro", description = "Cross Com
 
 newoption { trigger = "use-openmp", category = "YGOPro", description = "Enable OpenMP support for card picture resizing (only for benchmarking)" }
 
-newoption { trigger = "use-simd", category = "YGOPro", description = "Specify SIMD instruction set", allowed = {
-    { "none", "Turn off extra SIMD support" },
-    { "sse2", "Use SSE2 instructions" },
-    { "avx2", "Use AVX2 instructions" },
-    { "neon", "Use NEON instructions" },
-    { "best", "Default, use the best SIMD instructions (AVX2 on x86-*, NEON on ARM)" },
-}}
-
 ---- Process options
 
 -- Read settings from command line or environment variables.
@@ -306,28 +280,10 @@ if USE_AUDIO then
         elseif GetParam("miniaudio-support-opus-vorbis") then
             MINIAUDIO_SUPPORT_OPUS_VORBIS = true
         end
-        if MINIAUDIO_SUPPORT_OPUS_VORBIS then
-            MINIAUDIO_BUILD_OPUS_VORBIS = BUILD_ALL_FROM_SOURCE
-            if GetParam("no-build-opus-vorbis") then
-                MINIAUDIO_BUILD_OPUS_VORBIS = false
-            elseif GetParam("build-opus-vorbis") then
-                MINIAUDIO_BUILD_OPUS_VORBIS = true
-            end
-            if MINIAUDIO_BUILD_OPUS_VORBIS then
-                -- Opus, Vorbis and Ogg dependencies are integrated into the miniaudio subproject instead of being maintained as separate subprojects.
-                -- Since their locations are predefined in the miniaudio subproject, nothing needs to be done here.
-            else
-                for _, dep in ipairs(MINIAUDIO_DEPENDENCIES_METADATA) do
-                    ResolvePreBuiltDependencyDirectory(dep)
-                end
-            end
-        end
     else
         error("Unknown audio library: " .. AUDIO_LIB)
     end
 end
-
-USE_SIMD = GetParam("use-simd") or USE_SIMD
 
 -- Variables indicating the target Mac architecture for cross-compilation; automatically detected based on Premake's
 -- host architecture if neither --mac-arm nor --mac-intel is specified.
@@ -341,17 +297,6 @@ if os.istarget("macosx") then
     if GetParam("mac-intel") then
         mac_intel = true
     end
-end
-
-if not mac_arm and not mac_intel and table.indexof({ "x86", "x86_64", "ARM64" }, HOST_ARCH) == nil then
-    print("::warning:: Detected architecture '" .. HOST_ARCH .. "' is not recognized. Proceeding with the build; SIMD will be disabled.")
-    USE_SIMD = "none"
-end
-
--- Normalize "avx2" and "neon" to "best": downstream code only checks "best",
--- which already maps to AVX2 on x86-* and NEON on ARM.
-if USE_SIMD == "avx2" or USE_SIMD == "neon" then
-    USE_SIMD = "best"
 end
 
 if os.istarget("windows") and GetParam("vs2026-win7-support") then
@@ -410,22 +355,9 @@ workspace "YGOPro"
 
     filter { "system:windows", "action:vs*", "platforms:Win32" }
         architecture "x86"
-        if USE_SIMD == "none" then
-            vectorextensions "IA32"
-        end
-        if USE_SIMD == "sse2" then
-            vectorextensions "SSE2"
-        end
-        if USE_SIMD == "best" then
-            vectorextensions "AVX2"
-        end
 
     filter { "system:windows", "action:vs*", "platforms:x64" }
         architecture "x86_64"
-        -- x86_64 must have SSE2, so we shouldn't check USE_SIMD for SSE2
-        if USE_SIMD == "best" then
-            vectorextensions "AVX2"
-        end
 
     filter { "system:windows", "action:vs*", "platforms:ARM64" }
         architecture "AARCH64"
@@ -450,6 +382,8 @@ workspace "YGOPro"
         -- We need to specify architecture on macOS to make the premake filters work correctly.
         if mac_arm then
             architecture "AARCH64"
+            includedirs { "/opt/homebrew/include" }
+            libdirs { "/opt/homebrew/lib" }
         end
         if mac_intel then
             architecture "x86_64"
@@ -464,12 +398,12 @@ workspace "YGOPro"
         end
 
     filter "configurations:Release"
+        defines "NDEBUG"
         optimize "Speed"
         targetdir "bin/release"
 
     filter "configurations:Debug"
         symbols "On"
-        defines "_DEBUG"
         targetdir "bin/debug"
 
     filter { "system:windows", "action:vs*", "platforms:Win32", "configurations:Release" }
@@ -497,8 +431,9 @@ workspace "YGOPro"
             "4996", -- Currently only some dependencies use deprecated functions.
         }
 
-    filter { "configurations:Release", "not action:vs*" }
-        defines "NDEBUG"
+    filter { "configurations:Debug", "action:vs*" }
+        defines "_DEBUG"
+        staticruntime "On"
 
     filter "action:vs*"
         cdialect "C11"
@@ -513,11 +448,17 @@ workspace "YGOPro"
     filter "action:gmake"
         buildoptions { "-fno-strict-aliasing" }
 
-    filter { "action:gmake", "architecture:x86_64" }
-        if USE_SIMD == "best" then
-            vectorextensions "AVX2"
-            isaextensions { "FMA" }
-        end
+    filter { "system:windows", "action:vs*", "platforms:Win32" }
+        includedirs { "vcpkg_installed/x86-windows-static/include" }
+
+    filter { "system:windows", "action:vs*", "platforms:x64" }
+        includedirs { "vcpkg_installed/x64-windows-static/include" }
+
+    filter { "system:windows", "action:vs*", "platforms:ARM64" }
+        includedirs { "vcpkg_installed/arm64-windows-static/include" }
+
+    filter { "system:windows", "action:gmake" }
+        includedirs { "vcpkg_installed/x64-mingw-static/include" }
 
     filter {}
 

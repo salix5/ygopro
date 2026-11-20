@@ -39,24 +39,12 @@ project "YGOPro"
         links { EVENT_PTHREADS_LIB_NAME }
     end
 
-    if USE_SIMD == "none" then
-        defines { "STBIR_NO_SIMD" }
-    end
-
     if USE_AUDIO then
         defines { "YGOPRO_USE_AUDIO" }
         if AUDIO_LIB == "miniaudio" then
             defines { "YGOPRO_USE_MINIAUDIO" }
             includedirs { MINIAUDIO_INCLUDE_DIR }
             links { "miniaudio" }
-            if MINIAUDIO_SUPPORT_OPUS_VORBIS then
-                defines { "YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS" }
-                includedirs { MINIAUDIO_OPUS_INCLUDE_DIR, MINIAUDIO_VORBIS_INCLUDE_DIR }
-                if not MINIAUDIO_BUILD_OPUS_VORBIS then
-                    links { OPUSFILE_LIB_NAME, VORBISFILE_LIB_NAME, OPUS_LIB_NAME, VORBIS_LIB_NAME, OGG_LIB_NAME }
-                    libdirs { OPUSFILE_LIB_DIR, OPUS_LIB_DIR, VORBIS_LIB_DIR, OGG_LIB_DIR }
-                end
-            end
         end
     end
 
@@ -81,3 +69,30 @@ project "YGOPro"
     filter "system:linux"
         links { "GL", "X11", "dl", "pthread" }
         fatalwarnings { "All" }
+
+    filter { "system:windows", "action:vs*", "platforms:Win32", "configurations:Release" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x86-windows-static/lib" }
+    filter { "system:windows", "action:vs*", "platforms:Win32", "configurations:Debug" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x86-windows-static/debug/lib" }
+
+    filter { "system:windows", "action:vs*", "platforms:x64", "configurations:Release" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x64-windows-static/lib" }
+    filter { "system:windows", "action:vs*", "platforms:x64", "configurations:Debug" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x64-windows-static/debug/lib" }
+
+    filter { "system:windows", "action:vs*", "platforms:ARM64", "configurations:Release" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/arm64-windows-static/lib" }
+    filter { "system:windows", "action:vs*", "platforms:ARM64", "configurations:Debug" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/arm64-windows-static/debug/lib" }
+
+    filter { "system:windows", "action:gmake" }
+        libdirs { _MAIN_SCRIPT_DIR .. "/vcpkg_installed/x64-mingw-static/lib" }
+
+    filter { "system:windows", "action:vs*", "configurations:Release" }
+        links { "jpeg", "libpng16", "libzs" }
+
+    filter { "system:windows", "action:vs*", "configurations:Debug" }
+        links { "jpeg", "libpng16d", "libzsd" }
+    
+    filter { "action:gmake" }
+        links { "jpeg", "png", "z" }

@@ -1,7 +1,7 @@
 project "irrlicht"
     kind "StaticLib"
 
-    includedirs { "include", JPEG_INCLUDE_DIR, PNG_INCLUDE_DIR, ZLIB_INCLUDE_DIR }
+    includedirs { "include" }
 
     exceptionhandling "Off"
     rtti "Off"
