@@ -4,7 +4,7 @@
 #include "file_system.h"
 #ifdef YGOPRO_USE_MINIAUDIO
 #include <miniaudio.h>
-#ifdef YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS
+#ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 #include <miniaudio_libopus.h>
 #include <miniaudio_libvorbis.h>
 #endif
@@ -19,7 +19,7 @@ struct SoundManager::MiniAudioImpl {
 	bool engineMusicInitialized{};
 	ma_sound soundBGM;
 	bool soundBGMInitialized{};
-#ifdef YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS
+#ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 	ma_resource_manager resourceManager;
 	bool resourceManagerInitialized{};
 #endif
@@ -32,7 +32,7 @@ struct SoundManager::MiniAudioImpl {
 			ma_engine_uninit(&engineMusic);
 		if(engineSoundInitialized)
 			ma_engine_uninit(&engineSound);
-#ifdef YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS
+#ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 		if(resourceManagerInitialized)
 			ma_resource_manager_uninit(&resourceManager);
 #endif
@@ -58,7 +58,7 @@ bool SoundManager::Init() {
 		return true;
 	miniAudio = new MiniAudioImpl{};
 	auto engineConfig = ma_engine_config_init();
-#ifdef YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS
+#ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 	ma_decoding_backend_vtable* pCustomBackendVTables[] =
 	{
 		ma_decoding_backend_libvorbis,
@@ -115,7 +115,7 @@ void SoundManager::RefreshBGMDir(std::wstring path, int scene) {
 			return;
 		auto ext = fpath.extension().wstring();
 		if ((IsExtension(ext, L".mp3")
-#if defined(YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS)
+#if defined(YGOPRO_MINIAUDIO_SUPPORT_VORBIS)
 			|| IsExtension(ext, L".ogg")
 #endif
 			)) {
