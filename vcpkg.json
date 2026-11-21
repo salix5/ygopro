@@ -9,5 +9,6 @@
     "zlib",
     "libogg",
     "libvorbis"
-  ]
+  ],
+  "builtin-baseline": "ea49500a3353603af1190ca9a786a9015d638ea0"
 }

@@ -248,6 +248,10 @@ jobs:
         path: ~/AppData/Local/vcpkg/archives
         key: vcpkg-${{ matrix.name }}-${{ hashFiles('vcpkg.json') }}
 
+    - name: Update vcpkg
+      shell: bash
+      run: git -C "$VCPKG_INSTALLATION_ROOT" pull --ff-only
+    
     - name: Install dependencies via vcpkg (MSVC)
       if: matrix.mingw != true
       shell: pwsh
