@@ -144,8 +144,8 @@ newoption { trigger = "build-all", category = "YGOPro", description = "Build all
 newoption { trigger = "no-audio", category = "YGOPro", description = "Disable audio support" }
 newoption { trigger = "audio-lib", category = "YGOPro", description = "Specify audio library (only miniaudio is supported for now)", value = "NAME" }
 
-newoption { trigger = "miniaudio-support-opus-vorbis", category = "YGOPro - miniaudio", description = "Enable support for OGG format (Opus and Vorbis) in miniaudio" }
-newoption { trigger = "no-miniaudio-support-opus-vorbis", category = "YGOPro - miniaudio", description = "" }
+newoption { trigger = "miniaudio-support-vorbis", category = "YGOPro - miniaudio", description = "Enable support for OGG format (Vorbis) in miniaudio" }
+newoption { trigger = "no-miniaudio-support-vorbis", category = "YGOPro - miniaudio", description = "" }
 
 newoption { trigger = "vs2026-win7-support", category = "YGOPro", description = "Enable Windows 7 support (toolset v143) for Visual Studio 2026" }
 
@@ -235,9 +235,9 @@ end
 if USE_AUDIO then
     AUDIO_LIB = GetParam("audio-lib") or AUDIO_LIB
     if AUDIO_LIB == "miniaudio" then
-        if GetParam("no-miniaudio-support-opus-vorbis") then
+        if GetParam("no-miniaudio-support-vorbis") then
             MINIAUDIO_SUPPORT_VORBIS = false
-        elseif GetParam("miniaudio-support-opus-vorbis") then
+        elseif GetParam("miniaudio-support-vorbis") then
             MINIAUDIO_SUPPORT_VORBIS = true
         end
     else
