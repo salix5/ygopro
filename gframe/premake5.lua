@@ -43,15 +43,16 @@ project "YGOPro"
         defines { "YGOPRO_USE_AUDIO" }
         if AUDIO_LIB == "miniaudio" then
             defines { "YGOPRO_USE_MINIAUDIO" }
-            includedirs { MINIAUDIO_INCLUDE_DIR }
+            includedirs { _MAIN_SCRIPT_DIR .. "/miniaudio" }
             links { "miniaudio" }
             if MINIAUDIO_SUPPORT_OPUS_VORBIS then
                 defines { "YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS" }
-                includedirs { MINIAUDIO_OPUS_INCLUDE_DIR, MINIAUDIO_VORBIS_INCLUDE_DIR }
-                if not MINIAUDIO_BUILD_OPUS_VORBIS then
-                    links { OPUSFILE_LIB_NAME, VORBISFILE_LIB_NAME, OPUS_LIB_NAME, VORBIS_LIB_NAME, OGG_LIB_NAME }
-                    libdirs { OPUSFILE_LIB_DIR, OPUS_LIB_DIR, VORBIS_LIB_DIR, OGG_LIB_DIR }
-                end
+                includedirs { _MAIN_SCRIPT_DIR .. "/miniaudio/extras/decoders/libvorbis" }
+                links {
+                    "vorbisfile",
+                    "vorbis",
+                    "ogg"
+                }
             end
         end
     end
