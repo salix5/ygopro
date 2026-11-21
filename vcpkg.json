@@ -6,6 +6,8 @@
       "name": "libpng",
       "default-features": false
     },
-    "zlib"
+    "zlib",
+    "libogg",
+    "libvorbis"
   ]
 }
