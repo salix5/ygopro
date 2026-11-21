@@ -55,12 +55,7 @@ BUILD_LUA = true
 BUILD_IRRLICHT = true
 
 -- miniaudio is always built from source (originally a header-only library, now an independent subproject).
--- When building Opus/Vorbis from source, they are integrated directly into the miniaudio subproject.
--- To simplify the build process, support for Ogg format audio (Opus/Vorbis) is optional.
-MINIAUDIO_SUPPORT_OPUS_VORBIS = true
 MINIAUDIO_INCLUDE_DIR = path.getabsolute("./miniaudio")
-MINIAUDIO_OPUS_INCLUDE_DIR = path.getabsolute("./miniaudio/extras/decoders/libopus")
-MINIAUDIO_VORBIS_INCLUDE_DIR = path.getabsolute("./miniaudio/extras/decoders/libvorbis")
 
 -- When building freetype, a custom include dir is prepended to prioritize custom header files.
 FREETYPE_CUSTOM_INCLUDE_DIR = path.getabsolute("./freetype/custom")
@@ -68,10 +63,6 @@ FREETYPE_CUSTOM_INCLUDE_DIR = path.getabsolute("./freetype/custom")
 -- When building libevent from source, event_pthreads is integrated into the event subproject.
 -- When not building from source, both "event" and "event_pthreads" need to be linked.
 EVENT_PTHREADS_LIB_NAME = "event_pthreads"
-
--- When building Vorbis from source, vorbisfile is integrated into the miniaudio subproject.
--- When not building from source, both "vorbis" and "vorbisfile" need to be linked.
-VORBISFILE_LIB_NAME = "vorbisfile"
 
 --- Dependency metadata entries are used to generate global variables such as LUA_INCLUDE_DIR, LUA_LIB_NAME, LUA_LIB_DIR, etc. during processing.
 
@@ -131,30 +122,6 @@ DEPENDENCIES_METADATA = {
     },
 }
 
--- These dependencies do not have separate [no-]build-* options; instead, they use [no-]build-opus-vorbis as general build option.
--- When building from source, they are integrated into the miniaudio subproject instead of being maintained as separate subprojects,
--- and their locations are predefined in the miniaudio subproject (./miniaudio/external/*), so those options are ignored in this case.
-MINIAUDIO_DEPENDENCIES_METADATA = {
-    {
-        name = "opus",
-        prebuilt_header = "opus.h",
-        prebuilt_header_subdir = "opus",
-    },
-    {
-        name = "opusfile",
-        prebuilt_header = "opusfile.h",
-        prebuilt_header_subdir = "opus",
-    },
-    {
-        name = "vorbis",
-        prebuilt_header = "vorbis/vorbisfile.h",
-    },
-    {
-        name = "ogg",
-        prebuilt_header = "ogg/ogg.h",
-    },
-}
-
 ---- Register options
 
 --- The *-include-dir, *-lib-dir, and *-lib-name options are only used for prebuilt dependencies.
@@ -188,13 +155,6 @@ for _, dep in ipairs(DEPENDENCIES_METADATA) do
     local build = ifnil(_G["BUILD_" .. string.upper(name)], BUILD_ALL_FROM_SOURCE)
     newoption { trigger = "build-"    .. name,    category = cat, description = "Build " .. name .. " from source; default: " .. tostring(build) }
     newoption { trigger = "no-build-" .. name,    category = cat, description = "" }
-    newoption { trigger = name .. "-include-dir", category = cat, description = "", value = "PATH" }
-    newoption { trigger = name .. "-lib-dir",     category = cat, description = "", value = "PATH" }
-    newoption { trigger = name .. "-lib-name",    category = cat, description = "", value = "NAME" }
-end
-for _, dep in ipairs(MINIAUDIO_DEPENDENCIES_METADATA) do
-    local name = dep.name
-    local cat  = "YGOPro - miniaudio"
     newoption { trigger = name .. "-include-dir", category = cat, description = "", value = "PATH" }
     newoption { trigger = name .. "-lib-dir",     category = cat, description = "", value = "PATH" }
     newoption { trigger = name .. "-lib-name",    category = cat, description = "", value = "NAME" }
@@ -319,29 +279,7 @@ end
 
 if USE_AUDIO then
     AUDIO_LIB = GetParam("audio-lib") or AUDIO_LIB
-    if AUDIO_LIB == "miniaudio" then
-        if GetParam("no-miniaudio-support-opus-vorbis") then
-            MINIAUDIO_SUPPORT_OPUS_VORBIS = false
-        elseif GetParam("miniaudio-support-opus-vorbis") then
-            MINIAUDIO_SUPPORT_OPUS_VORBIS = true
-        end
-        if MINIAUDIO_SUPPORT_OPUS_VORBIS then
-            MINIAUDIO_BUILD_OPUS_VORBIS = BUILD_ALL_FROM_SOURCE
-            if GetParam("no-build-opus-vorbis") then
-                MINIAUDIO_BUILD_OPUS_VORBIS = false
-            elseif GetParam("build-opus-vorbis") then
-                MINIAUDIO_BUILD_OPUS_VORBIS = true
-            end
-            if MINIAUDIO_BUILD_OPUS_VORBIS then
-                -- Opus, Vorbis and Ogg dependencies are integrated into the miniaudio subproject instead of being maintained as separate subprojects.
-                -- Since their locations are predefined in the miniaudio subproject, nothing needs to be done here.
-            else
-                for _, dep in ipairs(MINIAUDIO_DEPENDENCIES_METADATA) do
-                    ResolvePreBuiltDependencyDirectory(dep)
-                end
-            end
-        end
-    else
+    if AUDIO_LIB ~= "miniaudio" then
         error("Unknown audio library: " .. AUDIO_LIB)
     end
 end
