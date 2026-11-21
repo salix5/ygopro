@@ -167,14 +167,6 @@ newoption { trigger = "no-dxsdk", category = "YGOPro - irrlicht", description = 
 newoption { trigger = "no-audio", category = "YGOPro", description = "Disable audio support" }
 newoption { trigger = "audio-lib", category = "YGOPro", description = "Specify audio library (only miniaudio is supported for now)", value = "NAME" }
 
-newoption { trigger = "miniaudio-support-opus-vorbis", category = "YGOPro - miniaudio", description = "Enable support for OGG format (Opus and Vorbis) in miniaudio" }
-newoption { trigger = "no-miniaudio-support-opus-vorbis", category = "YGOPro - miniaudio", description = "" }
-do
-    local build_opus_vorbis = ifnil(_G["BUILD_OPUS_VORBIS"], BUILD_ALL_FROM_SOURCE)
-    newoption { trigger = "build-opus-vorbis", category = "YGOPro - miniaudio", description = "Build Opus and Vorbis libraries from source; default: " .. tostring(build_opus_vorbis) }
-    newoption { trigger = "no-build-opus-vorbis", category = "YGOPro - miniaudio", description = "" }
-end
-
 newoption { trigger = "vs2026-win7-support", category = "YGOPro", description = "Enable Windows 7 support (toolset v143) for Visual Studio 2026" }
 
 newoption { trigger = "mac-arm", category = "YGOPro", description = "Cross Compile for Apple Silicon Mac" }
