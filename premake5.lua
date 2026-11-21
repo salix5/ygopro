@@ -55,7 +55,7 @@ SQLITE3_INCLUDE_DIR = path.getabsolute("./sqlite3")
 
 -- miniaudio is always built from source (originally a header-only library, now an independent subproject).
 -- To simplify the build process, support for Ogg Vorbis format audio is optional.
-MINIAUDIO_SUPPORT_OPUS_VORBIS = true
+MINIAUDIO_SUPPORT_VORBIS = true
 
 -- When building freetype, a custom include dir is prepended to prioritize custom header files.
 FREETYPE_CUSTOM_INCLUDE_DIR = path.getabsolute("./freetype/custom")
@@ -236,9 +236,9 @@ if USE_AUDIO then
     AUDIO_LIB = GetParam("audio-lib") or AUDIO_LIB
     if AUDIO_LIB == "miniaudio" then
         if GetParam("no-miniaudio-support-opus-vorbis") then
-            MINIAUDIO_SUPPORT_OPUS_VORBIS = false
+            MINIAUDIO_SUPPORT_VORBIS = false
         elseif GetParam("miniaudio-support-opus-vorbis") then
-            MINIAUDIO_SUPPORT_OPUS_VORBIS = true
+            MINIAUDIO_SUPPORT_VORBIS = true
         end
     else
         error("Unknown audio library: " .. AUDIO_LIB)

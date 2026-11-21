@@ -45,8 +45,8 @@ project "YGOPro"
             defines { "YGOPRO_USE_MINIAUDIO" }
             includedirs { _MAIN_SCRIPT_DIR .. "/miniaudio" }
             links { "miniaudio" }
-            if MINIAUDIO_SUPPORT_OPUS_VORBIS then
-                defines { "YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS" }
+            if MINIAUDIO_SUPPORT_VORBIS then
+                defines { "YGOPRO_MINIAUDIO_SUPPORT_VORBIS" }
                 includedirs { _MAIN_SCRIPT_DIR .. "/miniaudio/extras/decoders/libvorbis" }
                 links {
                     "vorbisfile",
