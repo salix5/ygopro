@@ -5,7 +5,6 @@
 #ifdef YGOPRO_USE_MINIAUDIO
 #include <miniaudio.h>
 #ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
-#include <miniaudio_libopus.h>
 #include <miniaudio_libvorbis.h>
 #endif
 #endif
@@ -61,8 +60,7 @@ bool SoundManager::Init() {
 #ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 	ma_decoding_backend_vtable* pCustomBackendVTables[] =
 	{
-		ma_decoding_backend_libvorbis,
-		ma_decoding_backend_libopus
+		ma_decoding_backend_libvorbis
 	};
 	auto resourceManagerConfig = ma_resource_manager_config_init();
 	resourceManagerConfig.ppCustomDecodingBackendVTables = pCustomBackendVTables;
