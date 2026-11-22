@@ -29,14 +29,6 @@ rm libevent-${LIBEVENT_VERSION}.tar.gz
 cp premake/event/msvc-event-config.h event/include/event2/event-config.h
 cp event/WIN32-Code/nmake/evconfig-private.h event/include/evconfig-private.h
 
-rm -rf jpeg
-LIBJPEG_VERSION=3.2.0
-curl -q -f -L -O "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/${LIBJPEG_VERSION}/libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz"
-tar -xf libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
-mv libjpeg-turbo-${LIBJPEG_VERSION} jpeg
-rm libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
-cp jpeg/src/jversion.h.in jpeg/src/jversion.h
-
 rm -rf sqlite3
 SQLITE_YEAR=2026
 SQLITE_VERSION=3530400
@@ -44,21 +36,6 @@ curl -q -f -L -O "https://www.sqlite.org/${SQLITE_YEAR}/sqlite-amalgamation-${SQ
 unzip sqlite-amalgamation-${SQLITE_VERSION}.zip
 mv sqlite-amalgamation-${SQLITE_VERSION} sqlite3
 rm sqlite-amalgamation-${SQLITE_VERSION}.zip
-
-rm -rf png
-LIBPNG_VERSION=1.6.58
-curl -q -f -L -O "https://downloads.sourceforge.net/libpng/libpng-${LIBPNG_VERSION}.tar.gz"
-tar -xf libpng-${LIBPNG_VERSION}.tar.gz
-mv libpng-${LIBPNG_VERSION} png
-cp png/scripts/pnglibconf.h.prebuilt png/pnglibconf.h
-rm libpng-${LIBPNG_VERSION}.tar.gz
-
-rm -rf zlib
-ZLIB_VERSION=1.3.2
-curl -q -f -L -O "https://github.com/madler/zlib/releases/download/v${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz"
-tar -xf zlib-${ZLIB_VERSION}.tar.gz
-mv zlib-${ZLIB_VERSION} zlib
-rm zlib-${ZLIB_VERSION}.tar.gz
 
 rm -rf lzma
 XZ_VERSION=5.8.3
