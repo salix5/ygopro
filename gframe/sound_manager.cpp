@@ -1,11 +1,11 @@
 #include <chrono>
+#include <iterator>
 #include "sound_manager.h"
 #include "game.h"
 #include "file_system.h"
 #ifdef YGOPRO_USE_MINIAUDIO
 #include <miniaudio.h>
-#ifdef YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS
-#include <miniaudio_libopus.h>
+#ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 #include <miniaudio_libvorbis.h>
 #endif
 #endif
@@ -19,9 +19,12 @@ struct SoundManager::MiniAudioImpl {
 	bool engineMusicInitialized{};
 	ma_sound soundBGM;
 	bool soundBGMInitialized{};
-#ifdef YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS
+#ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 	ma_resource_manager resourceManager;
 	bool resourceManagerInitialized{};
+	ma_decoding_backend_vtable* customBackendVTables[1] = {
+		ma_decoding_backend_libvorbis,
+	};
 #endif
 	wchar_t currentPlayingMusic[1024]{};
 
@@ -32,7 +35,7 @@ struct SoundManager::MiniAudioImpl {
 			ma_engine_uninit(&engineMusic);
 		if(engineSoundInitialized)
 			ma_engine_uninit(&engineSound);
-#ifdef YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS
+#ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 		if(resourceManagerInitialized)
 			ma_resource_manager_uninit(&resourceManager);
 #endif
@@ -58,15 +61,10 @@ bool SoundManager::Init() {
 		return true;
 	miniAudio = new MiniAudioImpl{};
 	auto engineConfig = ma_engine_config_init();
-#ifdef YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS
-	ma_decoding_backend_vtable* pCustomBackendVTables[] =
-	{
-		ma_decoding_backend_libvorbis,
-		ma_decoding_backend_libopus
-	};
+#ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 	auto resourceManagerConfig = ma_resource_manager_config_init();
-	resourceManagerConfig.ppCustomDecodingBackendVTables = pCustomBackendVTables;
-	resourceManagerConfig.customDecodingBackendCount = sizeof(pCustomBackendVTables) / sizeof(pCustomBackendVTables[0]);
+	resourceManagerConfig.ppCustomDecodingBackendVTables = miniAudio->customBackendVTables;
+	resourceManagerConfig.customDecodingBackendCount = std::size(miniAudio->customBackendVTables);
 	resourceManagerConfig.pCustomDecodingBackendUserData = NULL;
 	if(ma_resource_manager_init(&resourceManagerConfig, &miniAudio->resourceManager) != MA_SUCCESS) {
 		delete miniAudio;
@@ -115,7 +113,7 @@ void SoundManager::RefreshBGMDir(std::wstring path, int scene) {
 			return;
 		auto ext = fpath.extension().wstring();
 		if ((IsExtension(ext, L".mp3")
-#if defined(YGOPRO_MINIAUDIO_SUPPORT_OPUS_VORBIS)
+#if defined(YGOPRO_MINIAUDIO_SUPPORT_VORBIS)
 			|| IsExtension(ext, L".ogg")
 #endif
 			)) {

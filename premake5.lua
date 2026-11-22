@@ -15,10 +15,6 @@ USE_DXSDK = false
 USE_AUDIO = true
 AUDIO_LIB = "miniaudio" -- only miniaudio is supported for now
 
--- Available: none, sse2, avx2, neon, best
--- "best" means avx2 on x86-* and neon on ARM
-USE_SIMD = "best"
-
 -- On Linux and macOS, builds target the current machine's CPU architecture by default, but Premake needs an explicit
 -- architecture for the corresponding filters to take effect, so use os.hostarch() to detect it.
 HOST_ARCH = os.hostarch()
@@ -58,12 +54,8 @@ IRRLICHT_INCLUDE_DIR = path.getabsolute("./irrlicht/include")
 SQLITE3_INCLUDE_DIR = path.getabsolute("./sqlite3")
 
 -- miniaudio is always built from source (originally a header-only library, now an independent subproject).
--- When building Opus/Vorbis from source, they are integrated directly into the miniaudio subproject.
--- To simplify the build process, support for Ogg format audio (Opus/Vorbis) is optional.
-MINIAUDIO_SUPPORT_OPUS_VORBIS = true
-MINIAUDIO_INCLUDE_DIR = path.getabsolute("./miniaudio")
-MINIAUDIO_OPUS_INCLUDE_DIR = path.getabsolute("./miniaudio/extras/decoders/libopus")
-MINIAUDIO_VORBIS_INCLUDE_DIR = path.getabsolute("./miniaudio/extras/decoders/libvorbis")
+-- To simplify the build process, support for Ogg Vorbis format audio is optional.
+MINIAUDIO_SUPPORT_VORBIS = true
 
 -- When building freetype, a custom include dir is prepended to prioritize custom header files.
 FREETYPE_CUSTOM_INCLUDE_DIR = path.getabsolute("./freetype/custom")
@@ -71,10 +63,6 @@ FREETYPE_CUSTOM_INCLUDE_DIR = path.getabsolute("./freetype/custom")
 -- When building libevent from source, event_pthreads is integrated into the event subproject.
 -- When not building from source, both "event" and "event_pthreads" need to be linked.
 EVENT_PTHREADS_LIB_NAME = "event_pthreads"
-
--- When building Vorbis from source, vorbisfile is integrated into the miniaudio subproject.
--- When not building from source, both "vorbis" and "vorbisfile" need to be linked.
-VORBISFILE_LIB_NAME = "vorbisfile"
 
 --- Dependency metadata entries are used to generate global variables such as LUA_INCLUDE_DIR, LUA_LIB_NAME, LUA_LIB_DIR, etc. during processing.
 
@@ -103,47 +91,9 @@ DEPENDENCIES_METADATA = {
         source_header_subdir = "include",
     },
     {
-        name = "jpeg",
-        prebuilt_header = "jpeglib.h",
-        source_header_subdir = "src",
-    },
-    {
-        name = "png",
-        prebuilt_header = "png.h",
-    },
-    {
         name = "lzma",
         prebuilt_header = "lzma.h",
         source_header_subdir = "src/liblzma/api",
-    },
-    {
-        name = "zlib",
-        prebuilt_header = "zlib.h",
-        prebuilt_libname = "z",
-    },
-}
-
--- These dependencies do not have separate [no-]build-* options; instead, they use [no-]build-opus-vorbis as general build option.
--- When building from source, they are integrated into the miniaudio subproject instead of being maintained as separate subprojects,
--- and their locations are predefined in the miniaudio subproject (./miniaudio/external/*), so those options are ignored in this case.
-MINIAUDIO_DEPENDENCIES_METADATA = {
-    {
-        name = "opus",
-        prebuilt_header = "opus.h",
-        prebuilt_header_subdir = "opus",
-    },
-    {
-        name = "opusfile",
-        prebuilt_header = "opusfile.h",
-        prebuilt_header_subdir = "opus",
-    },
-    {
-        name = "vorbis",
-        prebuilt_header = "vorbis/vorbisfile.h",
-    },
-    {
-        name = "ogg",
-        prebuilt_header = "ogg/ogg.h",
     },
 }
 
@@ -184,26 +134,14 @@ for _, dep in ipairs(DEPENDENCIES_METADATA) do
     newoption { trigger = name .. "-lib-dir",     category = cat, description = "", value = "PATH" }
     newoption { trigger = name .. "-lib-name",    category = cat, description = "", value = "NAME" }
 end
-for _, dep in ipairs(MINIAUDIO_DEPENDENCIES_METADATA) do
-    local name = dep.name
-    local cat  = "YGOPro - miniaudio"
-    newoption { trigger = name .. "-include-dir", category = cat, description = "", value = "PATH" }
-    newoption { trigger = name .. "-lib-dir",     category = cat, description = "", value = "PATH" }
-    newoption { trigger = name .. "-lib-name",    category = cat, description = "", value = "NAME" }
-end
 
 newoption { trigger = "build-all", category = "YGOPro", description = "Build all dependencies from source" }
 
 newoption { trigger = "no-audio", category = "YGOPro", description = "Disable audio support" }
 newoption { trigger = "audio-lib", category = "YGOPro", description = "Specify audio library (only miniaudio is supported for now)", value = "NAME" }
 
-newoption { trigger = "miniaudio-support-opus-vorbis", category = "YGOPro - miniaudio", description = "Enable support for OGG format (Opus and Vorbis) in miniaudio" }
-newoption { trigger = "no-miniaudio-support-opus-vorbis", category = "YGOPro - miniaudio", description = "" }
-do
-    local build_opus_vorbis = ifnil(_G["BUILD_OPUS_VORBIS"], BUILD_ALL_FROM_SOURCE)
-    newoption { trigger = "build-opus-vorbis", category = "YGOPro - miniaudio", description = "Build Opus and Vorbis libraries from source; default: " .. tostring(build_opus_vorbis) }
-    newoption { trigger = "no-build-opus-vorbis", category = "YGOPro - miniaudio", description = "" }
-end
+newoption { trigger = "miniaudio-support-vorbis", category = "YGOPro - miniaudio", description = "Enable support for OGG format (Vorbis) in miniaudio" }
+newoption { trigger = "no-miniaudio-support-vorbis", category = "YGOPro - miniaudio", description = "" }
 
 newoption { trigger = "vs2026-win7-support", category = "YGOPro", description = "Enable Windows 7 support (toolset v143) for Visual Studio 2026" }
 
@@ -211,14 +149,6 @@ newoption { trigger = "mac-arm", category = "YGOPro", description = "Cross Compi
 newoption { trigger = "mac-intel", category = "YGOPro", description = "Cross Compile for Intel Mac" }
 
 newoption { trigger = "use-openmp", category = "YGOPro", description = "Enable OpenMP support for card picture resizing (only for benchmarking)" }
-
-newoption { trigger = "use-simd", category = "YGOPro", description = "Specify SIMD instruction set", allowed = {
-    { "none", "Turn off extra SIMD support" },
-    { "sse2", "Use SSE2 instructions" },
-    { "avx2", "Use AVX2 instructions" },
-    { "neon", "Use NEON instructions" },
-    { "best", "Default, use the best SIMD instructions (AVX2 on x86-*, NEON on ARM)" },
-}}
 
 ---- Process options
 
@@ -301,33 +231,15 @@ end
 if USE_AUDIO then
     AUDIO_LIB = GetParam("audio-lib") or AUDIO_LIB
     if AUDIO_LIB == "miniaudio" then
-        if GetParam("no-miniaudio-support-opus-vorbis") then
-            MINIAUDIO_SUPPORT_OPUS_VORBIS = false
-        elseif GetParam("miniaudio-support-opus-vorbis") then
-            MINIAUDIO_SUPPORT_OPUS_VORBIS = true
-        end
-        if MINIAUDIO_SUPPORT_OPUS_VORBIS then
-            MINIAUDIO_BUILD_OPUS_VORBIS = BUILD_ALL_FROM_SOURCE
-            if GetParam("no-build-opus-vorbis") then
-                MINIAUDIO_BUILD_OPUS_VORBIS = false
-            elseif GetParam("build-opus-vorbis") then
-                MINIAUDIO_BUILD_OPUS_VORBIS = true
-            end
-            if MINIAUDIO_BUILD_OPUS_VORBIS then
-                -- Opus, Vorbis and Ogg dependencies are integrated into the miniaudio subproject instead of being maintained as separate subprojects.
-                -- Since their locations are predefined in the miniaudio subproject, nothing needs to be done here.
-            else
-                for _, dep in ipairs(MINIAUDIO_DEPENDENCIES_METADATA) do
-                    ResolvePreBuiltDependencyDirectory(dep)
-                end
-            end
+        if GetParam("no-miniaudio-support-vorbis") then
+            MINIAUDIO_SUPPORT_VORBIS = false
+        elseif GetParam("miniaudio-support-vorbis") then
+            MINIAUDIO_SUPPORT_VORBIS = true
         end
     else
         error("Unknown audio library: " .. AUDIO_LIB)
     end
 end
-
-USE_SIMD = GetParam("use-simd") or USE_SIMD
 
 -- Variables indicating the target Mac architecture for cross-compilation; automatically detected based on Premake's
 -- host architecture if neither --mac-arm nor --mac-intel is specified.
@@ -341,17 +253,6 @@ if os.istarget("macosx") then
     if GetParam("mac-intel") then
         mac_intel = true
     end
-end
-
-if not mac_arm and not mac_intel and table.indexof({ "x86", "x86_64", "ARM64" }, HOST_ARCH) == nil then
-    print("::warning:: Detected architecture '" .. HOST_ARCH .. "' is not recognized. Proceeding with the build; SIMD will be disabled.")
-    USE_SIMD = "none"
-end
-
--- Normalize "avx2" and "neon" to "best": downstream code only checks "best",
--- which already maps to AVX2 on x86-* and NEON on ARM.
-if USE_SIMD == "avx2" or USE_SIMD == "neon" then
-    USE_SIMD = "best"
 end
 
 if os.istarget("windows") and GetParam("vs2026-win7-support") then
@@ -391,6 +292,7 @@ workspace "YGOPro"
 
     configurations { "Release", "Debug" }
     defaultconfiguration "Release"
+    multiprocessorcompile "On"
 
     filter "system:windows"
         systemversion "latest"
@@ -410,22 +312,9 @@ workspace "YGOPro"
 
     filter { "system:windows", "action:vs*", "platforms:Win32" }
         architecture "x86"
-        if USE_SIMD == "none" then
-            vectorextensions "IA32"
-        end
-        if USE_SIMD == "sse2" then
-            vectorextensions "SSE2"
-        end
-        if USE_SIMD == "best" then
-            vectorextensions "AVX2"
-        end
 
     filter { "system:windows", "action:vs*", "platforms:x64" }
         architecture "x86_64"
-        -- x86_64 must have SSE2, so we shouldn't check USE_SIMD for SSE2
-        if USE_SIMD == "best" then
-            vectorextensions "AVX2"
-        end
 
     filter { "system:windows", "action:vs*", "platforms:ARM64" }
         architecture "AARCH64"
@@ -450,6 +339,8 @@ workspace "YGOPro"
         -- We need to specify architecture on macOS to make the premake filters work correctly.
         if mac_arm then
             architecture "AARCH64"
+            includedirs { "/opt/homebrew/include" }
+            libdirs { "/opt/homebrew/lib" }
         end
         if mac_intel then
             architecture "x86_64"
@@ -464,12 +355,12 @@ workspace "YGOPro"
         end
 
     filter "configurations:Release"
+        defines "NDEBUG"
         optimize "Speed"
         targetdir "bin/release"
 
     filter "configurations:Debug"
         symbols "On"
-        defines "_DEBUG"
         targetdir "bin/debug"
 
     filter { "system:windows", "action:vs*", "platforms:Win32", "configurations:Release" }
@@ -497,8 +388,9 @@ workspace "YGOPro"
             "4996", -- Currently only some dependencies use deprecated functions.
         }
 
-    filter { "configurations:Release", "not action:vs*" }
-        defines "NDEBUG"
+    filter { "configurations:Debug", "action:vs*" }
+        defines "_DEBUG"
+        staticruntime "On"
 
     filter "action:vs*"
         cdialect "C11"
@@ -513,11 +405,17 @@ workspace "YGOPro"
     filter "action:gmake"
         buildoptions { "-fno-strict-aliasing" }
 
-    filter { "action:gmake", "architecture:x86_64" }
-        if USE_SIMD == "best" then
-            vectorextensions "AVX2"
-            isaextensions { "FMA" }
-        end
+    filter { "system:windows", "action:vs*", "platforms:Win32" }
+        includedirs { "vcpkg_installed/x86-windows-static/include" }
+
+    filter { "system:windows", "action:vs*", "platforms:x64" }
+        includedirs { "vcpkg_installed/x64-windows-static/include" }
+
+    filter { "system:windows", "action:vs*", "platforms:ARM64" }
+        includedirs { "vcpkg_installed/arm64-windows-static/include" }
+
+    filter { "system:windows", "action:gmake" }
+        includedirs { "vcpkg_installed/x64-mingw-static/include" }
 
     filter {}
 

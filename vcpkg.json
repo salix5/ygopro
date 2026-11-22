@@ -1,0 +1,14 @@
+{
+  "name": "ygopro",
+  "dependencies": [
+    "libjpeg-turbo",
+    {
+      "name": "libpng",
+      "default-features": false
+    },
+    "zlib",
+    "libogg",
+    "libvorbis"
+  ],
+  "builtin-baseline": "0df93a05b9de080129e653ec4776d7e14a1b2e4f"
+}
