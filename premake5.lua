@@ -296,6 +296,7 @@ workspace "YGOPro"
 
     configurations { "Release", "Debug" }
     defaultconfiguration "Release"
+    multiprocessorcompile "On"
 
     filter "system:windows"
         systemversion "latest"
