@@ -64,10 +64,6 @@ FREETYPE_CUSTOM_INCLUDE_DIR = path.getabsolute("./freetype/custom")
 -- When not building from source, both "event" and "event_pthreads" need to be linked.
 EVENT_PTHREADS_LIB_NAME = "event_pthreads"
 
--- When building Vorbis from source, vorbisfile is integrated into the miniaudio subproject.
--- When not building from source, both "vorbis" and "vorbisfile" need to be linked.
-VORBISFILE_LIB_NAME = "vorbisfile"
-
 --- Dependency metadata entries are used to generate global variables such as LUA_INCLUDE_DIR, LUA_LIB_NAME, LUA_LIB_DIR, etc. during processing.
 
 -- Fields:
