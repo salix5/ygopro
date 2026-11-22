@@ -1,4 +1,5 @@
 #include <chrono>
+#include <iterator>
 #include "sound_manager.h"
 #include "game.h"
 #include "file_system.h"
@@ -21,6 +22,9 @@ struct SoundManager::MiniAudioImpl {
 #ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
 	ma_resource_manager resourceManager;
 	bool resourceManagerInitialized{};
+	ma_decoding_backend_vtable* customBackendVTables[1] = {
+		ma_decoding_backend_libvorbis,
+	};
 #endif
 	wchar_t currentPlayingMusic[1024]{};
 
@@ -58,13 +62,9 @@ bool SoundManager::Init() {
 	miniAudio = new MiniAudioImpl{};
 	auto engineConfig = ma_engine_config_init();
 #ifdef YGOPRO_MINIAUDIO_SUPPORT_VORBIS
-	ma_decoding_backend_vtable* pCustomBackendVTables[] =
-	{
-		ma_decoding_backend_libvorbis
-	};
 	auto resourceManagerConfig = ma_resource_manager_config_init();
-	resourceManagerConfig.ppCustomDecodingBackendVTables = pCustomBackendVTables;
-	resourceManagerConfig.customDecodingBackendCount = sizeof(pCustomBackendVTables) / sizeof(pCustomBackendVTables[0]);
+	resourceManagerConfig.ppCustomDecodingBackendVTables = miniAudio->customBackendVTables;
+	resourceManagerConfig.customDecodingBackendCount = std::size(miniAudio->customBackendVTables);
 	resourceManagerConfig.pCustomDecodingBackendUserData = NULL;
 	if(ma_resource_manager_init(&resourceManagerConfig, &miniAudio->resourceManager) != MA_SUCCESS) {
 		delete miniAudio;
