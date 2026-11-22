@@ -242,12 +242,6 @@ jobs:
         update: true
         install: mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-make
 
-    - name: Cache vcpkg binary archives
-      uses: actions/cache@v5
-      with:
-        path: ~/AppData/Local/vcpkg/archives
-        key: vcpkg-${{ matrix.name }}-${{ hashFiles('vcpkg.json') }}
-
     - name: Install dependencies via vcpkg (MSVC)
       if: matrix.mingw != true
       shell: pwsh
