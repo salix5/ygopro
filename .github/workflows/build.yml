@@ -251,13 +251,13 @@ jobs:
     - name: Install dependencies via vcpkg (MSVC)
       if: matrix.mingw != true
       shell: pwsh
-      run: vcpkg install --triplet ${{ matrix.triplet }}
+      run: vcpkg install --triplet ${{ matrix.triplet }} --overlay-triplets=triplets
 
     - name: Install dependencies via vcpkg (MinGW)
       if: matrix.mingw == true
       shell: msys2 {0}
       run: |
-        "$VCPKG_INSTALLATION_ROOT/vcpkg.exe" install --triplet ${{ matrix.triplet }}
+        "$VCPKG_INSTALLATION_ROOT/vcpkg.exe" install --triplet ${{ matrix.triplet }} --overlay-triplets=triplets
 
     - name: Check DirectX SDK
       if: matrix.dxsdk == true
