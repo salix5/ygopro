@@ -1,2 +1,6 @@
-include("${VCPKG_ROOT_DIR}/triplets/arm64-windows-static.cmake")
+if(EXISTS "${VCPKG_ROOT_DIR}/triplets/arm64-windows-static.cmake")
+    include("${VCPKG_ROOT_DIR}/triplets/arm64-windows-static.cmake")
+else()
+    include("${VCPKG_ROOT_DIR}/triplets/community/arm64-windows-static.cmake")
+endif()
 set(VCPKG_BUILD_TYPE release)
