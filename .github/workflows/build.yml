@@ -487,12 +487,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        brew install zlib libjpeg-turbo libpng libvorbis
+        brew install libjpeg-turbo libpng libvorbis
 
     - name: Install dependencies (dynamic link)
       if: matrix.static-link != true
       run: |
-        brew install libevent libx11 freetype xz
+        brew install libevent freetype xz
 
     - name: Download premake
       id: premake
