@@ -13,6 +13,9 @@ project "irrlicht"
         "source/Irrlicht/*.cpp",
     }
 
+    filter "not action:vs*"
+        cppdialect "gnu++17"
+
     filter { "system:windows" }
         if USE_DXSDK then
             includedirs { "$(DXSDK_DIR)Include" }
