@@ -182,11 +182,11 @@ bool Game::Initialize() {
 			return false;
 		}
 		if(!numFont) {
-			BufferIO::CopyString(font_path.u8string().c_str(), gameConf.numfont);
+			BufferIO::CopyString(font_path.u8string(), gameConf.numfont);
 			numFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.numfont, 16);
 		}
 		if(!textFont) {
-			BufferIO::CopyString(font_path.u8string().c_str(), gameConf.textfont);
+			BufferIO::CopyString(font_path.u8string(), gameConf.textfont);
 			textFont = irr::gui::CGUITTFont::createTTFont(env, gameConf.textfont, gameConf.textfontsize);
 		}
 	}
