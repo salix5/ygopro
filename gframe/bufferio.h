@@ -32,35 +32,6 @@ public:
 		VectorWriteBlock(buffer, &value, sizeof(T));
 	}
 
-	// for compatibility
-	[[deprecated]]
-	static int32_t ReadInt32(unsigned char*& p) {
-		return Read<int32_t>(p);
-	}
-	[[deprecated]]
-	static short ReadInt16(unsigned char*& p) {
-		return Read<int16_t>(p);
-	}
-	[[deprecated]]
-	static char ReadInt8(unsigned char*& p) {
-		return Read<char>(p);
-	}
-	[[deprecated]]
-	static unsigned char ReadUInt8(unsigned char*& p) {
-		return Read<unsigned char>(p);
-	}
-	[[deprecated]]
-	static void WriteInt32(unsigned char*& p, int32_t val) {
-		Write<int32_t>(p, val);
-	}
-	[[deprecated]]
-	static void WriteInt16(unsigned char*& p, short val) {
-		Write<int16_t>(p, val);
-	}
-	[[deprecated]]
-	static void WriteInt8(unsigned char*& p, char val) {
-		Write<char>(p, val);
-	}
 	/**
 	* @brief Copy a C-style string to another C-style string.
 	* @param src The source wide string
