@@ -363,6 +363,7 @@ jobs:
         sudo apt-get install -y libevent-dev libfreetype6-dev liblzma-dev
 
     - name: Download premake
+      if: runner.arch == 'X64'
       id: premake
       uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
       with:
@@ -370,31 +371,22 @@ jobs:
         filename: premake5.tar.gz
         sha256: 8e50e143402de3ce0f0fefe4bb3f4f6a7db46c7d66203dc9f134c0348ebfe6c5
 
-    - name: Extract & test premake
-      id: extract-premake
+    - name: Extract premake
+      if: runner.arch == 'X64'
       run: |
         tar xf ${{ steps.premake.outputs.filepath }}
         chmod +x ./premake5
-        mkdir premake-test
-        cp ./premake5 ./premake-test
-        cd ./premake-test
-        if ./premake5 --version; then
-          echo "premake=ok" >> $GITHUB_OUTPUT
-        else
-          echo "premake=fail" >> $GITHUB_OUTPUT
-        fi
-        cd ..
 
-    - name: Fetch premake source (fallback)
-      if: steps.extract-premake.outputs.premake != 'ok'
+    - name: Fetch premake source
+      if: runner.arch == 'ARM64'
       uses: actions/checkout@v6
       with:
         repository: premake/premake-core
         path: premake-source
         ref: 4f6dab3129f86832c9ed745c69438fcaa5fee460 # tag: v5.0.0
 
-    - name: Build premake (fallback)
-      if: steps.extract-premake.outputs.premake != 'ok'
+    - name: Build premake
+      if: runner.arch == 'ARM64'
       run: |
         sudo apt-get install -y uuid-dev
         cd premake-source
@@ -507,37 +499,10 @@ jobs:
         filename: premake5.tar.gz
         sha256: ${{ runner.arch == 'X64' && '6005c5da9a76d980bcd13e1c9e0b0b04b53e07a39717137b2ee826429a6bda48' || '8952855a0d824f63ca22721f3f32ee947a4762c01008f9eddefeba133bafda0d' }}
 
-    - name: Extract & test premake
-      id: extract-premake
+    - name: Extract premake
       run: |
         tar xf ${{ steps.premake.outputs.filepath }}
         chmod +x ./premake5
-        mkdir premake-test
-        cp ./premake5 ./premake-test
-        cd ./premake-test
-        if ./premake5 --version; then
-          echo "premake=ok" >> $GITHUB_OUTPUT
-        else
-          echo "premake=fail" >> $GITHUB_OUTPUT
-        fi
-        cd ..
-
-    - name: Fetch premake source (fallback)
-      if: steps.extract-premake.outputs.premake != 'ok'
-      uses: actions/checkout@v6
-      with:
-        repository: premake/premake-core
-        path: premake-source
-        ref: 4f6dab3129f86832c9ed745c69438fcaa5fee460 # tag: v5.0.0
-
-    - name: Build premake (fallback)
-      if: steps.extract-premake.outputs.premake != 'ok'
-      run: |
-        cd premake-source
-        chmod +x ./Bootstrap.sh
-        ./Bootstrap.sh
-        cp bin/release/premake5 ../premake5
-        cd ..
 
     - name: Configure libevent
       if: matrix.static-link == true
