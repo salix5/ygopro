@@ -454,15 +454,12 @@ jobs:
         name:
           - macos-26-arm
           - macos-26-arm-static-link
-          - macos-26-intel
         include:
           - name: macos-26-arm
             os: macos-26
           - name: macos-26-arm-static-link
             os: macos-26
             static-link: true
-          - name: macos-26-intel
-            os: macos-26-intel
 
     runs-on: ${{ matrix.os }}
 
