@@ -1,5 +1,6 @@
 project "irrlicht"
     kind "StaticLib"
+    cppdialect "C++17"
 
     includedirs { "include" }
 
