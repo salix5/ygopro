@@ -28,6 +28,7 @@
    john@suckerfreegames.com
 */
 
+#include <filesystem>
 #include "CGUITTFont.h"
 #include <irrlicht.h>
 
@@ -326,7 +327,6 @@ bool CGUITTFont::load(const io::path& filename, const u32 size, const bool antia
 	if (size == 0) return false;
 	if (filename.size() == 0) return false;
 
-	io::IFileSystem* filesystem = Environment->getFileSystem();
 	irr::ILogger* logger = (Device != 0 ? Device->getLogger() : 0);
 	this->size = size;
 	this->filename = filename;
@@ -345,41 +345,40 @@ bool CGUITTFont::load(const io::path& filename, const u32 size, const bool antia
 	core::map<io::path, SGUITTFace*>::Node* node = c_faces.find(filename);
 	if (node == 0) {
 		face = new SGUITTFace();
-		c_faces.set(filename, face);
-
-		if (filesystem) {
-			// Read in the file data.
-			io::IReadFile* file = filesystem->createAndOpenFile(filename);
-			if (file == 0) {
-				if (logger) logger->log(L"CGUITTFont", L"Failed to open the file.", irr::ELL_INFORMATION);
-
-				c_faces.remove(filename);
-				delete face;
-				face = 0;
-				return false;
-			}
-			face->face_buffer = new FT_Byte[file->getSize()];
-			file->read(face->face_buffer, file->getSize());
-			face->face_buffer_size = file->getSize();
-			file->drop();
-
-			// Create the face.
-			if (FT_New_Memory_Face(c_library, face->face_buffer, face->face_buffer_size, 0, &face->face)) {
-				if (logger) logger->log(L"CGUITTFont", L"FT_New_Memory_Face failed.", irr::ELL_INFORMATION);
-
-				c_faces.remove(filename);
-				delete face;
-				face = 0;
-				return false;
-			}
-		} else {
-			if (logger) logger->log(L"CGUITTFont", L"FT_New_Face failed.", irr::ELL_INFORMATION);
-
-			c_faces.remove(filename);
+		// Read in the file data.
+		auto disposeFontFace = [&face]() {
 			delete face;
-			face = 0;
+			face = nullptr;
+		};
+		std::error_code ec;
+		auto file_size = std::filesystem::file_size(std::string_view(filename.c_str(), filename.size()), ec);
+		if (ec || file_size == 0) {
+			disposeFontFace();
 			return false;
 		}
+		FILE* fp = std::fopen(filename.c_str(), "rb");
+		if (fp == nullptr) {
+			if (logger) logger->log(L"CGUITTFont", L"Failed to open the file.", irr::ELL_INFORMATION);
+			disposeFontFace();
+			return false;
+		}
+		face->face_buffer = new FT_Byte[file_size];
+		if(std::fread(face->face_buffer, 1, file_size, fp) != file_size) {
+			if (logger) logger->log(L"CGUITTFont", L"Failed to read file.", irr::ELL_INFORMATION);
+			std::fclose(fp);
+			disposeFontFace();
+			return false;
+		}
+		face->face_buffer_size = file_size;
+		std::fclose(fp);
+
+		// Create the face.
+		if (FT_New_Memory_Face(c_library, face->face_buffer, face->face_buffer_size, 0, &face->face)) {
+			if (logger) logger->log(L"CGUITTFont", L"FT_New_Memory_Face failed.", irr::ELL_INFORMATION);
+			disposeFontFace();
+			return false;
+		}
+		c_faces.set(filename, face);
 	} else {
 		// Using another instance of this face.
 		face = node->getValue();
