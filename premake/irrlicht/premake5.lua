@@ -1,5 +1,6 @@
 project "irrlicht"
     kind "StaticLib"
+    cppdialect "C++17"
 
     includedirs { "include" }
 
@@ -11,6 +12,9 @@ project "irrlicht"
         "include/*.h",
         "source/Irrlicht/*.cpp",
     }
+
+    filter "not action:vs*"
+        cppdialect "gnu++17"
 
     filter { "system:windows" }
         if USE_DXSDK then

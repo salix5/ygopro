@@ -1,6 +1,7 @@
 project "lua"
     kind "StaticLib"
     compileas "C++"
+    cppdialect "C++17"
 
     files { "src/*.c", "src/*.h" }
     removefiles { "src/lua.c", "src/luac.c", "src/linit.c", "src/onelua.c" }
