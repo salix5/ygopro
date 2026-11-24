@@ -165,21 +165,14 @@ bool DataManager::LoadStrings(const char* file) {
 	return true;
 }
 bool DataManager::LoadStrings(irr::io::IReadFile* reader) {
-	char ch{};
-	std::string linebuf;
-	while (reader->read(&ch, 1)) {
-		if (ch == '\0')
-			break;
-		linebuf.push_back(ch);
-		if (ch == '\n' || linebuf.size() >= TEXT_LINE_SIZE - 1) {
-			ReadStringConfLine(linebuf.data());
-			linebuf.clear();
-		}
-	}
-	if (!linebuf.empty()) {
-		ReadStringConfLine(linebuf.data());
-	}
+	if (!reader)
+		return false;
+	char buffer[CONFIG_BUFFER_SIZE]{};
+	size_t size = reader->read(buffer, sizeof buffer);
 	reader->drop();
+	if (size >= sizeof buffer)
+		return false;
+	LoadStringsFromBuffer(std::string_view(buffer, size));
 	return true;
 }
 void DataManager::ReadStringConfLine(const char* linebuf) {
