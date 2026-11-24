@@ -326,7 +326,6 @@ bool CGUITTFont::load(const io::path& filename, const u32 size, const bool antia
 	if (size == 0) return false;
 	if (filename.size() == 0) return false;
 
-	io::IFileSystem* filesystem = Environment->getFileSystem();
 	irr::ILogger* logger = (Device != 0 ? Device->getLogger() : 0);
 	this->size = size;
 	this->filename = filename;
@@ -346,34 +345,34 @@ bool CGUITTFont::load(const io::path& filename, const u32 size, const bool antia
 	if (node == 0) {
 		face = new SGUITTFace();
 		c_faces.set(filename, face);
+		// Read in the file data.
+		FILE* fp = std::fopen(filename.c_str(), "rb");
+		if (fp == nullptr) {
+			if (logger) logger->log(L"CGUITTFont", L"Failed to open the file.", irr::ELL_INFORMATION);
+			c_faces.remove(filename);
+			delete face;
+			face = 0;
+			return false;
+		}
+		std::fseek(fp, 0, SEEK_END);
+		long file_size = std::ftell(fp);
+		if (file_size <= 0) {
+			if (logger) logger->log(L"CGUITTFont", L"Failed to determine file size.", irr::ELL_INFORMATION);
+			std::fclose(fp);
+			c_faces.remove(filename);
+			delete face;
+			face = nullptr;
+			return false;
+		}
+		face->face_buffer = new FT_Byte[file_size];
+		std::rewind(fp);
+		std::fread(face->face_buffer, 1, file_size, fp);
+		face->face_buffer_size = file_size;
+		std::fclose(fp);
 
-		if (filesystem) {
-			// Read in the file data.
-			io::IReadFile* file = filesystem->createAndOpenFile(filename);
-			if (file == 0) {
-				if (logger) logger->log(L"CGUITTFont", L"Failed to open the file.", irr::ELL_INFORMATION);
-
-				c_faces.remove(filename);
-				delete face;
-				face = 0;
-				return false;
-			}
-			face->face_buffer = new FT_Byte[file->getSize()];
-			file->read(face->face_buffer, file->getSize());
-			face->face_buffer_size = file->getSize();
-			file->drop();
-
-			// Create the face.
-			if (FT_New_Memory_Face(c_library, face->face_buffer, face->face_buffer_size, 0, &face->face)) {
-				if (logger) logger->log(L"CGUITTFont", L"FT_New_Memory_Face failed.", irr::ELL_INFORMATION);
-
-				c_faces.remove(filename);
-				delete face;
-				face = 0;
-				return false;
-			}
-		} else {
-			if (logger) logger->log(L"CGUITTFont", L"FT_New_Face failed.", irr::ELL_INFORMATION);
+		// Create the face.
+		if (FT_New_Memory_Face(c_library, face->face_buffer, face->face_buffer_size, 0, &face->face)) {
+			if (logger) logger->log(L"CGUITTFont", L"FT_New_Memory_Face failed.", irr::ELL_INFORMATION);
 
 			c_faces.remove(filename);
 			delete face;
