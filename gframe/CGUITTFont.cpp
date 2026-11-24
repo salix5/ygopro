@@ -28,6 +28,7 @@
    john@suckerfreegames.com
 */
 
+#include <filesystem>
 #include "CGUITTFont.h"
 #include <irrlicht.h>
 
@@ -344,41 +345,40 @@ bool CGUITTFont::load(const io::path& filename, const u32 size, const bool antia
 	core::map<io::path, SGUITTFace*>::Node* node = c_faces.find(filename);
 	if (node == 0) {
 		face = new SGUITTFace();
-		c_faces.set(filename, face);
 		// Read in the file data.
+		auto disposeFontFace = [&face]() {
+			delete face;
+			face = nullptr;
+		};
+		std::error_code ec;
+		auto file_size = std::filesystem::file_size(std::string_view(filename.c_str(), filename.size()), ec);
+		if (ec || file_size == 0) {
+			disposeFontFace();
+			return false;
+		}
 		FILE* fp = std::fopen(filename.c_str(), "rb");
 		if (fp == nullptr) {
 			if (logger) logger->log(L"CGUITTFont", L"Failed to open the file.", irr::ELL_INFORMATION);
-			c_faces.remove(filename);
-			delete face;
-			face = 0;
-			return false;
-		}
-		std::fseek(fp, 0, SEEK_END);
-		long file_size = std::ftell(fp);
-		if (file_size <= 0) {
-			if (logger) logger->log(L"CGUITTFont", L"Failed to determine file size.", irr::ELL_INFORMATION);
-			std::fclose(fp);
-			c_faces.remove(filename);
-			delete face;
-			face = nullptr;
+			disposeFontFace();
 			return false;
 		}
 		face->face_buffer = new FT_Byte[file_size];
-		std::rewind(fp);
-		std::fread(face->face_buffer, 1, file_size, fp);
+		if(std::fread(face->face_buffer, 1, file_size, fp) != file_size) {
+			if (logger) logger->log(L"CGUITTFont", L"Failed to read file.", irr::ELL_INFORMATION);
+			std::fclose(fp);
+			disposeFontFace();
+			return false;
+		}
 		face->face_buffer_size = file_size;
 		std::fclose(fp);
 
 		// Create the face.
 		if (FT_New_Memory_Face(c_library, face->face_buffer, face->face_buffer_size, 0, &face->face)) {
 			if (logger) logger->log(L"CGUITTFont", L"FT_New_Memory_Face failed.", irr::ELL_INFORMATION);
-
-			c_faces.remove(filename);
-			delete face;
-			face = 0;
+			disposeFontFace();
 			return false;
 		}
+		c_faces.set(filename, face);
 	} else {
 		// Using another instance of this face.
 		face = node->getValue();
