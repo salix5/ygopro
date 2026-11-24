@@ -231,6 +231,26 @@ bool DataManager::LoadDatabase(const char* file) {
 	sqlite3_close(pDB);
 	return ret;
 }
+void DataManager::LoadStringsFromBuffer(std::string_view content) {
+	std::string linebuf;
+	while (!content.empty()) {
+		auto pos = content.find('\n');
+		std::string_view line = content.substr(0, pos);
+		if (pos == std::string_view::npos) {
+			content = {};
+		}
+		else {
+			content = content.substr(pos + 1);
+		}
+		if (!line.empty() && line.back() == '\r') {
+			line.remove_suffix(1);
+		}
+		if (line.empty())
+			continue;
+		linebuf.assign(line);
+		ReadStringConfLine(linebuf.c_str());
+	}
+}
 code_pointer DataManager::GetCodePointer(uint32_t code) const {
 	return _datas.find(code);
 }
