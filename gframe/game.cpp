@@ -172,8 +172,8 @@ bool Game::Initialize() {
 		FileUtils::TraversalDir("./fonts", [&font_path](const std::filesystem::path& fpath, bool isdir) {
 			if (isdir || !font_path.empty())
 				return;
-			auto ext = fpath.extension().wstring();
-			if (IsExtension(ext, L".ttf") || IsExtension(ext, L".ttc") || IsExtension(ext, L".otf")) {
+			auto ext = fpath.extension().u8string();
+			if (IsExtension(ext, ".ttf") || IsExtension(ext, ".ttc") || IsExtension(ext, ".otf")) {
 				font_path = fpath;
 			}
 		});
@@ -1274,8 +1274,8 @@ void Game::LoadExpansions() {
 	FileUtils::TraversalDir("./expansions", [](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
-		auto ext = fpath.extension().wstring();
-		if (IsExtension(ext, L".cdb")) {
+		auto ext = fpath.extension().u8string();
+		if (IsExtension(ext, ".cdb")) {
 			if (!dataManager.LoadDB(fpath.u8string().c_str())) {
 				std::string errmsg = "Warning: Failed to load DB file on disk (";
 				errmsg.append(fpath.u8string());
@@ -1285,11 +1285,11 @@ void Game::LoadExpansions() {
 			}
 			return;
 		}
-		if (IsExtension(ext, L".conf")) {
+		if (IsExtension(ext, ".conf")) {
 			dataManager.LoadStrings(fpath.u8string().c_str());
 			return;
 		}
-		if (IsExtension(ext, L".zip") || IsExtension(ext, L".ypk")) {
+		if (IsExtension(ext, ".zip") || IsExtension(ext, ".ypk")) {
 			dataManager.IrrFileSystem->addFileArchive(fpath.u8string().c_str(), true, false, irr::io::EFAT_ZIP);
 			return;
 		}
@@ -1391,7 +1391,7 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 	FileUtils::TraversalDir(deckpath, [&deck_files](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
-		if (IsExtension(fpath.extension().wstring(), L".ydk")) {
+		if (IsExtension(fpath.extension().u8string(), ".ydk")) {
 			deck_files.push_back(fpath.stem().wstring());
 		}
 		});
@@ -1406,7 +1406,7 @@ void Game::RefreshReplay() {
 	FileUtils::TraversalDir(L"./replay", [&replay_files](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
-		if (IsExtension(fpath.extension().wstring(), L".yrp"))
+		if (IsExtension(fpath.extension().u8string(), ".yrp"))
 			replay_files.push_back(fpath.filename().wstring());
 	});
 	std::sort(replay_files.begin(), replay_files.end());
@@ -1421,7 +1421,7 @@ void Game::RefreshSingleplay() {
 	FileUtils::TraversalDir(L"./single", [&singleplay_files](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
-		if (IsExtension(fpath.extension().wstring(), L".lua"))
+		if (IsExtension(fpath.extension().u8string(), ".lua"))
 			singleplay_files.push_back(fpath.filename().wstring());
 	});
 	std::sort(singleplay_files.begin(), singleplay_files.end());
@@ -1985,8 +1985,7 @@ void Game::OpenDeckBuilder(bool from_arg) {
 	if (from_arg) {
 		if (deckManager.LoadCurrentDeck(open_file_name)) {
 			std::filesystem::path p = open_file_name;
-			auto filename = p.filename().wstring();
-			ebDeckname->setText(filename.c_str());
+			ebDeckname->setText(p.filename().wstring().c_str());
 		}
 		else {
 			ebDeckname->setText(L"");
