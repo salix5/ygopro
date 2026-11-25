@@ -111,10 +111,10 @@ void SoundManager::RefreshBGMDir(std::wstring path, int scene) {
 	FileUtils::TraversalDir(search, [this, &path, scene](const std::filesystem::path& fpath, bool isdir) {
 		if (isdir)
 			return;
-		auto ext = fpath.extension().wstring();
-		if ((IsExtension(ext, L".mp3")
+		auto ext = fpath.extension().u8string();
+		if ((IsExtension(ext, ".mp3")
 #if defined(YGOPRO_MINIAUDIO_SUPPORT_VORBIS)
-			|| IsExtension(ext, L".ogg")
+			|| IsExtension(ext, ".ogg")
 #endif
 			)) {
 			std::wstring filename = path + L"/" + fpath.filename().wstring();
