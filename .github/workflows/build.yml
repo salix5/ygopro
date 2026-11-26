@@ -95,7 +95,7 @@ jobs:
       with:
         repository: mackron/miniaudio
         path: miniaudio-source
-        ref: 9634bedb5b5a2ca38c1ee7108a9358a4e233f14d # tag: 0.11.25
+        ref: 877ea4a7c2601c7b0f2a44e83dfac42e6470fea6 # tag: 0.11.26
 
     - name: Use miniaudio split & decoders only
       run: |
@@ -136,13 +136,13 @@ jobs:
       id: freetype
       uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
       with:
-        url: https://downloads.sourceforge.net/freetype/freetype-2.14.3.tar.gz
-        sha256: e61b31ab26358b946e767ed7eb7f4bb2e507da1cfefeb7a8861ace7fd5c899a1
+        url: https://downloads.sourceforge.net/freetype/freetype-2.15.0.tar.gz
+        sha256: 9186627467a616d9a9e3e574748ac0c45fa77398e6364edef3041a8ba8d92f64
 
     - name: Extract freetype
       run: |
         tar xf ${{ steps.freetype.outputs.filepath }}
-        mv freetype-2.14.3 freetype
+        mv freetype-2.15.0 freetype
 
     - name: Download lzma (xz)
       id: lzma
