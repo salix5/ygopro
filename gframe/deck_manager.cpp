@@ -346,6 +346,7 @@ void DeckManager::GetCategoryPath(wchar_t* ret, int index, const wchar_t* text) 
 	case -1:
 	case DECK_CATEGORY_NONE:
 	case DECK_CATEGORY_SEPARATOR:
+		// Add "./" otherwise IrrFileSystem may open file in expansion archives instead of the local deck directory.
 		std::wcsncpy(ret, L"./deck", 7);
 		break;
 	default:

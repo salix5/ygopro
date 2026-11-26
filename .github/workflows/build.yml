@@ -148,8 +148,8 @@ jobs:
       id: lzma
       uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
       with:
-        url: https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.gz
-        sha256: 3d3a1b973af218114f4f889bbaa2f4c037deaae0c8e815eec381c3d546b974a0
+        url: https://github.com/tukaani-project/xz/releases/download/v5.8.4/xz-5.8.4.tar.gz
+        sha256: 0014c7886930454fe8bd4228665b51af55eeae560ea135c9c4cd33f55b2591d9
 
     - name: Extract lzma
       run: |
@@ -409,14 +409,14 @@ jobs:
       id: lzma
       uses: salix5/action-cache-download-file@42a33307a0e00b163efaf26f29149a62d7bbd37d
       with:
-        url: https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.gz
-        sha256: 3d3a1b973af218114f4f889bbaa2f4c037deaae0c8e815eec381c3d546b974a0
+        url: https://github.com/tukaani-project/xz/releases/download/v5.8.4/xz-5.8.4.tar.gz
+        sha256: 0014c7886930454fe8bd4228665b51af55eeae560ea135c9c4cd33f55b2591d9
 
     - name: Extract lzma
       if: matrix.apt-outdated == true
       run: |
         tar xf ${{ steps.lzma.outputs.filepath }}
-        mv xz-5.8.3 lzma
+        mv xz-5.8.4 lzma
 
     - name: Copy premake files
       run: |

@@ -11,6 +11,7 @@
 #include "single_mode.h"
 #include "CGUITTFont.h"
 #include <algorithm>
+#include <algorithm>
 #include <thread>
 #include <chrono>
 #ifdef _WIN32
@@ -1290,12 +1291,13 @@ void Game::LoadExpansions() {
 			return;
 		}
 		if (IsExtension(ext, ".zip") || IsExtension(ext, ".ypk")) {
-			dataManager.IrrFileSystem->addFileArchive(fpath.u8string().c_str(), true, false, irr::io::EFAT_ZIP);
+			dataManager.IrrFileSystem->addFileArchive(fpath.u8string().c_str(), false, false, irr::io::EFAT_ZIP);
 			return;
 		}
 	});
 	for(irr::u32 i = 0; i < dataManager.IrrFileSystem->getFileArchiveCount(); ++i) {
 		auto archive = dataManager.IrrFileSystem->getFileArchive(i)->getFileList();
+		auto packStart = deckBuilder.expansionPacks.size();
 		for(irr::u32 j = 0; j < archive->getFileCount(); ++j) {
 			const char* name = archive->getFullFileName(j).c_str();
 			if (IsExtension(name, ".cdb")) {
@@ -1332,6 +1334,7 @@ void Game::LoadExpansions() {
 				continue;
 			}
 		}
+		std::sort(deckBuilder.expansionPacks.begin() + packStart, deckBuilder.expansionPacks.end());
 	}
 }
 void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGUIComboBox* cbDeck, bool selectlastused) {
@@ -1381,7 +1384,8 @@ void Game::RefreshDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGUIComboBo
 	RefreshDeck(catepath, [cbDeck](const wchar_t* item) { cbDeck->addItem(item); });
 }
 void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const wchar_t*)>& additem) {
-	if(!mywcsncasecmp(deckpath, L"./pack", 6)) {
+	bool isPack = !mywcsncasecmp(deckpath, L"pack", 5); // match 4 chars + 1 null terminator
+	if(isPack) {
 		for(auto& pack : deckBuilder.expansionPacks) {
 			// add pack/xxx.ydk
 			additem(pack.substr(5, pack.size() - 9).c_str());
