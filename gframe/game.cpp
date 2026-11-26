@@ -1297,7 +1297,6 @@ void Game::LoadExpansions() {
 	});
 	for(irr::u32 i = 0; i < dataManager.IrrFileSystem->getFileArchiveCount(); ++i) {
 		auto archive = dataManager.IrrFileSystem->getFileArchive(i)->getFileList();
-		auto packStart = deckBuilder.expansionPacks.size();
 		for(irr::u32 j = 0; j < archive->getFileCount(); ++j) {
 			const char* name = archive->getFullFileName(j).c_str();
 			if (IsExtension(name, ".cdb")) {
@@ -1333,9 +1332,9 @@ void Game::LoadExpansions() {
 				deckBuilder.expansionPacks.push_back(fname);
 				continue;
 			}
-		}
-		std::sort(deckBuilder.expansionPacks.begin() + packStart, deckBuilder.expansionPacks.end());
+		}	
 	}
+	std::sort(deckBuilder.expansionPacks.begin(), deckBuilder.expansionPacks.end());
 }
 void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGUIComboBox* cbDeck, bool selectlastused) {
 	cbCategory->clear();
