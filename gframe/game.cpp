@@ -1372,18 +1372,18 @@ void Game::RefreshCategoryDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGU
 	}
 }
 void Game::RefreshDeck(irr::gui::IGUIComboBox* cbCategory, irr::gui::IGUIComboBox* cbDeck) {
-	if(cbCategory != cbDBCategory && cbCategory->getSelected() == DECK_CATEGORY_PACK) {
+	auto category = cbCategory->getSelected();
+	if (cbCategory != cbDBCategory && category == DECK_CATEGORY_PACK) {
 		// can't use pack list in duel
 		cbDeck->clear();
 		return;
 	}
 	wchar_t catepath[256];
-	DeckManager::GetCategoryPath(catepath, cbCategory->getSelected(), cbCategory->getText());
+	DeckManager::GetCategoryPath(catepath, category, cbCategory->getText());
 	cbDeck->clear();
-	RefreshDeck(catepath, [cbDeck](const wchar_t* item) { cbDeck->addItem(item); });
+	RefreshDeck(catepath, [cbDeck](const wchar_t* item) { cbDeck->addItem(item); }, category == DECK_CATEGORY_PACK);
 }
-void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const wchar_t*)>& additem) {
-	bool isPack = !mywcsncasecmp(deckpath, L"pack", 5); // match 4 chars + 1 null terminator
+void Game::RefreshDeck(const wchar_t *deckpath, const std::function<void(const wchar_t *)> &additem, bool isPack) {
 	if(isPack) {
 		for(auto& pack : deckBuilder.expansionPacks) {
 			// add pack/xxx.ydk
@@ -1398,7 +1398,10 @@ void Game::RefreshDeck(const wchar_t* deckpath, const std::function<void(const w
 			deck_files.push_back(fpath.stem().wstring());
 		}
 		});
-	std::sort(deck_files.begin(), deck_files.end());
+	if(isPack)
+		std::sort(deck_files.rbegin(), deck_files.rend());
+	else
+		std::sort(deck_files.begin(), deck_files.end());
 	for (const auto& deck : deck_files) {
 		additem(deck.c_str());
 	}
