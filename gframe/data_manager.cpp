@@ -154,25 +154,26 @@ bool DataManager::LoadDB(const char* file) {
 	return ret;
 }
 bool DataManager::LoadStrings(const char* file) {
-	FILE* fp = std::fopen(file, "r");
+	FILE* fp = std::fopen(file, "rb");
 	if(!fp)
 		return false;
-	char linebuf[TEXT_LINE_SIZE]{};
-	while(std::fgets(linebuf, sizeof linebuf, fp)) {
-		ReadStringConfLine(linebuf);
-	}
+	char buffer[CONFIG_BUFFER_SIZE]{};
+	size_t size = std::fread(buffer, 1, sizeof buffer, fp);
 	std::fclose(fp);
+	if (size == 0 || size >= sizeof buffer)
+		return false;
+	LoadStringsFromBuffer(std::string_view(buffer, size));
 	return true;
 }
 bool DataManager::LoadStrings(irr::io::IReadFile* reader) {
 	if (!reader)
 		return false;
-	char buffer[CONFIG_BUFFER_SIZE]{};
-	size_t size = reader->read(buffer, sizeof buffer);
-	reader->drop();
-	if (size >= sizeof buffer)
+	if (reader->getSize() <= 0 || reader->getSize() > CONFIG_BUFFER_SIZE)
 		return false;
-	LoadStringsFromBuffer(std::string_view(buffer, size));
+	std::string buffer(reader->getSize(), '\0');
+	if (reader->read(buffer.data(), buffer.size()) != buffer.size())
+		return false;
+	LoadStringsFromBuffer(buffer);
 	return true;
 }
 void DataManager::ReadStringConfLine(const char* linebuf) {

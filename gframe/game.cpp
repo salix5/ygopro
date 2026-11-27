@@ -1313,6 +1313,7 @@ void Game::LoadExpansions() {
 			if (IsExtension(name, ".conf")) {
 				auto reader = dataManager.IrrFileSystem->createAndOpenFile(name);
 				dataManager.LoadStrings(reader);
+				reader->drop();
 				continue;
 			}
 			if (!mystrncasecmp(name, "pack/", 5) && IsExtension(name, ".ydk")) {
