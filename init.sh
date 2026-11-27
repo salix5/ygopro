@@ -42,6 +42,6 @@ rm sqlite-amalgamation-${SQLITE_VERSION}.zip
 rm -rf lzma
 XZ_VERSION=5.8.4
 curl -q -f -L -O "https://github.com/tukaani-project/xz/releases/download/v${XZ_VERSION}/xz-${XZ_VERSION}.tar.gz"
-tar -xf xz-${XZ_VERSION}.tar.gz
+tar --exclude="*/tests/*" -xf xz-${XZ_VERSION}.tar.gz
 mv xz-${XZ_VERSION} lzma
 rm xz-${XZ_VERSION}.tar.gz
