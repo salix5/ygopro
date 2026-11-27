@@ -2,8 +2,10 @@
 git submodule update --init ocgcore
 git -C ocgcore checkout master
 
+rm -rf miniaudio
+MINIAUDIO_VERSION=0.11.26
 git clone https://github.com/salix5/irrlicht.git
-git clone --depth=1 -b 0.11.25 https://github.com/mackron/miniaudio
+git clone --depth=1 -b ${MINIAUDIO_VERSION} https://github.com/mackron/miniaudio
 cp miniaudio/extras/miniaudio_split/miniaudio.* miniaudio
 
 rm -rf lua
@@ -14,7 +16,7 @@ mv lua-${LUA_VERSION} lua
 rm lua-${LUA_VERSION}.tar.gz
 
 rm -rf freetype
-FREETYPE_VERSION=2.14.3
+FREETYPE_VERSION=2.15.0
 curl -q -f -L -O "https://downloads.sourceforge.net/freetype/freetype-${FREETYPE_VERSION}.tar.gz"
 tar -xf freetype-${FREETYPE_VERSION}.tar.gz
 mv freetype-${FREETYPE_VERSION} freetype
@@ -31,14 +33,14 @@ cp event/WIN32-Code/nmake/evconfig-private.h event/include/evconfig-private.h
 
 rm -rf sqlite3
 SQLITE_YEAR=2026
-SQLITE_VERSION=3530400
+SQLITE_VERSION=3540100
 curl -q -f -L -O "https://www.sqlite.org/${SQLITE_YEAR}/sqlite-amalgamation-${SQLITE_VERSION}.zip"
 unzip sqlite-amalgamation-${SQLITE_VERSION}.zip
 mv sqlite-amalgamation-${SQLITE_VERSION} sqlite3
 rm sqlite-amalgamation-${SQLITE_VERSION}.zip
 
 rm -rf lzma
-XZ_VERSION=5.8.3
+XZ_VERSION=5.8.4
 curl -q -f -L -O "https://github.com/tukaani-project/xz/releases/download/v${XZ_VERSION}/xz-${XZ_VERSION}.tar.gz"
 tar -xf xz-${XZ_VERSION}.tar.gz
 mv xz-${XZ_VERSION} lzma
