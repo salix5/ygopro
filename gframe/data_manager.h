@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include "../ocgcore/card_data.h"
@@ -81,6 +82,7 @@ public:
 	bool LoadDB(const char* file);
 	bool LoadStrings(const char* file);
 	bool LoadStrings(irr::io::IReadFile* reader);
+	void LoadStringsFromBuffer(std::string_view content);
 	void ReadStringConfLine(const char* linebuf);
 	bool Error(sqlite3* pDB, sqlite3_stmt* pStmt = nullptr);
 	bool LoadDatabase(const char* file);
@@ -123,6 +125,7 @@ public:
 	const wchar_t* unknown_string{ L"???" };
 	irr::io::IFileSystem* IrrFileSystem{};
 
+	static constexpr size_t CONFIG_BUFFER_SIZE = 65536;
 	static constexpr uint32_t STRING_ID_LOCATION = 1000;
 	static constexpr uint32_t STRING_ID_ATTRIBUTE = 1010;
 	static constexpr uint32_t STRING_ID_RACE = 1020;

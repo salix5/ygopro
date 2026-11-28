@@ -154,33 +154,49 @@ bool DataManager::LoadDB(const char* file) {
 	return ret;
 }
 bool DataManager::LoadStrings(const char* file) {
-	FILE* fp = std::fopen(file, "r");
+	FILE* fp = std::fopen(file, "rb");
 	if(!fp)
 		return false;
-	char linebuf[TEXT_LINE_SIZE]{};
-	while(std::fgets(linebuf, sizeof linebuf, fp)) {
-		ReadStringConfLine(linebuf);
-	}
+	std::vector<char> buffer(CONFIG_BUFFER_SIZE);
+	size_t size = std::fread(buffer.data(), 1, buffer.size(), fp);
 	std::fclose(fp);
+	if (size == 0 || size >= buffer.size())
+		return false;
+	LoadStringsFromBuffer(std::string_view(buffer.data(), size));
 	return true;
 }
 bool DataManager::LoadStrings(irr::io::IReadFile* reader) {
-	char ch{};
-	std::string linebuf;
-	while (reader->read(&ch, 1)) {
-		if (ch == '\0')
-			break;
-		linebuf.push_back(ch);
-		if (ch == '\n' || linebuf.size() >= TEXT_LINE_SIZE - 1) {
-			ReadStringConfLine(linebuf.data());
-			linebuf.clear();
-		}
-	}
-	if (!linebuf.empty()) {
-		ReadStringConfLine(linebuf.data());
-	}
-	reader->drop();
+	if (!reader)
+		return false;
+	long size = reader->getSize();
+	if (size <= 0 || size > CONFIG_BUFFER_SIZE)
+		return false;
+	std::vector<char> buffer(size);
+	if (reader->read(buffer.data(), buffer.size()) != buffer.size())
+		return false;
+	LoadStringsFromBuffer(std::string_view(buffer.data(), buffer.size()));
 	return true;
+}
+void DataManager::LoadStringsFromBuffer(std::string_view content) {
+	std::string linebuf;
+	linebuf.reserve(TEXT_LINE_SIZE);
+	while (!content.empty()) {
+		auto pos = content.find('\n');
+		std::string_view line = content.substr(0, pos);
+		if (pos == std::string_view::npos) {
+			content = {};
+		}
+		else {
+			content = content.substr(pos + 1);
+		}
+		if (!line.empty() && line.back() == '\r') {
+			line.remove_suffix(1);
+		}
+		if (line.empty())
+			continue;
+		linebuf.assign(line);
+		ReadStringConfLine(linebuf.c_str());
+	}
 }
 void DataManager::ReadStringConfLine(const char* linebuf) {
 	if(linebuf[0] != '!')
