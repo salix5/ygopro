@@ -9,8 +9,6 @@
 #include "duelclient.h"
 #include "netserver.h"
 #include "single_mode.h"
-#include "CGUITTFont.h"
-#include <algorithm>
 #include <algorithm>
 #include <thread>
 #include <chrono>
