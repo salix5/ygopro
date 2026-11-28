@@ -6,6 +6,7 @@
 #include <cwchar>
 #include <algorithm>
 #include <string>
+#include <string_view>
 #include <vector>
 
 class BufferIO {
