@@ -125,12 +125,12 @@ public:
 	const wchar_t* unknown_string{ L"???" };
 	irr::io::IFileSystem* IrrFileSystem{};
 
+	static constexpr size_t CONFIG_BUFFER_SIZE = 65536;
 	static constexpr uint32_t STRING_ID_LOCATION = 1000;
 	static constexpr uint32_t STRING_ID_ATTRIBUTE = 1010;
 	static constexpr uint32_t STRING_ID_RACE = 1020;
 	static constexpr uint32_t STRING_ID_TYPE = 1050;
 	static constexpr int TYPES_COUNT = 27;
-	static constexpr size_t CONFIG_BUFFER_SIZE = 65536;
 
 	static inline bool prefer_expansion_script = false;
 	static uint32_t CardReader(uint32_t, card_data*);
