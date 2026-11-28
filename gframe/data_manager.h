@@ -82,10 +82,10 @@ public:
 	bool LoadDB(const char* file);
 	bool LoadStrings(const char* file);
 	bool LoadStrings(irr::io::IReadFile* reader);
+	void LoadStringsFromBuffer(std::string_view content);
 	void ReadStringConfLine(const char* linebuf);
 	bool Error(sqlite3* pDB, sqlite3_stmt* pStmt = nullptr);
 	bool LoadDatabase(const char* file);
-	void LoadStringsFromBuffer(std::string_view content);
 
 	code_pointer GetCodePointer(uint32_t code) const;
 	string_pointer GetStringPointer(uint32_t code) const;
