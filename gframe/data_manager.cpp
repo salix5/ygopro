@@ -179,6 +179,7 @@ bool DataManager::LoadStrings(irr::io::IReadFile* reader) {
 }
 void DataManager::LoadStringsFromBuffer(std::string_view content) {
 	std::string linebuf;
+	linebuf.reserve(TEXT_LINE_SIZE);
 	while (!content.empty()) {
 		auto pos = content.find('\n');
 		std::string_view line = content.substr(0, pos);
