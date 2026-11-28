@@ -157,23 +157,24 @@ bool DataManager::LoadStrings(const char* file) {
 	FILE* fp = std::fopen(file, "rb");
 	if(!fp)
 		return false;
-	char buffer[CONFIG_BUFFER_SIZE]{};
-	size_t size = std::fread(buffer, 1, sizeof buffer, fp);
+	std::vector<char> buffer(CONFIG_BUFFER_SIZE);
+	size_t size = std::fread(buffer.data(), 1, buffer.size(), fp);
 	std::fclose(fp);
-	if (size == 0 || size >= sizeof buffer)
+	if (size == 0 || size >= buffer.size())
 		return false;
-	LoadStringsFromBuffer(std::string_view(buffer, size));
+	LoadStringsFromBuffer(std::string_view(buffer.data(), size));
 	return true;
 }
 bool DataManager::LoadStrings(irr::io::IReadFile* reader) {
 	if (!reader)
 		return false;
-	if (reader->getSize() <= 0 || reader->getSize() > CONFIG_BUFFER_SIZE)
+	long size = reader->getSize();
+	if (size <= 0 || size > CONFIG_BUFFER_SIZE)
 		return false;
-	std::string buffer(reader->getSize(), '\0');
+	std::vector<char> buffer(size);
 	if (reader->read(buffer.data(), buffer.size()) != buffer.size())
 		return false;
-	LoadStringsFromBuffer(buffer);
+	LoadStringsFromBuffer(std::string_view(buffer.data(), buffer.size()));
 	return true;
 }
 void DataManager::ReadStringConfLine(const char* linebuf) {
